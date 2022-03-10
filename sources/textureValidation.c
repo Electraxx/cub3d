@@ -40,6 +40,8 @@ error_type	texture_check(char *t_path , t_cardi_check *check_cardi)
 	if(open(t_path + 3, O_RDONLY) < 0 || !is_valid_cardinal(substr))
 	{
 		free(substr);
+		if(!is_valid_cardinal(substr))
+			return (MISSING_CARDINAL);
 		return (TEXTURE_ERROR);
 	}
 	set_cardi_values(substr, check_cardi);
