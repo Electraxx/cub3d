@@ -1,7 +1,7 @@
 SRCS_DIR	= sources/
 SRCS_DIR_GNL = sources/gnl/
 SRCS_FILES_GNL = get_next_line.c
-SRCS_FILES	= main.c mapValidation.c
+SRCS_FILES	= main.c init.c error.c mapValidation.c colorValidation.c textureValidation.c configValidation.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 SRCS_GNL = ${patsubst %, ${SRCS_DIR_GNL}%, ${SRCS_FILES_GNL}}
 
@@ -33,7 +33,7 @@ AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

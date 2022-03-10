@@ -17,7 +17,7 @@ SRCS= ft_memset.c ft_bzero.c ft_memcpy.c ft_memccpy.c ft_memmove.c \
 		ft_split.c ft_same_str.c ft_remove_char.c ft_slash_sanitize.c \
 		ft_pushfreestr.c ft_get_escape.c ft_close_fd.c ft_delete_quotes.c ft_add_args.c \
 		ft_is_a_quote.cft_close_fds.c ft_copy_2d_str.c \
-		ft_print_2d_str.c ft_is_only_whitespace.c
+		ft_print_2d_str.c ft_is_only_whitespace.c ft_is_str_full_num.c
 
 
 OBJ = ft_memset.o ft_bzero.o ft_memcpy.o ft_memccpy.o ft_memmove.o \
@@ -35,7 +35,7 @@ OBJ = ft_memset.o ft_bzero.o ft_memcpy.o ft_memccpy.o ft_memmove.o \
 		ft_split.o ft_same_str.o ft_remove_char.o ft_slash_sanitize.o \
 		ft_pushfreestr.o ft_get_escape.o ft_close_fd.o ft_delete_quotes.o ft_add_args.o \
 		ft_is_a_quote.o ft_close_fds.o ft_copy_2d_str.o \
-		ft_print_2d_str.o ft_is_only_whitespace.o
+		ft_print_2d_str.o ft_is_only_whitespace.o ft_is_str_full_num.o
 
 $(NAME): $(OBJ)
 		ar rc $(NAME) $(OBJ)

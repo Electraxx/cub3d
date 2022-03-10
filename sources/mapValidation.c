@@ -6,7 +6,7 @@
 /*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 13:08:23 by qbrechbu          #+#    #+#             */
-/*   Updated: 2022/03/10 14:34:28 by vvermot-         ###   ########.fr       */
+/*   Updated: 2022/03/10 15:09:07 by vvermot-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,11 @@ int	wall_check(char **map)
 	return (1);
 }
 
-int	is_map_valid(char **map)
+error_type	is_map_valid(char **map)
 {
-	if (!wall_check(map))
-		return (0);
-	return (1);
+	if (wall_check(map))
+		return (CHECK_OK);
+	return (MAP_ERROR);
 }
 
 int		get_number_of_lines(int fd)
@@ -192,3 +192,4 @@ int	chars_check(char **map)
 	free (cnt);
 	return (0);
 }
+
