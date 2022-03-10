@@ -1,6 +1,9 @@
 SRCS_DIR	= sources/
+SRCS_DIR_GNL = sources/gnl/
+SRCS_FILES_GNL = get_next_line.c
 SRCS_FILES	= main.c mapValidation.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
+SRCS_GNL = ${patsubst %, ${SRCS_DIR_GNL}%, ${SRCS_FILES_GNL}}
 
 BONUS_DIR	= ./
 BONUS_FILES	= 
@@ -19,12 +22,13 @@ MAKELIBX	= ${MAKE} -C ${LIBX}
 HEADS		= ./
 
 OBJS		= ${SRCS:.c=.o}
+OBJS_GNL	= ${SRCS_GNL:.c=.o}
 OBJSB		= ${BONUS:.c=.o}
 OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc
+CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR}
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
@@ -34,17 +38,17 @@ CFLAGS		= -Wall -Wextra -Werror
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-${NAME}:	${OBJS} ${OBJFT}
+${NAME}:  ${OBJS} ${OBJS_GNL} ${OBJFT}
 		${MAKELIBX} all
 		${MAKELIB} all
-		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${OBJFT} -Lminilibx -lmlx -framework OpenGL -framework AppKit
+		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${OBJS_GNL} ${OBJFT} -Lminilibx -lmlx -framework OpenGL -framework AppKit
 
 all:		${NAME}
 
 bonus:		${NAME}
 
 clean:
-		${RM} ${OBJS} ${OBJFT}
+		${RM} ${OBJS} ${OBJFT} ${OBJS_GNL}
 		${MAKELIBX} clean
 
 fclean:		clean
