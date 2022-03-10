@@ -19,3 +19,18 @@ error_type color_check(char *t_path)
     else
         return (CHECK_OK);
 }
+
+void	print_error_exit(error_type error)
+{
+	if(error == MAP_ERROR)
+		printf("Map error\n");
+	if(error == TEXTURE_ERROR)
+		printf("Texture error\n");
+	if(error == COLOR_ERROR)
+		printf("Color error\n");
+	if(error == MISSING_TEXTURE)
+		printf("Missing texture error (verify the path)\n");
+	if(error == MISSING_CARDINAL)
+		printf("Missing cardinal error\n");
+	exit(0);
+}
