@@ -1,5 +1,5 @@
 SRCS_DIR	= sources/
-SRCS_FILES	= main.c mapValidation.c
+SRCS_FILES	= main.c error.c mapValidation.c colorValidation.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 
 BONUS_DIR	= ./
@@ -29,7 +29,7 @@ AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -Wall -Wextra -Werror
+CFLAGS		= -Wall -Wextra -Werror -g
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

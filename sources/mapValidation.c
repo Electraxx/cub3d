@@ -6,7 +6,7 @@
 /*   By: qbrechbu <qbrechbu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 13:08:23 by qbrechbu          #+#    #+#             */
-/*   Updated: 2022/03/10 10:31:52 by qbrechbu         ###   ########.fr       */
+/*   Updated: 2022/03/10 11:23:55 by qbrechbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ char	**map_to_str2(char *path)
 	char	**res;
 
 	fd = open(path, O_RDONLY);
-	//if (fd < 0) //TODO ADD invalid map;
-	//	invalid_map();
+	if (fd < 0) //TODO ADD invalid map;
+		invalid_map();
 	buff = ft_calloc(10000, sizeof(char));
 	str = ft_calloc(10000, sizeof(char));
 	while (read(fd, buff, 10000))
@@ -102,9 +102,9 @@ int	chars_check(char **map)
 	return (0);
 }
 
-int	is_map_valid(char **map)
+error_type	is_map_valid(char **map)
 {
 	if (sz_check(map) && wall_check(map) && chars_check(map))
-		return (1);
-	return (0);
+		return (CHECK_OK);
+	return (MAP_ERROR);
 }

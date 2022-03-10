@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
+/*   By: qbrechbu <qbrechbu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 02:33:00 by qbrechbu          #+#    #+#             */
-/*   Updated: 2022/02/17 17:17:22 by vvermot-         ###   ########.fr       */
+/*   Updated: 2022/03/10 11:53:50 by qbrechbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ void	ft_close_fds(int fd1, int fd2);
 char	**ft_copy_2d_str(char **ori);
 void	ft_print_2d_str(char **strs, int fd, char *prompt);
 int		ft_is_only_whitespace(char *str);
-
+int		ft_is_str_full_num(char *str);
 #endif
