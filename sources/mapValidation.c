@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mapValidation.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: qbrechbu <qbrechbu@student.42.fr>          +#+  +:+       +#+        */
+/*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/15 13:08:23 by qbrechbu          #+#    #+#             */
-/*   Updated: 2022/03/10 10:31:52 by qbrechbu         ###   ########.fr       */
+/*   Updated: 2022/03/10 11:22:41 by vvermot-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,23 @@ char	**map_to_str2(char *path)
 	return (res);
 }
 
+static int	ft_check_middle_lines(char **map, int i)
+{
+	int	j;
+
+	j = 0;
+	while (map[i][j] == ' ')
+		j++;
+	if (map[i][j] != '1')
+		return (0);
+	j = ft_strlen(map[i]);
+	while (map[i][j] == ' ')
+		j--;
+	if (map[i][j] != '1')
+		return (0);
+	return (1);
+}
+
 int	wall_check(char **map)
 {
 	int	i;
@@ -40,19 +57,19 @@ int	wall_check(char **map)
 	i = 0;
 	while (map[0][i])
 	{
-		if (map[0][i] != '1')
+		if (map[0][i] != '1' || map[0][i] != ' ')
 			return (0);
 		i++;
 	}
 	i = -1;
 	while (map[++i])
-		if (map[i][0] != '1' || map[i][ft_strlen(map[i]) - 1] != '1')
+		if (!ft_check_middle_lines(map, i))
 			return (0);
 	i--;
 	j = 0;
 	while (map[i][j])
 	{
-		if (map[i][j] != '1')
+		if (map[i][j] != '1' || map[0][i] != ' ')
 			return (0);
 		j++;
 	}
