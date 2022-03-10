@@ -12,14 +12,6 @@ void	invalid_texture(void)
 	exit(0); //TODO replace exit (make the func return an integer and if the check fails, stop the program by returning 0 in main)
 }
 
-error_type texture_check(char *t_path)
-{
-    if(open(t_path, O_RDONLY) < 0)
-        return (TEXTURE_ERROR);
-    else
-        return (1);
-}
-
 error_type color_check(char *t_path)
 {
     if(open(t_path, O_RDONLY) < 0)

@@ -1,5 +1,5 @@
 SRCS_DIR	= sources/
-SRCS_FILES	= main.c error.c mapValidation.c colorValidation.c
+SRCS_FILES	= main.c init.c error.c mapValidation.c colorValidation.c textureValidation.c configValidation.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 
 BONUS_DIR	= ./

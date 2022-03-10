@@ -19,7 +19,8 @@ error_type is_color_valid(char *color_line)
 	while (i < 3)
 	{
 		colors[i] = ft_atoi(c_strs[i]);
-		if ((colors[i] > 255 || colors[i] < 0) && ft_is_str_full_num(c_strs[i]))
+		ft_is_str_full_num(c_strs[i]);
+		if ((colors[i] > 255 || colors[i] < 0) || !ft_is_str_full_num(c_strs[i]))
 		{
 			free(colors);
 			ft_free_2d_str(c_strs);
