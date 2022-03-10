@@ -6,7 +6,7 @@
 /*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:08:07 by vvermot-          #+#    #+#             */
-/*   Updated: 2021/10/28 14:02:39 by vvermot-         ###   ########.fr       */
+/*   Updated: 2022/03/10 14:21:10 by vvermot-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ char	*get_next_line(int fd)
 	char		*buffer;
 	char		*line;
 	static int	is_empty = 0;
-	static int	file = 1;
+	int	file = 1;
 
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)

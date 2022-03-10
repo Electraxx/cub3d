@@ -28,7 +28,7 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR}
+CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
