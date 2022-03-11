@@ -6,7 +6,7 @@
 /*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:08:25 by vvermot-          #+#    #+#             */
-/*   Updated: 2022/03/10 12:57:33 by vvermot-         ###   ########.fr       */
+/*   Updated: 2022/03/11 14:08:16 by vvermot-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@
 #  define BUFFER_SIZE 42
 # endif
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, int new_call);
 
 #endif

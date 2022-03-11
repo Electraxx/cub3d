@@ -6,7 +6,7 @@
 /*   By: vvermot- <vvermot-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:08:07 by vvermot-          #+#    #+#             */
-/*   Updated: 2022/03/10 14:21:10 by vvermot-         ###   ########.fr       */
+/*   Updated: 2022/03/11 14:14:26 by vvermot-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ char	*copy_line(char **line, char **buf_pos, int *is_empty)
 		i++;
 	if ((*buf_pos)[i] == '\n')
 	{
-		i++;
 		*line = ft_substr(*buf_pos, 0, i);
+		i++;
 		*is_empty = *is_empty + 1;
 	}
 	else if ((*buf_pos)[i] == '\0' && *buf_pos)
@@ -59,7 +59,7 @@ int	check_validity(int fd, char **buffer, int *is_empty)
 	return (1);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int new_call)
 {
 	char static	*buf_pos = NULL;
 	char		*buffer;
@@ -67,6 +67,8 @@ char	*get_next_line(int fd)
 	static int	is_empty = 0;
 	int	file = 1;
 
+	if (new_call)
+		buf_pos = NULL;
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
 	if (!buffer)
 		return (NULL);

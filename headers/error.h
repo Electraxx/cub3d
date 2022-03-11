@@ -10,6 +10,8 @@ typedef enum
     COLOR_ERROR = -3,
     MISSING_TEXTURE = -4,
     MISSING_CARDINAL = -5,
+    PLAYER_ERROR = -6,
+    WALL_ERROR = -7,
     CHECK_OK = 1
 } error_type;
 

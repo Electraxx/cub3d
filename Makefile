@@ -1,7 +1,7 @@
 SRCS_DIR	= sources/
 SRCS_DIR_GNL = sources/gnl/
 SRCS_FILES_GNL = get_next_line.c
-SRCS_FILES	= main.c init.c error.c mapValidation.c colorValidation.c textureValidation.c configValidation.c
+SRCS_FILES	= main.c init.c error.c mapValidation.c debug.c colorValidation.c textureValidation.c configValidation.c fileParsing.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 SRCS_GNL = ${patsubst %, ${SRCS_DIR_GNL}%, ${SRCS_FILES_GNL}}
 
@@ -28,7 +28,7 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g
+CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g -fsanitize=address
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f

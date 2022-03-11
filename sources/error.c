@@ -22,15 +22,19 @@ error_type color_check(char *t_path)
 
 void	print_error_exit(error_type error)
 {
-	if(error == MAP_ERROR)
+	if (error == MAP_ERROR)
 		printf("Map error\n");
-	if(error == TEXTURE_ERROR)
+	else if (error == TEXTURE_ERROR)
 		printf("Texture error\n");
-	if(error == COLOR_ERROR)
+	else if (error == COLOR_ERROR)
 		printf("Color error\n");
-	if(error == MISSING_TEXTURE)
+	else if (error == MISSING_TEXTURE)
 		printf("Missing texture error (verify the path)\n");
-	if(error == MISSING_CARDINAL)
+	else if (error == MISSING_CARDINAL)
 		printf("Missing cardinal error\n");
+	else if (error == PLAYER_ERROR)
+		printf("There should be ONE player on the map\n");
+	else if (error == WALL_ERROR)
+		printf("The map should be surrounded by walls\n");
 	exit(0);
 }
