@@ -30,6 +30,27 @@ void	my_mlx_pixel_put(t_image *image, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
+int	max_height(char **map)
+{
+	return ft_2dim_char_sz(map);
+}
+
+int	max_width(char **map)
+{
+	size_t	max;
+	size_t	i;
+
+	max = 0;
+	i = 0;
+	while(map[i])
+	{
+		if(ft_strlen(map[i]) > max)
+			max = ft_strlen(map[i]);
+		i++;
+	}
+	return max;
+}
+
 /*void	draw_map(t_mlxp p, t_game game)
 {
 	int		k;

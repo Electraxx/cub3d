@@ -20,6 +20,27 @@ static char	**ft_replace_spaces_with_1(char **map)
 	return (map);
 }
 
+void	fill_map(char ***map)
+{
+	size_t	i;
+	size_t	max;
+	char	*tempstr;
+
+	max = max_width(*map);
+	i = 0;
+	while((*map)[i])
+	{
+		if(ft_strlen((*map)[i]) < max)
+		{
+			tempstr = ft_calloc((max + 1), sizeof(char));
+			ft_bchar(tempstr, max, '1');
+			ft_memcpy(tempstr, (*map)[i], ft_strlen((*map)[i]));
+			(*map)[i] = tempstr;
+		}
+		i++;
+	}
+}
+
 static int	wall_check(char **map)
 {
 	int	i;
@@ -70,6 +91,29 @@ static int	player_check(char **map)
 	if (player_count == 1)
 		return (1);
 	return (0);
+}
+
+void	player_setpos(char **map, t_player *player)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (map[i])
+	{
+		j = 0;
+		while (map[i][j])
+		{
+			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
+				|| map[i][j] == 'W')
+				{
+					player->posX = j;
+					player->posY = i;
+				}
+			j++;
+		}
+		i++;
+	}
 }
 
 static error_type	is_map_valid(char **map)

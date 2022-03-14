@@ -13,6 +13,11 @@
 #define WINDOW_WIDTH 720
 #define WINDOW_HEIGHT 480
 
+#define W_KEY 13
+#define S_KEY 1
+#define A_KEY 0
+#define D_KEY 2
+
 typedef struct s_color{
 	int	r;
 	int	g;
@@ -26,7 +31,8 @@ typedef struct s_config{
 	char	*path_so;
 	char	*path_we;
 	char	*path_ea;
-	char**map;
+	size_t		caseHeight;
+	size_t		caseWidth;
 } t_config;
 
 typedef struct s_cardi_check{
@@ -64,6 +70,7 @@ typedef struct s_game
 	t_player	*player;
 	t_image		*buffer;
 	t_mlxp		*mlxp;
+	t_config	*config;
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);
@@ -76,6 +83,8 @@ error_type 		is_color_valid(char *color_line);
 // mapValidation.c
 error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck);
 error_type		parse_map(int fd, int lines_num, char ***map);
+void			fill_map(char ***map);
+void			player_setpos(char **map, t_player *player);
 
 // textureValidation.c
 int 			is_valid_cardinal(char *cardinal);
@@ -91,5 +100,10 @@ void			print_error_exit(error_type error);
 
 //render2d
 void			my_mlx_pixel_put(t_image *image, int x, int y, int color);
+int				max_width(char **map);
+int				max_height(char **map);
+
+//movement.c
+int				key_hook(int keycode, t_game *game);
 
 #endif

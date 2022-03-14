@@ -1,29 +1,53 @@
 #include "cub3d.h"
 
+void load_tile(char tile, size_t posX, size_t posY, t_game *game)
+{
+	size_t	i;
+	size_t	j;
+	int 	color;
+	t_config *conf;
+
+	i = 0;
+	j = 0;
+	conf = game->config;
+	if(tile == '1')
+		color = 0x00ff0000;
+	else if(tile == '0')
+		color = 0;
+	else
+		color = 0x000000ff;
+	while(i < conf->caseHeight)
+	{
+		j = 0;
+		while(j < conf->caseWidth)
+		{
+			my_mlx_pixel_put(game->buffer, j + (posX * conf->caseWidth), i + (posY * conf->caseHeight), color);
+			j++;
+		}
+		i++;
+	}
+}
+
 int render_frame(void *g)
 {
-	printf("render frame called \n");
 	t_game *game = (t_game *) g;
 	int i = 0;
 	int j = 0;
-	int color = 0x00FF0000;
-	static int ii = 0;
-	static int jj = 0;
-	while(i < WINDOW_HEIGHT)
+
+	while(game->map[i])
 	{
 		j = 0;
-		while(j < WINDOW_WIDTH)
-		{
-			my_mlx_pixel_put(game->buffer, j, i, color);
-			j++;
-		}
-		color+=1;
+			while(game->map[i][j])
+			{
+				load_tile(game->map[i][j], j, i, game);
+				j++;
+			}
 		i++;
 	}
 	// sleep(1);
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
-	ii++;
-	jj++;
+	//ft_print_map(game->map);
+	//exit(0)
 	return 0;
 }
 
@@ -34,6 +58,7 @@ int main(int argc, char **argv)
 	t_game game;
 	t_image img;
 	game.player = malloc(sizeof (t_player));
+	game.config = malloc(sizeof (t_config));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
 	(void) img;
@@ -42,6 +67,7 @@ int main(int argc, char **argv)
 		return (1);
 	init_cardi_struct(&cardiCheck);
 	ft_parse_file(argv[1], &cardiCheck, &game);
+	fill_map(&game.map);
 	ft_print_map(game.map);
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
@@ -50,11 +76,12 @@ int main(int argc, char **argv)
 								&img.endian);
 	//draw_map(mlx, game);
 
-
+	game.config->caseHeight = WINDOW_HEIGHT / max_height(game.map);
+	game.config->caseWidth = WINDOW_WIDTH / max_width(game.map);
+	player_setpos(game.map, game.player);
 	mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame, &game);
-	//mlx_key_hook(mlxp.win_ptr, key_hook, &p);
-	//mlx_hook(mlxp.win_ptr, 17, 0, close_game, &p);
-	
+
+	mlx_key_hook(mlxp.win_ptr, key_hook, &game);
 	mlx_loop(mlxp.mlx_ptr);
 	/*while(1)
 	{
