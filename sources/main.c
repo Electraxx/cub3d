@@ -14,13 +14,13 @@ int render_frame(void *g)
 		j = 0;
 		while(j < WINDOW_WIDTH)
 		{
-			my_mlx_pixel_put(game->buffer->img, j, i, color);
+			my_mlx_pixel_put(game->buffer, j, i, color);
 			j++;
 		}
 		color+=1;
 		i++;
 	}
-	sleep(1);
+	// sleep(1);
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 	ii++;
 	jj++;
