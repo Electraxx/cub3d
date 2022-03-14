@@ -6,7 +6,7 @@
 /*   By: qbrechbu <qbrechbu@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 02:33:00 by qbrechbu          #+#    #+#             */
-/*   Updated: 2022/03/10 11:53:50 by qbrechbu         ###   ########.fr       */
+/*   Updated: 2022/03/14 16:00:14 by qbrechbu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,4 +95,6 @@ char	**ft_copy_2d_str(char **ori);
 void	ft_print_2d_str(char **strs, int fd, char *prompt);
 int		ft_is_only_whitespace(char *str);
 int		ft_is_str_full_num(char *str);
+void	ft_bchar(void *s, size_t n, char c);
+
 #endif
