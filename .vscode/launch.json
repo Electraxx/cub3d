@@ -9,7 +9,7 @@
             "request": "launch",
             "name": "Debug",
             "program": "${workspaceFolder}/cub3d",
-            "args": ["lol.cub"],
+            "args": ["config.cub"],
             "cwd": "${workspaceFolder}"
         }
     ]

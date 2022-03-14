@@ -1,7 +1,7 @@
 SRCS_DIR	= sources/
 SRCS_DIR_GNL = sources/gnl/
 SRCS_FILES_GNL = get_next_line.c
-SRCS_FILES	= main.c init.c error.c mapValidation.c debug.c colorValidation.c textureValidation.c configValidation.c fileParsing.c
+SRCS_FILES	= main.c init.c error.c mapValidation.c debug.c colorValidation.c textureValidation.c configValidation.c fileParsing.c render2dMap.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 SRCS_GNL = ${patsubst %, ${SRCS_DIR_GNL}%, ${SRCS_FILES_GNL}}
 
@@ -18,7 +18,6 @@ MAKELIB		= ${MAKE} -C ${LIBFT}
 
 LIBX		= ./minilibx
 MAKELIBX	= ${MAKE} -C ${LIBX}
-
 HEADS		= ./
 
 OBJS		= ${SRCS:.c=.o}
@@ -28,7 +27,7 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g -fsanitize=address
+CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g -fsanitize=address
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f

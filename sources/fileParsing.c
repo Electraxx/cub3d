@@ -31,7 +31,7 @@ static int	ft_check_extension(char *path)
 	return (1);
 }
 
-int	ft_parse_file(char *path, t_cardi_check *cardiCheck)
+int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
 	int		fd;
 	int		ret;
@@ -50,6 +50,7 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck)
 	if (ret < 0)
 		print_error_exit(ret);
 	ret = parse_map(fd, lines_number, &map);
+	game->map = map;
 	if (ret < 0)
 		print_error_exit(ret);
 	return (CHECK_OK);

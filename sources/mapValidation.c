@@ -98,6 +98,5 @@ error_type	parse_map(int fd, int lines_num, char ***map)
 	}
 	(*map)[i] = NULL;
 	(*map) = ft_replace_spaces_with_1((*map));
-	ft_print_map((*map));
 	return (is_map_valid(*map));
 }
