@@ -28,7 +28,7 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 	}
 }
 
-int render_frame(void *g)
+int render_frame2D(void *g)
 {
 	t_game *game = (t_game *) g;
 	int i = 0;
@@ -48,8 +48,50 @@ int render_frame(void *g)
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 	//ft_print_map(game->map);
 	//exit(0)
-	return 0;
+	return (0);
 }
+
+void drawRays3D(t_game *game)
+{
+	int r,mx,mp,my,dof;
+	double rx,ry,ra,xo,yo;
+
+	r = 0;
+	ra = game->player->v_angle;
+	while(r < RAYS_NBR)
+	{
+		dof = 0;
+		float aTan = -1 / tan(ra);
+		if(ra > PI)
+		{
+			ry = ((int) py >> 6) << 6)
+		}
+		r++;
+	}
+}
+
+/*int render_frame(void *g)
+{
+	t_game *game = (t_game *) g;
+	double camX ;
+	int w = 100;
+	int i = 0;
+	int j = 0;
+	int planeX;
+	int planeX;
+	int rayDirX;
+	int rayDirY;
+  	double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
+	while(i < w)
+	{
+		camX = 2 * game->player->posX / (double) w - 1;
+		//double rayDirX = dirX + planeX * camX;
+      	//double rayDirY = dirY + planeY * camX;
+		i++;
+	}
+	
+	return (0);
+}*/
 
 int main(int argc, char **argv)
 {
@@ -58,6 +100,7 @@ int main(int argc, char **argv)
 	t_game game;
 	t_image img;
 	game.player = malloc(sizeof (t_player));
+	game.player->v_angle = 0;
 	game.config = malloc(sizeof (t_config));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
@@ -76,11 +119,13 @@ int main(int argc, char **argv)
 								&img.endian);
 	//draw_map(mlx, game);
 
-	game.config->caseHeight = WINDOW_HEIGHT / max_height(game.map);
-	game.config->caseWidth = WINDOW_WIDTH / max_width(game.map);
-	player_setpos(game.map, game.player);
-	mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame, &game);
+	game.config->caseWidth = 64;
 
+	game.config->caseHeight = 64;
+	// game.config->caseWidth = game.config->caseHeight;
+	player_setpos(game.map, game.player);
+	mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
+	printf("%f %f\n", game.player->posX, game.player->posY);
 	mlx_key_hook(mlxp.win_ptr, key_hook, &game);
 	mlx_loop(mlxp.mlx_ptr);
 	/*while(1)
