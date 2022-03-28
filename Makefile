@@ -32,7 +32,7 @@ AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS		= -g #-Wall -Wextra -Werror -g
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
@@ -48,11 +48,12 @@ bonus:		${NAME}
 
 clean:
 		${RM} ${OBJS} ${OBJFT} ${OBJS_GNL}
-		${MAKELIBX} clean
 
 fclean:		clean
 		${RM} ${NAME}
 
-re:		fclean all
+re:		fclean ${OBJS} ${OBJS_GNL} ${OBJFT}
+		${MAKELIB} all
+		${CC} ${CFLAGS} -o ${NAME} ${OBJS} ${OBJS_GNL} ${OBJFT} -Lminilibx -lmlx -framework OpenGL -framework AppKit
 
 .PHONY:		all bonus clean fclean re

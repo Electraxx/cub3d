@@ -9,14 +9,21 @@
 # include <stdio.h>
 # include "../minilibx/mlx.h"
 # include <pthread.h>
+# include <math.h>
 
-#define WINDOW_WIDTH 720
-#define WINDOW_HEIGHT 480
+#define WINDOW_WIDTH 2200
+#define WINDOW_HEIGHT 1200
+
+#define PI 3.141592653589
 
 #define W_KEY 13
 #define S_KEY 1
 #define A_KEY 0
 #define D_KEY 2
+
+#define SPEED 0.5
+#define ROT_SPEED 5
+#define RAYS_NBR 1
 
 typedef struct s_color{
 	int	r;
@@ -44,6 +51,9 @@ typedef struct s_player
 {
 	double	posX;
 	double	posY;
+	double	deltaX;
+	double	deltaY;
+	double	v_angle;
 	double	ori;
 }	t_player;
 
