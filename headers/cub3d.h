@@ -26,6 +26,7 @@
 #define RAYS_NBR 1
 
 typedef struct s_color{
+	int	a;
 	int	r;
 	int	g;
 	int	b;
@@ -40,6 +41,8 @@ typedef struct s_config{
 	char	*path_ea;
 	size_t		caseHeight;
 	size_t		caseWidth;
+	size_t		mapMaxWidth;
+	size_t		mapMaxHeight;
 } t_config;
 
 typedef struct s_cardi_check{

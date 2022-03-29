@@ -20,7 +20,7 @@ void	set_cardi_values(char *cardi, t_cardi_check *check_cardi)
 	int	i;
 
 	i = 0;
-	while(i < 4)
+	while (i < 4)
 	{
 		if(ft_same_str(check_cardi->cardi[i], cardi))
 			check_cardi->val[i] = 1;
