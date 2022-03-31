@@ -93,6 +93,7 @@ typedef struct s_game
 	t_mlxp		*mlxp;
 	t_config	*config;
 	t_camera	*camera;
+	t_image *rayIgm;
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);

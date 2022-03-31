@@ -21,17 +21,14 @@ void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
 	}
 }
 
-void move(t_game *game)
+void move(int tempX, int tempY, t_game *game)
 {
 	char		**map;
 	t_player	*player;
-	int			tempX;
-	int			tempY;
 
 	player = game->player;
 	map = game->map;
-	tempX = game->player->posX + game->camera->dirX * SPEED;
-	tempY = game->player->posY + game->camera->dirY * SPEED;
+	printf("altered map : \n");
 	print_altered_map(tempX, tempY, 'X', game->map, game->config->mapMaxWidth, game->config->mapMaxHeight);
 	if (map[tempY][tempX] != '1')
 	{
@@ -41,7 +38,8 @@ void move(t_game *game)
 		game->player->posX = tempX;
 		g_debug = 1;
 	}
-	//ft_print_map(game->map);
+	printf("real map : \n");
+	ft_print_map(game->map);
 }
 
 int	key_hook(int keycode, t_game *game)
@@ -49,9 +47,13 @@ int	key_hook(int keycode, t_game *game)
     (void) game;
     double	x;
     double	y;
+	static int count = 0;
+	int		tempX;
+	int		tempY;
 
 	x = 0;
 	y = 0;
+	count++;
 	if(keycode == D_KEY)
 	{
 		double oldDirX = game->camera->dirX;
@@ -73,9 +75,17 @@ int	key_hook(int keycode, t_game *game)
 		// printf("new diry : %f\n", game->camera->dirY);
 	}
 	if (keycode == W_KEY)
-		move(game);
+	{
+		tempY = game->player->posY + game->camera->dirY * SPEED;
+		tempX = game->player->posX + game->camera->dirX * SPEED;
+		move(tempX, tempY, game);
+	}
 	if (keycode == S_KEY)
-		move(game);
-	//vars->cntmoves += move(keycode, vars);
+	{
+		tempY = game->player->posY - game->camera->dirY * SPEED;
+		tempX = game->player->posX - game->camera->dirX * SPEED;
+		move(tempX, tempY, game);
+	}
+	printf("Count vaut : %d\n", count);
 	return (0);
 }
