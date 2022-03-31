@@ -1,32 +1,47 @@
 #include "cub3d.h"
+extern int g_debug;
 
-void move(double movX, double movY, t_game *game)
+void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
+{
+	int i = 0;
+	int j = 0;
+	while(i < dimY)
+	{
+		j = 0;
+		while(j < dimX)
+		{
+			if(j == x && y == i)
+				printf("%c", c);
+			else
+				printf("%c", map[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
+}
+
+void move(t_game *game)
 {
 	char		**map;
 	t_player	*player;
+	int			tempX;
+	int			tempY;
 
 	player = game->player;
 	map = game->map;
-	movX = movX * SPEED;
-	movY = movY * SPEED;
-	if (map[(int)(player->posY + movY)][(int)(player->posX + movX)] != '1')
+	tempX = game->player->posX + game->camera->dirX * SPEED;
+	tempY = game->player->posY + game->camera->dirY * SPEED;
+	print_altered_map(tempX, tempY, 'X', game->map, game->config->mapMaxWidth, game->config->mapMaxHeight);
+	if (map[tempY][tempX] != '1')
 	{
-		printf("before x : %f\n", game->player->posX);
-		printf("before y : %f\n", game->player->posY);
-		printf("before x (cast) : %d\n",(int) game->player->posX);
-		printf("before y (cast) : %d\n", (int) game->player->posY);
 		map[((int)player->posY)][((int)player->posX)] = '0';
-		map[(int)(player->posY + movY)][(int)(player->posX + movX)] = 'N';
-		game->player->posY = player->posY + movY;
-		game->player->posX = player->posX + movX;
-		printf("after x : %f\n", player->posX);
-		printf("after y : %f\n", player->posY);
-		printf("after x (cast) : %d\n",(int) game->player->posX);
-		printf("after y (cast) : %d\n", (int) game->player->posY);
+		map[tempY][tempX] = 'N';
+		game->player->posY = tempY;
+		game->player->posX = tempX;
+		g_debug = 1;
 	}
-	printf("%f\n", game->player->posX);
-	printf("%f\n", game->player->posY);
-	ft_print_map(game->map);
+	//ft_print_map(game->map);
 }
 
 int	key_hook(int keycode, t_game *game)
@@ -37,27 +52,30 @@ int	key_hook(int keycode, t_game *game)
 
 	x = 0;
 	y = 0;
-	if(keycode == A_KEY)
-	{
-		game->player->v_angle -= 0.1;
-		if(game->player->v_angle < 0)
-			game->player->v_angle += 2 * PI;
-		game->player->deltaX = cos(game->player->v_angle) * ROT_SPEED;
-		game->player->deltaY = sin(game->player->v_angle) * ROT_SPEED;
-	}
 	if(keycode == D_KEY)
 	{
-		game->player->v_angle += 0.1;
-		if(game->player->v_angle > 2 * PI)
-			game->player->v_angle -= 2 * PI;
-		game->player->deltaX = cos(game->player->v_angle) * ROT_SPEED;
-		game->player->deltaY = sin(game->player->v_angle) * ROT_SPEED;
+		double oldDirX = game->camera->dirX;
+      	game->camera->dirX = oldDirX * cos(-ROT_SPEED) - game->camera->dirY * sin(-ROT_SPEED);
+      	game->camera->dirY = oldDirX * sin(-ROT_SPEED) + game->camera->dirY * cos(-ROT_SPEED);
+      	double oldPlaneX = game->camera->planeX;
+      	game->camera->planeX = game->camera->planeX * cos(-ROT_SPEED) - game->camera->planeY * sin(-ROT_SPEED);
+      	game->camera->planeY = oldPlaneX * sin(-ROT_SPEED) + game->camera->planeY * cos(-ROT_SPEED);
 	}
-	if(keycode == W_KEY)
-		y--;
-	if(keycode == S_KEY)
-		y++;
-	move(x, y, game);
+	if(keycode == A_KEY)
+	{
+		double oldDirX = game->camera->dirX;
+      	game->camera->dirX = oldDirX * cos(ROT_SPEED) - game->camera->dirY * sin(ROT_SPEED);
+      	game->camera->dirY = oldDirX * sin(ROT_SPEED) + game->camera->dirY * cos(ROT_SPEED);
+      	double oldPlaneX = game->camera->planeX;
+      	game->camera->planeX = game->camera->planeX * cos(ROT_SPEED) - game->camera->planeY * sin(ROT_SPEED);
+      	game->camera->planeY = oldPlaneX * sin(ROT_SPEED) + game->camera->planeY * cos(ROT_SPEED);
+		// printf("new dirx : %f\n", game->camera->dirX);
+		// printf("new diry : %f\n", game->camera->dirY);
+	}
+	if (keycode == W_KEY)
+		move(game);
+	if (keycode == S_KEY)
+		move(game);
 	//vars->cntmoves += move(keycode, vars);
 	return (0);
 }

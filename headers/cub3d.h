@@ -11,8 +11,8 @@
 # include <pthread.h>
 # include <math.h>
 
-#define WINDOW_WIDTH 2200
-#define WINDOW_HEIGHT 1200
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 #define PI 3.141592653589
 
@@ -22,7 +22,7 @@
 #define D_KEY 2
 
 #define SPEED 0.5
-#define ROT_SPEED 5
+#define ROT_SPEED 0.1
 #define RAYS_NBR 1
 
 typedef struct s_color{
@@ -50,15 +50,23 @@ typedef struct s_cardi_check{
 	char **cardi;
 } t_cardi_check;
 
+// int g_debug = 0;
+
 typedef struct s_player
 {
 	double	posX;
 	double	posY;
-	double	deltaX;
-	double	deltaY;
 	double	v_angle;
 	double	ori;
 }	t_player;
+
+typedef struct s_camera
+{
+	double	planeX;
+	double	planeY;
+	double	dirX;
+	double	dirY;
+}	t_camera;
 
 typedef struct	s_image {
 	void	*img;
@@ -84,6 +92,7 @@ typedef struct s_game
 	t_image		*buffer;
 	t_mlxp		*mlxp;
 	t_config	*config;
+	t_camera	*camera;
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);
