@@ -17,17 +17,23 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 		color = 0;
 	else
 		color = 0x000000ff;
-	while (i < 16)
+	while (i < 4)
 	{
 		j = 0;
-		while (j < 16)
+		while (j < 4)
 		{
-			my_mlx_pixel_put(game->buffer, j + (posX * 16), i + (posY * 16), color);
+			my_mlx_pixel_put(game->minimap, j + (posX * 4), i + (posY * 4), color);
 			j++;
 		}
 		i++;
 	}
-	//exit(0);
+}
+
+void ft_swapd(double *a, double *b)
+{
+	double c = *a;
+	*a = *b;
+	*b = c;
 }
 
 int render_frame2D(void *g)
@@ -35,74 +41,55 @@ int render_frame2D(void *g)
 	t_game *game = (t_game *)g;
 	int i = 0;
 	int j = 0;
-	int a = 0;
+
 	while (game->map[i])
 	{
 		j = 0;
 		while (game->map[i][j])
 		{
-			if(i == 7)
-				a = 2;
 			load_tile(game->map[i][j], j, i, game);
-			printf("tile x: %d y : %d loaded\n", j, i);
 			j++;
 		}
 		i++;
 	}
-	// sleep(1);
-	//P2x = P1x + n * Vx
-	//P2y = P1y + n * Vy
-	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
-	int rayx = 
-	int rayy = game->player->posY + game->player->posY * game->camera->dirY;
-	my_mlx_pixel_put(game->rayIgm, 0, 0, 0x0000ff00);
-	//my_mlx_pixel_put(game->rayIgm, rayx, rayy + 1, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx + 1, rayy, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx - 1, rayy, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx, rayy - 1, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx + 1, rayy + 1, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx - 1 , rayy - 1, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx + 1, rayy - 1, 0x00000000);
-	//my_mlx_pixel_put(game->rayIgm, rayx - 1, rayy + 1, 0x00000000);
-	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->rayIgm, rayx * 16, rayy * 16);
-	ft_print_map(game->map);
-	//exit(0)
+	printf("%f %f\n", game->camera->dirX, game->camera->dirY);
+	double rayx = game->player->posX + game->player->posX * (fabs(game->camera->dirX));
+	double rayy = game->player->posY + game->player->posY * (fabs(game->camera->dirY));
+	int z = 20;
+	double tposx = game->player->posX;
+	double tposy = game->player->posY ;
+	while(z)
+	{
+		tposx += game->camera->dirX;
+		tposy += game->camera->dirY;
+		my_mlx_pixel_put(game->buffer, (int) (game->player->posX) + tposx + WINDOW_WIDTH - 400, (int) (game->player->posY) + tposy, 0x0000ff00);
+		z--;
+	}
+	// mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, WINDOW_WIDTH - 400, 0);
 	return (0);
 }
 
-void drawLinePointDirection(int px, int py, int dx, int dy) {
-    int Ax = px + 10000 * dx;
-    int Ay = py + 10000 * dy;
-    int Bx = Px - 10000 * dx;
-    int By = Py - 10000 * dy;
-    drawLineTwoPoints(A, B);
-}
-
 unsigned long createRGBA(t_color color)
-{   
-    return ((color.r & 0xff) << 24) + ((color.g & 0xff) << 16) + ((color.b & 0xff) << 8)
-           + (color.a & 0xff);
+{
+	return ((color.r & 0xff) << 24) + ((color.g & 0xff) << 16) + ((color.b & 0xff) << 8) + (color.a & 0xff);
 }
 
-void	ft_verline(int line, int *drawStart_end, t_game *game, int color)
+void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	// game->buffer->img = mlx_new_image(game->mlxp->mlx_ptr, 1, drawStart_end[1] - drawStart_end[0]);
-	//game->buffer->addr = mlx_get_data_addr(game->buffer->img, &game->buffer->bits_per_pixel, &game->buffer->line_length,
-								// &game->buffer->endian);
-	while(i < drawStart_end[0])
+	while (i < drawStart_end[0])
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x00ff0000);
 		i++;
 	}
-	while(i < drawStart_end[1])
+	while (i < drawStart_end[1])
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, color);
 		i++;
 	}
-	while(i < WINDOW_HEIGHT)
+	while (i < WINDOW_HEIGHT)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x0000ff00);
 		i++;
@@ -119,18 +106,18 @@ void drawRays3D(void *g)
 	double perpWallDist;
 	double deltaDistX;
 	double deltaDistY;
-	t_game *game = (t_game *) g;
+	t_game *game = (t_game *)g;
 	while (!done)
 	{
 		i = 0;
 		//usleep(100);
-		while (i < WINDOW_WIDTH)
+		while (i < WINDOW_WIDTH - 400)
 		{
-			double cameraX = 2 * i / ((double)WINDOW_WIDTH - 1); //x-coordinate in camera space
+			double cameraX = 2 * i / ((double)WINDOW_WIDTH - 400 - 1) ; //x-coordinate in camera space
 			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
 			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
-			int mapx = (int) game->player->posX;
-			int mapy = (int) game->player->posY;
+			int mapx = (int)game->player->posX;
+			int mapy = (int)game->player->posY;
 			deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
 			deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
 
@@ -204,17 +191,20 @@ void drawRays3D(void *g)
 			//t_color color;
 			//color.g = 255;
 			int color = 0x000000ff;
-			if (side == 1) {color = color / 2;}
+			if (side == 1)
+				color = color / 2;
 
 			int start_end[2];
 			start_end[0] = drawStart;
 			start_end[1] = drawEnd;
-      		//draw the pixels of the stripe as a vertical line
-      		ft_verline(i, start_end, game, color);
+			//draw the pixels of the stripe as a vertical line
+			
+			ft_verline(i, start_end, game, color);
 			i++;
-			}
-			done = 1;
 		}
+		render_frame2D(game);
+		  done = 1;
+	}
 }
 
 int main(int argc, char **argv)
@@ -228,6 +218,7 @@ int main(int argc, char **argv)
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
+	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
 	if (argc != 2)
@@ -238,18 +229,20 @@ int main(int argc, char **argv)
 	ft_print_map(game.map);
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
-	//img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
+	game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
+	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
-	game.rayIgm = mlx_new_image(&mlxp, 1, 1);
+	//game.rayIgm = mlx_new_image(&mlxp, 3, 3);
 	game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
-								 &game.rayIgm->endian);
+										  &game.rayIgm->endian);
+	game.minimap->addr = mlx_get_data_addr(&game.minimap->img, &game.minimap->bits_per_pixel, &game.minimap->line_length,
+	&game.minimap->endian);
 	//draw_map(mlx, game);
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
 	game.camera->planeX = 0;
-	game.camera->planeY = 0.8;
+	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
 	game.config->mapMaxHeight = max_height(game.map);
 
@@ -268,9 +261,10 @@ int main(int argc, char **argv)
 		ft_verline(300 + i, trash, &game, trash2);
 		j++;
 	}*/
-	//mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
-	mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
-	printf("%f %f\n", game.player->posX, game.player->posY);
+	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
+	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
 	mlx_key_hook(mlxp.win_ptr, key_hook, &game);
+	//mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
+	//printf("%f %f\n", game.player->posX, game.player->posY);
 	mlx_loop(mlxp.mlx_ptr);
 }
