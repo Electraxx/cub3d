@@ -17,23 +17,16 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 		color = 0;
 	else
 		color = 0x000000ff;
-	while (i < 4)
+	while (i < 16)
 	{
 		j = 0;
-		while (j < 4)
+		while (j < 16)
 		{
-			my_mlx_pixel_put(game->minimap, j + (posX * 4), i + (posY * 4), color);
+			my_mlx_pixel_put(game->buffer, j + (posX * 16), i + (posY * 16), color);
 			j++;
 		}
 		i++;
 	}
-}
-
-void ft_swapd(double *a, double *b)
-{
-	double c = *a;
-	*a = *b;
-	*b = c;
 }
 
 int render_frame2D(void *g)
@@ -62,10 +55,10 @@ int render_frame2D(void *g)
 	{
 		tposx += game->camera->dirX;
 		tposy += game->camera->dirY;
-		my_mlx_pixel_put(game->buffer, (int) (game->player->posX) + tposx + WINDOW_WIDTH - 400, (int) (game->player->posY) + tposy, 0x0000ff00);
+		my_mlx_pixel_put(game->buffer, (int) (game->player->posX * 15) + tposx, (int) (game->player->posY * 15) + tposy, 0x0000ff00);
 		z--;
 	}
-	// mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, WINDOW_WIDTH - 400, 0);
+	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 	return (0);
 }
 
@@ -113,7 +106,7 @@ void drawRays3D(void *g)
 		//usleep(100);
 		while (i < WINDOW_WIDTH)
 		{
-			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) ; //x-coordinate in camera space
+			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) - 0.3; //x-coordinate in camera space
 			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
 			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
 			int mapx = (int)game->player->posX;
@@ -229,13 +222,12 @@ int main(int argc, char **argv)
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	//game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
+	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
 	//game.rayIgm = mlx_new_image(&mlxp, 3, 3);
-	game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
-										  &game.rayIgm->endian);
-	game.minimap->addr = mlx_get_data_addr(&game.minimap->img, &game.minimap->bits_per_pixel, &game.minimap->line_length,
-	&game.minimap->endian);
+	//game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
+										 // &game.rayIgm->endian);
 	//draw_map(mlx, game);
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;

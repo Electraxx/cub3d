@@ -28,12 +28,19 @@ void move(double deltax, double deltay, t_game *game)
 
 	player = game->player;
 	map = game->map;
-	int dirx = game->camera->dirX;
-	int diry = game->camera->dirY;
-	// if (fabs(deltax) < 0.09)
-	// 	deltax = 0.0;
-	// if (fabs(deltay) < 0.09)
-	// 	deltay = 0.0;
+
+	if (fabs(deltax) < 0.09)
+	deltax = 0.0;
+	if (fabs(deltay) < 0.09)
+		deltay = 0.0;
+	// int testx = (int)deltax * 100;
+	// int testy = (int)deltay * 100;
+	// if(testx % 10 >= 5)
+	// 	testx += testx % 10;
+	// if(testx % 10 >= 5)
+	// 	testx += testx % 10;
+	//deltay = ceilf(deltay);
+	//deltax = ceilf(deltax);
 	//printf("altered map : \n");
 	//print_altered_map(tempX, tempY, 'X', game->map, game->config->mapMaxWidth, game->config->mapMaxHeight);
 	if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX + deltax)] != '1')

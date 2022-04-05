@@ -27,12 +27,12 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} -g -fsanitize=address
+CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} -fsanitize=address
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -g #-Wall -Wextra -Werror -g
+CFLAGS		= -g3 #-Wall -Wextra -Werror -g
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
