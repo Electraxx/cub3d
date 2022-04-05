@@ -21,6 +21,28 @@ void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
 	}
 }
 
+double roundnearest125(double nbr)
+{
+	double testnbr = -1;
+	double lowest_delta = 100000;
+	int i = 1;
+	int itnbr = 0;
+	int negcheck = 1;
+	if(nbr < 0)
+		negcheck -=2;
+	while(i < 17)
+	{
+		double debug = fabs(((i) * 0.100) - fabs(nbr));
+		if(lowest_delta > fabs((i * 0.) - fabs(nbr)))
+		{
+			itnbr = i;
+			lowest_delta = fabs(fabs(i * 0.125) - fabs(nbr));
+		}
+		i++;
+	}
+	return itnbr * 0.125 * negcheck;
+}
+
 void move(double deltax, double deltay, t_game *game)
 {
 	char		**map;
@@ -29,10 +51,12 @@ void move(double deltax, double deltay, t_game *game)
 	player = game->player;
 	map = game->map;
 
-	if (fabs(deltax) < 0.09)
-	deltax = 0.0;
-	if (fabs(deltay) < 0.09)
-		deltay = 0.0;
+	deltax = roundnearest125(deltax);
+	deltay = roundnearest125(deltay);
+	// if (fabs(deltax) < 0.06)
+	// 	deltax = 0.0;
+	// if (fabs(deltay) < 0.06)
+	// 	deltay = 0.0;
 	// int testx = (int)deltax * 100;
 	// int testy = (int)deltay * 100;
 	// if(testx % 10 >= 5)

@@ -22,7 +22,7 @@
 #define D_KEY 2
 
 #define SPEED 0.3
-#define ROT_SPEED 0.1
+#define ROT_SPEED 0.125
 
 typedef struct s_color{
 	int	a;

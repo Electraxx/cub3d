@@ -106,7 +106,7 @@ void drawRays3D(void *g)
 		//usleep(100);
 		while (i < WINDOW_WIDTH)
 		{
-			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) - 0.3; //x-coordinate in camera space
+			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) - 0.25; //x-coordinate in camera space
 			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
 			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
 			int mapx = (int)game->player->posX;
