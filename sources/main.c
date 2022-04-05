@@ -111,9 +111,9 @@ void drawRays3D(void *g)
 	{
 		i = 0;
 		//usleep(100);
-		while (i < WINDOW_WIDTH - 400)
+		while (i < WINDOW_WIDTH)
 		{
-			double cameraX = 2 * i / ((double)WINDOW_WIDTH - 400 - 1) ; //x-coordinate in camera space
+			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) ; //x-coordinate in camera space
 			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
 			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
 			int mapx = (int)game->player->posX;
@@ -177,8 +177,6 @@ void drawRays3D(void *g)
 				perpWallDist = (sideDistY - deltaDistY);
 			//Calculate height of line to draw on screen
 			int lineHeight = (int)(WINDOW_HEIGHT / perpWallDist);
-			if (perpWallDist == 0)
-				lineHeight = WINDOW_HEIGHT - 1;
 			//calculate lowest and highest pixel to fill in current stripe
 			int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
 			if (drawStart < 0)
@@ -202,7 +200,7 @@ void drawRays3D(void *g)
 			ft_verline(i, start_end, game, color);
 			i++;
 		}
-		render_frame2D(game);
+		//render_frame2D(game);
 		  done = 1;
 	}
 }
@@ -229,7 +227,7 @@ int main(int argc, char **argv)
 	ft_print_map(game.map);
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
+	//game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);

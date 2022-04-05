@@ -11,7 +11,7 @@
 # include <pthread.h>
 # include <math.h>
 
-#define WINDOW_WIDTH 1040
+#define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
 #define PI 3.141592653589

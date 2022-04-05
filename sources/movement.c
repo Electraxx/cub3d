@@ -89,13 +89,18 @@ int	key_hook(int keycode, t_game *game)
 	{
 		// tempY = game->player->posY + game->camera->dirY * SPEED;
 		// tempX = game->player->posX + game->camera->dirX * SPEED;
-		if (fabs(game->camera->dirX) > fabs(game->camera->dirY))
-			move(game->camera->dirX * SPEED, 0, game);
-		else
-			move(0, game->camera->dirY * SPEED, game);
+	// 	if (fabs(game->camera->dirX) > fabs(game->camera->dirY))
+	// 		move(game->camera->dirX * SPEED, 0, game);
+	// 	else
+	// 		move(0, game->camera->dirY * SPEED, game);
+		move(game->camera->dirX * SPEED, game->camera->dirY * SPEED, game);
 	}
 	if (keycode == S_KEY)
 	{
+		// if (fabs(game->camera->dirX) > fabs(game->camera->dirY))
+		// 	move(game->camera->dirX * SPEED * -1, 0, game);
+		// else
+		// 	move(0, game->camera->dirY * SPEED * -1, game);
 		move(game->camera->dirX * SPEED * -1, game->camera->dirY * SPEED * -1, game);
 	}
 	return (0);
