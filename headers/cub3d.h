@@ -84,6 +84,11 @@ typedef struct s_mlxp
 	int		ww;
 }	t_mlxp;
 
+typedef struct s_assets
+{
+	void	*wallText;
+}	t_assets;
+
 typedef struct s_game
 {
 	char		**map;
@@ -94,6 +99,8 @@ typedef struct s_game
 	t_camera	*camera;
 	t_image *rayIgm;
 	t_image *minimap;
+	t_assets *textures;
+	uint32_t textbuff[WINDOW_HEIGHT][WINDOW_WIDTH];
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);

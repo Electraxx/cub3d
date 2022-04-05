@@ -51,22 +51,22 @@ void move(double deltax, double deltay, t_game *game)
 	player = game->player;
 	map = game->map;
 
-	deltax = roundnearest125(deltax);
-	deltay = roundnearest125(deltay);
-	// if (fabs(deltax) < 0.06)
-	// 	deltax = 0.0;
-	// if (fabs(deltay) < 0.06)
-	// 	deltay = 0.0;
+	//deltax = roundnearest125(deltax);
+	//deltay = roundnearest125(deltay);
+	if (fabs(deltax) < 0.06)
+		deltax = 0.0;
+	if (fabs(deltay) < 0.06)
+		deltay = 0.0;
 	// int testx = (int)deltax * 100;
 	// int testy = (int)deltay * 100;
 	// if(testx % 10 >= 5)
 	// 	testx += testx % 10;
 	// if(testx % 10 >= 5)
 	// 	testx += testx % 10;
-	//deltay = ceilf(deltay);
-	//deltax = ceilf(deltax);
-	//printf("altered map : \n");
-	//print_altered_map(tempX, tempY, 'X', game->map, game->config->mapMaxWidth, game->config->mapMaxHeight);
+	// deltay = ceilf(deltay);
+	// deltax = ceilf(deltax);
+	// printf("altered map : \n");
+	// print_altered_map(tempX, tempY, 'X', game->map, game->config->mapMaxWidth, game->config->mapMaxHeight);
 	if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX + deltax)] != '1')
 	{
 		game->player->posX += deltax;

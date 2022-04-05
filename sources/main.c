@@ -29,6 +29,13 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 	}
 }
 
+void	load_textures(t_game *game)
+{
+	int a;
+	int b;
+	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/wall.xpm", &a, &b);
+}
+
 int render_frame2D(void *g)
 {
 	t_game *game = (t_game *)g;
@@ -209,6 +216,7 @@ int main(int argc, char **argv)
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
+	game.textures = malloc(sizeof(t_assets));
 	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
@@ -239,6 +247,15 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	// game.config->caseWidth = game.config->caseHeight;
+	load_textures(&game);
+	int i = 0;
+	printf("%p", (game.textures->wallText));
+	printf("\n");
+	while(i < 30)
+	{
+		printf("%d\n", ((int *)game.textures->wallText)[i]);
+		i++;
+	}
 	player_setpos(game.map, game.player);
 	int trash[2];
 
