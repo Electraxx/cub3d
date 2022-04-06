@@ -33,7 +33,7 @@ void	load_textures(t_game *game)
 {
 	int a;
 	int b;
-	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/wall.xpm", &a, &b);
+	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
 }
 
 int render_frame2D(void *g)
@@ -266,30 +266,23 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	// game.config->caseWidth = game.config->caseHeight;
-	load_textures(&game);
-	int i = 0;
-	printf("%p", (game.textures->wallText));
-	printf("\n");
-	//while(i < 30)
+	// load_textures(&game);
+	// int i = 0;
+	// printf("%p", (game.textures->wallText));
+	// printf("\n");
+	// 	uint32_t *val = (uint32_t *) game.textures->wallText;
+	// while(i < 30)
 	// {
-	// 	printf("%d\n", ((int *)game.textures->wallText)[i]);
+	// 	printf("%d\n", ((uint32_t *)game.textures->wallText)[i]);
 	// 	i++;
 	// }
-	player_setpos(game.map, game.player);
-	int trash[2];
+	// int trash[2];
 
-	/*trash[0] = 100;
-	trash[1] = 300;
-	t_color trash2;
-	int j = 0;
-	for (int i = 0; j < 20 ; i += 12)
-	{
-		ft_verline(300 + i, trash, &game, trash2);
-		j++;
-	}*/
-	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
+	player_setpos(game.map, game.player);
+	mlx_hook(mlxp.mlx_ptr, 2, (1L << 0), &key_hook, &game);
 	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
-	mlx_key_hook(mlxp.win_ptr, key_hook, &game);
+	// mlx_key_hook(mlxp.win_ptr, key_hook, &game);
+	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
 	// printf("%f %f\n", game.player->posX, game.player->posY);
 	mlx_loop(mlxp.mlx_ptr);
