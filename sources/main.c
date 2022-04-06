@@ -57,12 +57,12 @@ int render_frame2D(void *g)
 	double rayy = game->player->posY + game->player->posY * (fabs(game->camera->dirY));
 	int z = 20;
 	double tposx = game->player->posX;
-	double tposy = game->player->posY ;
-	while(z)
+	double tposy = game->player->posY;
+	while (z)
 	{
 		tposx += game->camera->dirX;
 		tposy += game->camera->dirY;
-		my_mlx_pixel_put(game->buffer, (int) (game->player->posX * 15) + tposx, (int) (game->player->posY * 15) + tposy, 0x0000ff00);
+		my_mlx_pixel_put(game->buffer, (int)(game->player->posX * 15) + tposx, (int)(game->player->posY * 15) + tposy, 0x0000ff00);
 		z--;
 	}
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
@@ -110,10 +110,10 @@ void drawRays3D(void *g)
 	while (!done)
 	{
 		i = 0;
-		//usleep(100);
+		// usleep(100);
 		while (i < WINDOW_WIDTH)
 		{
-			double cameraX = 2 * i / ((double)(WINDOW_WIDTH) - 1) - 0.25; //x-coordinate in camera space
+			double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
 			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
 			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
 			int mapx = (int)game->player->posX;
@@ -121,15 +121,25 @@ void drawRays3D(void *g)
 			deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
 			deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
 
+			double angleInRadians = atan2(rayDirY, rayDirX);
+			double angleInDegrees = (angleInRadians / PI) * 180.0;
+			double pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
+			double pangleInDegrees = (angleInRadians / PI) * 180.0;
+			if (i == 0 || i == WINDOW_WIDTH - 1)
+			{
+				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
+				printf("(%d) player angle (start) is %f\n", i, pangleInDegrees);
+			}
+			//exit(0);
 			double perpWallDist;
 
-			//what direction to step in x or y-direction (either +1 or -1)
+			// what direction to step in x or y-direction (either +1 or -1)
 			double stepX;
 			double stepY;
 
-			int hit = 0; //was there a wall hit?
-			int side;	 //was a NS or a EW wall hit?
-			//calculate step and initial sideDist
+			int hit = 0; // was there a wall hit?
+			int side;	 // was a NS or a EW wall hit?
+			// calculate step and initial sideDist
 			if (rayDirX < 0)
 			{
 				stepX = -1;
@@ -152,7 +162,7 @@ void drawRays3D(void *g)
 			}
 			while (hit == 0)
 			{
-				//jump to next map square, either in x-direction, or in y-direction
+				// jump to next map square, either in x-direction, or in y-direction
 				if (sideDistX < sideDistY)
 				{
 					sideDistX += deltaDistX;
@@ -165,8 +175,8 @@ void drawRays3D(void *g)
 					mapy += stepY;
 					side = 1;
 				}
-				//Check if ray has hit a wall
-				//if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
+				// Check if ray has hit a wall
+				// if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
 				//	exit(0);
 				if (game->map[mapy][mapx] == '1')
 					hit = 1;
@@ -175,9 +185,9 @@ void drawRays3D(void *g)
 				perpWallDist = (sideDistX - deltaDistX);
 			else
 				perpWallDist = (sideDistY - deltaDistY);
-			//Calculate height of line to draw on screen
+			// Calculate height of line to draw on screen
 			int lineHeight = (int)(WINDOW_HEIGHT / perpWallDist);
-			//calculate lowest and highest pixel to fill in current stripe
+			// calculate lowest and highest pixel to fill in current stripe
 			int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
 			if (drawStart < 0)
 				drawStart = 0;
@@ -185,9 +195,9 @@ void drawRays3D(void *g)
 			if (drawEnd >= WINDOW_HEIGHT)
 				drawEnd = WINDOW_HEIGHT - 1;
 
-			//choose wall color
-			//t_color color;
-			//color.g = 255;
+			// choose wall color
+			// t_color color;
+			// color.g = 255;
 			int color = 0x000000ff;
 			if (side == 1)
 				color = color / 2;
@@ -195,13 +205,22 @@ void drawRays3D(void *g)
 			int start_end[2];
 			start_end[0] = drawStart;
 			start_end[1] = drawEnd;
-			//draw the pixels of the stripe as a vertical line
-			
+			// draw the pixels of the stripe as a vertical line
+			angleInRadians = atan2(rayDirY, rayDirX);
+			angleInDegrees = (angleInRadians / PI) * 180.0;
+			pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
+			pangleInDegrees = (angleInRadians / PI) * 180.0;
+			printf("angle is %f\n", angleInDegrees);
+			if (i == 0 || i == WINDOW_WIDTH - 1)
+			{
+				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
+				printf("(%d) player angle in %f\n", i, pangleInDegrees);
+			}
 			ft_verline(i, start_end, game, color);
 			i++;
 		}
-		//render_frame2D(game);
-		  done = 1;
+		// render_frame2D(game);
+		done = 1;
 	}
 }
 
@@ -228,15 +247,15 @@ int main(int argc, char **argv)
 	ft_print_map(game.map);
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	//game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
+	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
-	//game.rayIgm = mlx_new_image(&mlxp, 3, 3);
-	//game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
-										 // &game.rayIgm->endian);
-	//draw_map(mlx, game);
+	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
+	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
+	//  &game.rayIgm->endian);
+	// draw_map(mlx, game);
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
 	game.camera->planeX = 0;
@@ -271,7 +290,7 @@ int main(int argc, char **argv)
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
 	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
 	mlx_key_hook(mlxp.win_ptr, key_hook, &game);
-	//mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
-	//printf("%f %f\n", game.player->posX, game.player->posY);
+	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
+	// printf("%f %f\n", game.player->posX, game.player->posY);
 	mlx_loop(mlxp.mlx_ptr);
 }
