@@ -266,11 +266,11 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	// game.config->caseWidth = game.config->caseHeight;
-	// load_textures(&game);
+	load_textures(&game);
 	int i = 0;
-	// printf("%p", (game.textures->wallText));
-	// printf("\n");
-	// while(i < 30)
+	printf("%p", (game.textures->wallText));
+	printf("\n");
+	//while(i < 30)
 	// {
 	// 	printf("%d\n", ((int *)game.textures->wallText)[i]);
 	// 	i++;
