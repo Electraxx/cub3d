@@ -102,7 +102,7 @@ void drawRays3D(void *g)
 	t_game *game = (t_game *)g;
 	while (!done)
 	{
-		i = WINDOW_WIDTH/2;
+		i = 0;
 		// usleep(100);
 		while (i < WINDOW_WIDTH)
 		{
@@ -211,115 +211,6 @@ void drawRays3D(void *g)
 			}
 			ft_verline(i, start_end, game, color);
 			i++;
-		}
-		i = WINDOW_WIDTH /2;
-		while (i >= 0)
-		{
-			double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
-			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
-			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
-			int mapx = (int)game->player->posX;
-			int mapy = (int)game->player->posY;
-			deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-			deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-
-			double angleInRadians = atan2(rayDirY, rayDirX);
-			double angleInDegrees = (angleInRadians / PI) * 180.0;
-			double pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
-			double pangleInDegrees = (angleInRadians / PI) * 180.0;
-			if (i == 0 || i == WINDOW_WIDTH - 1)
-			{
-				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
-				printf("(%d) player angle (start) is %f\n", i, pangleInDegrees);
-			}
-			//exit(0);
-			double perpWallDist;
-
-			// what direction to step in x or y-direction (either +1 or -1)
-			double stepX;
-			double stepY;
-
-			int hit = 0; // was there a wall hit?
-			int side;	 // was a NS or a EW wall hit?
-			// calculate step and initial sideDist
-			if (rayDirX < 0)
-			{
-				stepX = -1;
-				sideDistX = (game->player->posX - mapx) * deltaDistX;
-			}
-			else
-			{
-				stepX = 1;
-				sideDistX = (mapx + 1.0 - game->player->posX) * deltaDistX;
-			}
-			if (rayDirY < 0)
-			{
-				stepY = -1;
-				sideDistY = (game->player->posY - mapy) * deltaDistY;
-			}
-			else
-			{
-				stepY = 1;
-				sideDistY = (mapy + 1.0 - game->player->posY) * deltaDistY;
-			}
-			while (hit == 0)
-			{
-				// jump to next map square, either in x-direction, or in y-direction
-				if (sideDistX < sideDistY)
-				{
-					sideDistX += deltaDistX;
-					mapx += stepX;
-					side = 0;
-				}
-				else
-				{
-					sideDistY += deltaDistY;
-					mapy += stepY;
-					side = 1;
-				}
-				// Check if ray has hit a wall
-				// if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
-				//	exit(0);
-				if (game->map[mapy][mapx] == '1')
-					hit = 1;
-			}
-			if (side == 0)
-				perpWallDist = (sideDistX - deltaDistX);
-			else
-				perpWallDist = (sideDistY - deltaDistY);
-			// Calculate height of line to draw on screen
-			int lineHeight = (int)(WINDOW_HEIGHT / perpWallDist);
-			// calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
-			if (drawStart < 0)
-				drawStart = 0;
-			int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
-			if (drawEnd >= WINDOW_HEIGHT)
-				drawEnd = WINDOW_HEIGHT - 1;
-
-			// choose wall color
-			// t_color color;
-			// color.g = 255;
-			int color = 0x000000ff;
-			if (side == 1)
-				color = color / 2;
-
-			int start_end[2];
-			start_end[0] = drawStart;
-			start_end[1] = drawEnd;
-			// draw the pixels of the stripe as a vertical line
-			angleInRadians = atan2(rayDirY, rayDirX);
-			angleInDegrees = (angleInRadians / PI) * 180.0;
-			pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
-			pangleInDegrees = (angleInRadians / PI) * 180.0;
-			printf("angle is %f\n", angleInDegrees);
-			if (i == 0 || i == WINDOW_WIDTH - 1)
-			{
-				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
-				printf("(%d) player angle in %f\n", i, pangleInDegrees);
-			}
-			ft_verline(i, start_end, game, color);
-			i--;
 		}
 		// render_frame2D(game);
 		done = 1;
