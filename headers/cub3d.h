@@ -52,6 +52,11 @@ typedef struct s_config{
 	size_t		mapMaxHeight;
 } t_config;
 
+typedef struct s_vector{
+	double	posX;
+	double	posY;
+} t_vector;
+
 typedef struct s_cardi_check{
 	int *val;
 	char **cardi;
