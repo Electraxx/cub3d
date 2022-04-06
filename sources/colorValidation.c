@@ -1,4 +1,5 @@
 #include "../headers/cub3d.h"
+#include "../headers/error.h"
 
 error_type is_color_valid(char *color_line)
 {

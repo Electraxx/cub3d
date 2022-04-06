@@ -51,12 +51,12 @@ void move(double deltax, double deltay, t_game *game)
 	player = game->player;
 	map = game->map;
 
-	// deltax = roundnearest125(deltax);
-	// deltay = roundnearest125(deltay);
-	if (fabs(deltax) < 0.06)
-		deltax = 0.0;
-	if (fabs(deltay) < 0.06)
-		deltay = 0.0;
+	//deltax = roundnearest125(deltax);
+	//deltay = roundnearest125(deltay);
+	// if (fabs(deltax) < 0.06)
+	// 	deltax = 0.0;
+	// if (fabs(deltay) < 0.06)
+	// 	deltay = 0.0;
 	// int testx = (int)deltax * 100;
 	// int testy = (int)deltay * 100;
 	// if(testx % 10 >= 5)
