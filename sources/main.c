@@ -97,6 +97,18 @@ void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, line, 0);
 }
 
+void do_action(t_game *game)
+{
+	if(game->player->current_action[FRONT_INDEX])
+		move(game, 1);
+	if(game->player->current_action[BACK_INDEX])
+		move(game, -1);
+	if(game->player->current_action[R_LEFT_INDEX])
+		turnCamera(game, 1);
+	if(game->player->current_action[R_RIGHT_INDEX])
+		turnCamera(game, -1);
+}
+
 void drawRays3D(void *g)
 {
 	int done = 0;
@@ -110,7 +122,7 @@ void drawRays3D(void *g)
 	while (!done)
 	{
 		i = 0;
-		// usleep(100);
+		do_action(game);
 		while (i < WINDOW_WIDTH)
 		{
 			double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
@@ -120,16 +132,6 @@ void drawRays3D(void *g)
 			int mapy = (int)game->player->posY;
 			deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
 			deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-
-			double angleInRadians = atan2(rayDirY, rayDirX);
-			double angleInDegrees = (angleInRadians / PI) * 180.0;
-			double pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
-			double pangleInDegrees = (angleInRadians / PI) * 180.0;
-			if (i == 0 || i == WINDOW_WIDTH - 1)
-			{
-				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
-				printf("(%d) player angle (start) is %f\n", i, pangleInDegrees);
-			}
 			//exit(0);
 			double perpWallDist;
 
@@ -194,10 +196,6 @@ void drawRays3D(void *g)
 			int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
 			if (drawEnd >= WINDOW_HEIGHT)
 				drawEnd = WINDOW_HEIGHT - 1;
-
-			// choose wall color
-			// t_color color;
-			// color.g = 255;
 			int color = 0x000000ff;
 			if (side == 1)
 				color = color / 2;
@@ -205,23 +203,24 @@ void drawRays3D(void *g)
 			int start_end[2];
 			start_end[0] = drawStart;
 			start_end[1] = drawEnd;
-			// draw the pixels of the stripe as a vertical line
-			angleInRadians = atan2(rayDirY, rayDirX);
-			angleInDegrees = (angleInRadians / PI) * 180.0;
-			pangleInRadians = atan2(game->camera->dirY, game->camera->dirX);
-			pangleInDegrees = (angleInRadians / PI) * 180.0;
-			printf("angle is %f\n", angleInDegrees);
-			if (i == 0 || i == WINDOW_WIDTH - 1)
-			{
-				printf("(%d) raydir angle (start) is %f\n", i, angleInDegrees);
-				printf("(%d) player angle in %f\n", i, pangleInDegrees);
-			}
 			ft_verline(i, start_end, game, color);
 			i++;
 		}
 		// render_frame2D(game);
 		done = 1;
 	}
+}
+
+int key_relase(int kc, t_game *game)
+{
+	if (kc == D_KEY)
+		game->player->current_action[R_RIGHT_INDEX] = 0;
+	if (kc == A_KEY)
+		game->player->current_action[R_LEFT_INDEX] = 0;
+	if (kc == W_KEY)
+		game->player->current_action[FRONT_INDEX] = 0;
+	if (kc == S_KEY)
+		game->player->current_action[BACK_INDEX] = 0;
 }
 
 int main(int argc, char **argv)
@@ -258,6 +257,11 @@ int main(int argc, char **argv)
 	// draw_map(mlx, game);
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
+	game.player->current_action = malloc(sizeof(int) * 4);
+	game.player->current_action[0] = 0;
+	game.player->current_action[1] = 0;
+	game.player->current_action[2] = 0;
+	game.player->current_action[3] = 0;
 	game.camera->planeX = 0;
 	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
@@ -279,9 +283,10 @@ int main(int argc, char **argv)
 	// int trash[2];
 
 	player_setpos(game.map, game.player);
-	mlx_hook(mlxp.mlx_ptr, 2, (1L << 0), &key_hook, &game);
-	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
+	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
+	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
 	// mlx_key_hook(mlxp.win_ptr, key_hook, &game);
+	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
 	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
 	// printf("%f %f\n", game.player->posX, game.player->posY);

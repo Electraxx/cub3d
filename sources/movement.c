@@ -58,12 +58,12 @@ void turnCamera(t_game *game, int dir)
 int key_hook(int keycode, t_game *game)
 {
 	if (keycode == D_KEY)
-		turnCamera(game, -1);
+		game->player->current_action[R_RIGHT_INDEX] = 1;
 	if (keycode == A_KEY)
-		turnCamera(game, 1);
+		game->player->current_action[R_LEFT_INDEX] = 1;
 	if (keycode == W_KEY)
-		move(game, 1);
+		game->player->current_action[FRONT_INDEX] = 1;
 	if (keycode == S_KEY)
-		move(game, -1);
+		game->player->current_action[BACK_INDEX] = 1;
 	return (0);
 }

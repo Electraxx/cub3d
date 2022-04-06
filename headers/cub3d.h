@@ -21,8 +21,16 @@
 #define A_KEY 0
 #define D_KEY 2
 
-#define SPEED 0.3
-#define ROT_SPEED 0.125
+#define SPEED 0.1
+#define ROT_SPEED 0.05
+
+typedef enum e_action_index{
+	FRONT_INDEX,
+	BACK_INDEX,
+	R_LEFT_INDEX,
+	R_RIGHT_INDEX,
+	NONE
+} e_action_index;
 
 typedef struct s_color{
 	int	a;
@@ -57,6 +65,7 @@ typedef struct s_player
 	double	posY;
 	double	v_angle;
 	double	ori;
+	e_action_index *current_action;
 }	t_player;
 
 typedef struct s_camera
@@ -135,5 +144,7 @@ int				max_height(char **map);
 
 //movement.c
 int				key_hook(int keycode, t_game *game);
+void 			move(t_game *game, int dir);
+void			turnCamera(t_game *game, int dir);
 
 #endif
