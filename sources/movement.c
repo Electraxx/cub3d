@@ -1,10 +1,9 @@
 #include "cub3d.h"
-extern int g_debug;
 
 void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
 {
 	int i = 0;
-	int j = 0;
+	int j;
 	while (i < dimY)
 	{
 		j = 0;
@@ -36,10 +35,16 @@ void move(t_game *game, int dir)
 	{
 		game->player->posX += deltax;
 		game->player->posY += deltay;
-		if ((int)(player->posY - deltay) != (int)(player->posY) || (int)(player->posY - deltax) != (int)(player->posX))
-			map[((int)(player->posY - deltay))][((int)(player->posX - deltax))] = '0';
-		map[(int)(player->posY)][(int)(player->posX)] = 'N';
 	}
+    // The two else if are here to check for wall slides
+    // TODO Maybe modifier la speed quand tu wall slide
+    else if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] == '1')
+        game->player->posX += deltax;
+    else if (map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] == '1')
+        game->player->posY += deltay;
+    if ((int)(player->posY - deltay) != (int)(player->posY) || (int)(player->posY - deltax) != (int)(player->posX))
+        map[((int)(player->posY - deltay))][((int)(player->posX - deltax))] = '0';
+    map[(int)(player->posY)][(int)(player->posX)] = 'N';
 }
 
 void turnCamera(t_game *game, int dir)

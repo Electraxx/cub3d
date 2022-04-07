@@ -115,7 +115,6 @@ void drawRays3D(void *g)
 	int i = 0;
 	double sideDistX;
 	double sideDistY;
-	double perpWallDist;
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
@@ -221,6 +220,7 @@ int key_relase(int kc, t_game *game)
 		game->player->current_action[FRONT_INDEX] = 0;
 	if (kc == S_KEY)
 		game->player->current_action[BACK_INDEX] = 0;
+    return (0);
 }
 
 int main(int argc, char **argv)
