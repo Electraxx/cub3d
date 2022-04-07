@@ -73,5 +73,8 @@ int key_hook(int keycode, t_game *game)
 		game->player->current_action[FRONT_INDEX] = 1;
 	if (keycode == S_KEY)
 		game->player->current_action[BACK_INDEX] = 1;
+//	if (keycode == 14)
+//		game->player->health += 10;
+//	ft_draw_lifebar(game);
 	return (0);
 }

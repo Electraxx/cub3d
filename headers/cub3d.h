@@ -70,18 +70,11 @@ typedef struct s_cardi_check{
 	char **cardi;
 } t_cardi_check;
 
-// int g_debug = 0;
-
-typedef struct s_life_bar{
-    int     color;
-    int     health;
-} t_life_bar;
-
 typedef struct s_player
 {
 	double	posX;
 	double	posY;
-    t_life_bar *lifebar;
+    int     health;
 	e_action_index *current_action;
 }	t_player;
 
@@ -156,5 +149,8 @@ int				max_height(char **map);
 int				key_hook(int keycode, t_game *game);
 void 			move(t_game *game, int dir);
 void			turnCamera(t_game *game, int dir);
+
+//main.c
+void            ft_draw_lifebar(t_game *game);
 
 #endif

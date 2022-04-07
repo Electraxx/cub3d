@@ -4,7 +4,7 @@
 4. Macron explosion
 5. Textures
 6. Collectibles
-7. Barre de vie
+7. Barre de vie | Affichage ok | lié avec les HP du player ok
 8. Exit
 9. Armes (Petition)
 10. Portes

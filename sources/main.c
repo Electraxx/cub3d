@@ -97,14 +97,24 @@ void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, line, 0);
 }
 
-void ft_draw_lifebar(t_game *game, int i)
+void ft_draw_lifebar(t_game *game)
 {
-    int    j;
-    while (i < WINDOW_WIDTH / 4)
+    int		j;
+    int		i;
+
+    i = 0;
+    while (i < WINDOW_WIDTH / 3)
     {
         j = -1;
         while (++j < 30)
-            my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+        {
+            if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
+                my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
+            else if (i < game->player->health)
+                my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+            else
+                my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
+        }
         i++;
     }
     mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 100);
@@ -131,7 +141,6 @@ void drawRays3D(void *g)
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
-    ft_draw_lifebar(game, i);
 	while (!done)
 	{
 		i = 0;
@@ -237,6 +246,17 @@ int key_relase(int kc, t_game *game)
     return (0);
 }
 
+int get_hp(int kc, t_game *game)
+{
+	if (kc == 1)
+	{
+		game->player->health += 10;
+		ft_draw_lifebar(game);
+	}
+//	printf("%d\n", kc);
+	return (0);
+}
+
 int main(int argc, char **argv)
 {
 	t_mlxp mlxp;
@@ -250,7 +270,6 @@ int main(int argc, char **argv)
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
 	game.minimap = malloc(sizeof(t_image));
-    game.player->lifebar = malloc(sizeof(t_life_bar));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
     game.lifebar = &lifebar_img;
@@ -264,7 +283,7 @@ int main(int argc, char **argv)
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
-    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 4, 30);
+    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
@@ -274,6 +293,7 @@ int main(int argc, char **argv)
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
 	// draw_map(mlx, game);
+    game.player->health = 150;
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
 	game.player->current_action = malloc(sizeof(int) * 4);
@@ -298,11 +318,13 @@ int main(int argc, char **argv)
 	// {
 	// 	printf("%d\n", ((uint32_t *)game.textures->wallText)[i]);
 	// 	i++;
-	// }
+	//
+	ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
+// TODO Comprendre pourquoi la mouse_hook fait segfault je devienne fou
+//	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
 	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
-	// mlx_key_hook(mlxp.win_ptr, key_hook, &game);
 	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
 	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
