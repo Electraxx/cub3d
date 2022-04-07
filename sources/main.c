@@ -33,24 +33,48 @@ void	load_textures(t_game *game)
 {
 	int a;
 	int b;
+
 	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
 }
 
-void	render_minimap(t_mlxp *mlxp,t_image *mm, char **map)
+void load_square(int color, size_t posX, size_t posY, t_game *game, t_image *buffer)
+{
+	size_t i;
+	size_t j;
+	t_config *conf;
+
+	i = 0;
+	j = 0;
+	conf = game->config;
+	while (i < conf->caseHeight)
+	{
+		j = 0;
+		while (j < conf->caseWidth)
+		{
+			my_mlx_pixel_put(buffer, j + (16 * posX), i + (16 * posY), color);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	render_minimap(t_game *game, char **map, t_image *mm)
 {
 	int	x;
 	int	y;
+	t_mlxp *mlxp;
 
 	y = 0;
+	mlxp = game->mlxp;
 	while(map[y])
 	{
 		x = 0;
 		while(map[y][x])
 		{
 			if(map[y][x] == '0')
-				my_mlx_pixel_put(mm, x++, y, 0x0000ff00);
+				load_square(0x0000ff00, x++, y, game, mm);
 			else
-				my_mlx_pixel_put(mm, x++, y, 0x0000ff00);
+				load_square(0x0000ff00, x++, y, game, mm);
 		}
 		y++;
 	}
@@ -144,6 +168,7 @@ void drawRays3D(void *g)
 	{
 		i = 0;
 		do_action(game);
+		render_minimap(game, game->map, game->minimap);
 		while (i < WINDOW_WIDTH)
 		{
 			double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
@@ -228,7 +253,6 @@ void drawRays3D(void *g)
 			i++;
 		}
 		i++;
-		render_minimap(game->mlxp, game->minimap->img, game->map);
 		// render_frame2D(game);
 		done = 1;
 	}
@@ -291,8 +315,8 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxHeight = max_height(game.map);
 	game.config->mapMaxWidth = max_width(game.map);
-	minimap.img = mlx_new_image(&mlxp, game.config->mapMaxWidth, game.config->mapMaxHeight);
-	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
+	minimap.img = mlx_new_image(&mlxp, 300, 300);
+	minimap.addr = mlx_get_data_addr(&minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
 								 &minimap.endian);
 	game.minimap = &minimap;
 	// game.config->caseWidth = game.config->caseHeight;

@@ -27,7 +27,7 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} -fsanitize=address
+CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} #-fsanitize=address
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
