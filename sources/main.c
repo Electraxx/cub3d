@@ -246,7 +246,6 @@ int main(int argc, char **argv)
 	ft_print_map(game.map);
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
@@ -269,6 +268,8 @@ int main(int argc, char **argv)
 
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
+	game.minimap= mlx_new_image(&mlxp, game.config->mapMaxWidth, game.config->mapMaxHeight);
+
 	// game.config->caseWidth = game.config->caseHeight;
 	// load_textures(&game);
 	// int i = 0;
