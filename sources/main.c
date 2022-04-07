@@ -89,12 +89,25 @@ void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 		my_mlx_pixel_put(game->buffer, 0, i, color);
 		i++;
 	}
-	while (i < WINDOW_HEIGHT)
+	while (i < WINDOW_HEIGHT - 200)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x0000ff00);
 		i++;
 	}
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, line, 0);
+}
+
+void ft_draw_lifebar(t_game *game, int i)
+{
+    int    j;
+    while (i < WINDOW_WIDTH / 4)
+    {
+        j = -1;
+        while (++j < 30)
+            my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+        i++;
+    }
+    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 100);
 }
 
 void do_action(t_game *game)
@@ -187,14 +200,14 @@ void drawRays3D(void *g)
 			else
 				perpWallDist = (sideDistY - deltaDistY);
 			// Calculate height of line to draw on screen
-			int lineHeight = (int)(WINDOW_HEIGHT / perpWallDist);
+			int lineHeight = (int)((WINDOW_HEIGHT - 200) / perpWallDist);
 			// calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + WINDOW_HEIGHT / 2;
+			int drawStart = -lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
 			if (drawStart < 0)
 				drawStart = 0;
-			int drawEnd = lineHeight / 2 + WINDOW_HEIGHT / 2;
-			if (drawEnd >= WINDOW_HEIGHT)
-				drawEnd = WINDOW_HEIGHT - 1;
+			int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
+			if (drawEnd >= (WINDOW_HEIGHT - 200))
+				drawEnd = (WINDOW_HEIGHT - 200) - 1;
 			int color = 0x000000ff;
 			if (side == 1)
 				color = color / 2;
@@ -204,6 +217,7 @@ void drawRays3D(void *g)
 			start_end[1] = drawEnd;
 			ft_verline(i, start_end, game, color);
 			i++;
+            ft_draw_lifebar(game, i);
 		}
 		// render_frame2D(game);
 		done = 1;
@@ -228,16 +242,18 @@ int main(int argc, char **argv)
 	t_mlxp mlxp;
 	t_cardi_check cardiCheck;
 	t_game game;
-	t_image img;
+    t_image img;
+    t_image lifebar_img;
 	game.player = malloc(sizeof(t_player));
-	game.player->v_angle = 0;
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
 	game.minimap = malloc(sizeof(t_image));
+    game.player->lifebar = malloc(sizeof(t_life_bar));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
+    game.lifebar = &lifebar_img;
 	if (argc != 2)
 		return (1);
 	init_cardi_struct(&cardiCheck);
@@ -248,9 +264,12 @@ int main(int argc, char **argv)
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
+    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 4, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
+    lifebar_img.addr = mlx_get_data_addr(lifebar_img.img, &lifebar_img.bits_per_pixel, &lifebar_img.line_length,
+                                         &lifebar_img.endian);
 	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
@@ -280,8 +299,6 @@ int main(int argc, char **argv)
 	// 	printf("%d\n", ((uint32_t *)game.textures->wallText)[i]);
 	// 	i++;
 	// }
-	// int trash[2];
-
 	player_setpos(game.map, game.player);
 	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
 	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);

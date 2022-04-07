@@ -12,7 +12,7 @@
 # include <math.h>
 
 #define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define WINDOW_HEIGHT 680
 
 #define PI 3.141592653589
 
@@ -23,6 +23,14 @@
 
 #define SPEED 0.1
 #define ROT_SPEED 0.05
+
+typedef struct	s_image {
+    void	*img;
+    char	*addr;
+    int		bits_per_pixel;
+    int		line_length;
+    int		endian;
+}				t_image;
 
 typedef enum e_action_index{
 	FRONT_INDEX,
@@ -64,12 +72,16 @@ typedef struct s_cardi_check{
 
 // int g_debug = 0;
 
+typedef struct s_life_bar{
+    int     color;
+    int     health;
+} t_life_bar;
+
 typedef struct s_player
 {
 	double	posX;
 	double	posY;
-	double	v_angle;
-	double	ori;
+    t_life_bar *lifebar;
 	e_action_index *current_action;
 }	t_player;
 
@@ -80,14 +92,6 @@ typedef struct s_camera
 	double	dirX;
 	double	dirY;
 }	t_camera;
-
-typedef struct	s_image {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_image;
 
 typedef struct s_mlxp
 {
@@ -113,6 +117,7 @@ typedef struct s_game
 	t_camera	*camera;
 	t_image *rayIgm;
 	t_image *minimap;
+    t_image *lifebar;
 	t_assets *textures;
 	uint32_t textbuff[WINDOW_HEIGHT][WINDOW_WIDTH];
 }	t_game;

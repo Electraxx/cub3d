@@ -1,4 +1,4 @@
-1. Slider sur les murs
+1. Slider sur les murs : ✔
 2. Minimap
 3. Ennemies
 4. Macron explosion

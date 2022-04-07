@@ -38,9 +38,12 @@ void move(t_game *game, int dir)
 	}
     // The two else if are here to check for wall slides
     // TODO Maybe modifier la speed quand tu wall slide
-    else if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] == '1')
+    // TODO Fix Crash quand on fonce dans les coins | SHOULD BE FINE
+    else if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] == '1'
+        && map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] != '1')
         game->player->posX += deltax;
-    else if (map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] == '1')
+    else if (map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] == '1'
+        && map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] != '1')
         game->player->posY += deltay;
     if ((int)(player->posY - deltay) != (int)(player->posY) || (int)(player->posY - deltax) != (int)(player->posX))
         map[((int)(player->posY - deltay))][((int)(player->posX - deltax))] = '0';
