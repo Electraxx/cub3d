@@ -131,6 +131,7 @@ void drawRays3D(void *g)
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
+    ft_draw_lifebar(game, i);
 	while (!done)
 	{
 		i = 0;
@@ -217,7 +218,6 @@ void drawRays3D(void *g)
 			start_end[1] = drawEnd;
 			ft_verline(i, start_end, game, color);
 			i++;
-            ft_draw_lifebar(game, i);
 		}
 		// render_frame2D(game);
 		done = 1;
@@ -263,7 +263,7 @@ int main(int argc, char **argv)
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
+	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
     lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 4, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
