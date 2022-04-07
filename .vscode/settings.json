@@ -4,5 +4,6 @@
         "libft.h": "c",
         "colorvalidation.h": "c",
         "texturevalidation.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }

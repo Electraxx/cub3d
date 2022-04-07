@@ -36,6 +36,27 @@ void	load_textures(t_game *game)
 	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
 }
 
+void	render_minimap(t_mlxp *mlxp,t_image *mm, char **map)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while(map[y])
+	{
+		x = 0;
+		while(map[y][x])
+		{
+			if(map[y][x] == '0')
+				my_mlx_pixel_put(mm, x++, y, 0x0000ff00);
+			else
+				my_mlx_pixel_put(mm, x++, y, 0x0000ff00);
+		}
+		y++;
+	}
+	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm, 0, 0);
+}
+
 int render_frame2D(void *g)
 {
 	t_game *game = (t_game *)g;
@@ -69,7 +90,7 @@ int render_frame2D(void *g)
 	return (0);
 }
 
-unsigned long createRGBA(t_color color)
+unsigned long createRGBA(t_color color) //TODO RGB as input
 {
 	return ((color.r & 0xff) << 24) + ((color.g & 0xff) << 16) + ((color.b & 0xff) << 8) + (color.a & 0xff);
 }
@@ -206,6 +227,8 @@ void drawRays3D(void *g)
 			ft_verline(i, start_end, game, color);
 			i++;
 		}
+		i++;
+		render_minimap(game->mlxp, game->minimap->img, game->map);
 		// render_frame2D(game);
 		done = 1;
 	}
@@ -221,6 +244,7 @@ int key_relase(int kc, t_game *game)
 		game->player->current_action[FRONT_INDEX] = 0;
 	if (kc == S_KEY)
 		game->player->current_action[BACK_INDEX] = 0;
+	return (0);
 }
 
 int main(int argc, char **argv)
@@ -229,13 +253,13 @@ int main(int argc, char **argv)
 	t_cardi_check cardiCheck;
 	t_game game;
 	t_image img;
+	t_image minimap;
 	game.player = malloc(sizeof(t_player));
 	game.player->v_angle = 0;
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
-	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
 	if (argc != 2)
@@ -264,12 +288,13 @@ int main(int argc, char **argv)
 	game.camera->planeX = 0;
 	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
-	game.config->mapMaxHeight = max_height(game.map);
-
 	game.config->caseHeight = 16;
+	game.config->mapMaxHeight = max_height(game.map);
 	game.config->mapMaxWidth = max_width(game.map);
-	game.minimap= mlx_new_image(&mlxp, game.config->mapMaxWidth, game.config->mapMaxHeight);
-
+	minimap.img = mlx_new_image(&mlxp, game.config->mapMaxWidth, game.config->mapMaxHeight);
+	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
+								 &minimap.endian);
+	game.minimap = &minimap;
 	// game.config->caseWidth = game.config->caseHeight;
 	// load_textures(&game);
 	// int i = 0;
