@@ -323,15 +323,15 @@ int main(int argc, char **argv)
 	game.config->mapMaxWidth = max_width(game.map);
 	// game.config->caseWidth = game.config->caseHeight;
 	load_textures(&game);
-	// int i = 0;
+	int i = 0;
 	// printf("%p", (game.textures->wallText));
 	// printf("\n");
-	// 	uint32_t *val = (uint32_t *) game.textures->wallText;
-	// while(i < 30)
-	// {
-	// 	printf("%d\n", ((uint32_t *)game.textures->wallText)[i]);
-	// 	i++;
-	//
+	uint32_t *val = (uint32_t *) game.textures->wallText;
+	 while(i < 30) {
+		 uint32_t debug = ((uint32_t *) game.texture->addr)[i];
+		 printf("%d\n", ((uint32_t *) game.texture->addr)[i]);
+		 i++;
+	 }
 	ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
