@@ -33,7 +33,14 @@ void	load_textures(t_game *game)
 {
 	int a;
 	int b;
-	game->textures->wallText = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
+//	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
+//	lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
+//	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
+//	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
+//								 &img.endian);
+	game->texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
+	game->texture->addr =  mlx_get_data_addr(game->texture->img, &game->texture->bits_per_pixel,
+											 &game->texture->line_length, &game->texture->endian);
 }
 
 int render_frame2D(void *g)
@@ -248,13 +255,18 @@ int key_relase(int kc, t_game *game)
 
 int get_hp(int kc, t_game *game)
 {
-	if (kc == 1)
-	{
-		game->player->health += 10;
-		ft_draw_lifebar(game);
-	}
-//	printf("%d\n", kc);
+//	if (kc == 1)
+//	{
+//		game->player->health += 10;
+//		ft_draw_lifebar(game);
+//	}
+	printf("%d\n", kc);
 	return (0);
+}
+
+int exit_game(int kc, t_game *game)
+{
+	exit(0);
 }
 
 int main(int argc, char **argv)
@@ -269,6 +281,7 @@ int main(int argc, char **argv)
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
+	game.texture = malloc(sizeof(t_image));
 	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
@@ -309,7 +322,7 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	// game.config->caseWidth = game.config->caseHeight;
-	// load_textures(&game);
+	load_textures(&game);
 	// int i = 0;
 	// printf("%p", (game.textures->wallText));
 	// printf("\n");
@@ -321,10 +334,12 @@ int main(int argc, char **argv)
 	//
 	ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
-// TODO Comprendre pourquoi la mouse_hook fait segfault je devienne fou
+// TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
+//	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
 	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
 	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
+	mlx_hook(mlxp.win_ptr, 17, 0, exit_game, &game);
 	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
 	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);

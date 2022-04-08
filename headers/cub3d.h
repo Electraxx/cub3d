@@ -111,6 +111,7 @@ typedef struct s_game
 	t_image *rayIgm;
 	t_image *minimap;
     t_image *lifebar;
+    t_image *texture;
 	t_assets *textures;
 	uint32_t textbuff[WINDOW_HEIGHT][WINDOW_WIDTH];
 }	t_game;
