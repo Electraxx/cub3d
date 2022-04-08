@@ -66,19 +66,19 @@ void	render_minimap(t_game *game, char **map, t_image *mm)
 
 	y = 0;
 	mlxp = game->mlxp;
-	while(map[y])
+	while (map[y])
 	{
 		x = 0;
-		while(map[y][x])
+		while (map[y][x])
 		{
-			if(map[y][x] == '0')
+			if (map[y][x] == '0')
 				load_square(0x0000ff00, x++, y, game, mm);
 			else
-				load_square(0x0000ff00, x++, y, game, mm);
+				load_square(0x0000ffff, x++, y, game, mm);
 		}
 		y++;
 	}
-	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm, 0, 0);
+	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm->img, 0, 0);
 }
 
 int render_frame2D(void *g)
@@ -252,8 +252,9 @@ void drawRays3D(void *g)
 			ft_verline(i, start_end, game, color);
 			i++;
 		}
-		i++;
+		//i++;
 		// render_frame2D(game);
+		render_minimap(game, game->map, game->minimap);
 		done = 1;
 	}
 }
@@ -316,7 +317,7 @@ int main(int argc, char **argv)
 	game.config->mapMaxHeight = max_height(game.map);
 	game.config->mapMaxWidth = max_width(game.map);
 	minimap.img = mlx_new_image(&mlxp, 300, 300);
-	minimap.addr = mlx_get_data_addr(&minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
+	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
 								 &minimap.endian);
 	game.minimap = &minimap;
 	// game.config->caseWidth = game.config->caseHeight;
@@ -333,6 +334,7 @@ int main(int argc, char **argv)
 	// int trash[2];
 
 	player_setpos(game.map, game.player);
+	render_minimap(&game, game.map,game.minimap);
 	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
 	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
 	// mlx_key_hook(mlxp.win_ptr, key_hook, &game);
