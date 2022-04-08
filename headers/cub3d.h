@@ -30,6 +30,8 @@ typedef struct	s_image {
     int		bits_per_pixel;
     int		line_length;
     int		endian;
+	int 	width;
+	int 	height;
 }				t_image;
 
 typedef enum e_action_index{
@@ -75,6 +77,7 @@ typedef struct s_player
 	double	posX;
 	double	posY;
     int     health;
+	char 	dirState;
 	e_action_index *current_action;
 }	t_player;
 
@@ -97,7 +100,10 @@ typedef struct s_mlxp
 
 typedef struct s_assets
 {
-	void	*wallText;
+	t_image	*N_texture;
+	t_image	*S_texture;
+	t_image	*E_texture;
+	t_image	*W_texture;
 }	t_assets;
 
 typedef struct s_game
@@ -113,7 +119,6 @@ typedef struct s_game
     t_image *lifebar;
     t_image *texture;
 	t_assets *textures;
-	uint32_t textbuff[WINDOW_HEIGHT][WINDOW_WIDTH];
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);

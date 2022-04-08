@@ -29,18 +29,28 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 	}
 }
 
-void	load_textures(t_game *game)
+void	load_textures(t_game *game		)
 {
 	int a;
 	int b;
-//	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
-//	lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
-//	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
-//	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-//								 &img.endian);
-	game->texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
-	game->texture->addr =  mlx_get_data_addr(game->texture->img, &game->texture->bits_per_pixel,
-											 &game->texture->line_length, &game->texture->endian);
+	game->textures->E_texture = malloc(sizeof (t_image));
+	game->textures->S_texture = malloc(sizeof (t_image));
+	game->textures->W_texture = malloc(sizeof (t_image));
+	game->textures->N_texture = malloc(sizeof (t_image));
+
+	game->textures->E_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/flag.xpm", &a, &b);
+	game->textures->N_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/roz.xpm", &a, &b);
+	game->textures->W_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
+	game->textures->S_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/wall.xpm", &a, &b);
+
+	game->textures->E_texture->addr =  mlx_get_data_addr(game->textures->E_texture->img, &game->textures->E_texture->bits_per_pixel,
+											 &game->textures->E_texture->line_length, &game->textures->E_texture->endian);
+	game->textures->W_texture->addr =  mlx_get_data_addr(game->textures->W_texture->img, &game->textures->W_texture->bits_per_pixel,
+											 &game->textures->W_texture->line_length, &game->textures->W_texture->endian);
+	game->textures->N_texture->addr =  mlx_get_data_addr(game->textures->N_texture->img, &game->textures->N_texture->bits_per_pixel,
+														 &game->textures->N_texture->line_length, &game->textures->N_texture->endian);
+	game->textures->S_texture->addr =  mlx_get_data_addr(game->textures->S_texture->img, &game->textures->S_texture->bits_per_pixel,
+														 &game->textures->S_texture->line_length, &game->textures->S_texture->endian);
 }
 
 int render_frame2D(void *g)
@@ -80,7 +90,9 @@ unsigned long createRGBA(t_color color)
 {
 	return ((color.r & 0xff) << 24) + ((color.g & 0xff) << 16) + ((color.b & 0xff) << 8) + (color.a & 0xff);
 }
-
+/*
+ * cette fonction ta mere
+ */
 void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 {
 	int i;
@@ -139,6 +151,44 @@ void do_action(t_game *game)
 		turnCamera(game, -1);
 }
 
+unsigned int get_pixel_color(int x, int y, char *firstpixel)
+{
+	unsigned int *fp;;
+
+	fp = (unsigned int *)firstpixel;
+	return (fp[y * 64 + x]);
+}
+
+char	get_adjacent_cardinal(int vec, char curr)
+{
+	char	*cardinal;
+	int 	i;
+	char 	ret;
+
+	i = 0;
+	cardinal = ft_strcpy("NESW");
+	while(curr != cardinal[i])
+			i++;
+	i += vec;
+	ret = cardinal[i % 4];
+	free(cardinal);
+	return ret;
+}
+
+t_image *get_texture(char c, t_assets *text)
+{
+	if (c == 'W')
+		return (text->W_texture);
+	else if (c == 'E')
+		return (text->E_texture);
+	else if (c == 'N')
+		return (text->N_texture);
+	else if (c == 'S')
+		return (text->S_texture);
+	else
+		return (NULL);
+}
+
 void drawRays3D(void *g)
 {
 	int done = 0;
@@ -148,8 +198,6 @@ void drawRays3D(void *g)
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
-	while (!done)
-	{
 		i = 0;
 		do_action(game);
 		while (i < WINDOW_WIDTH)
@@ -191,6 +239,7 @@ void drawRays3D(void *g)
 				stepY = 1;
 				sideDistY = (mapy + 1.0 - game->player->posY) * deltaDistY;
 			}
+			char c;
 			while (hit == 0)
 			{
 				// jump to next map square, either in x-direction, or in y-direction
@@ -209,6 +258,16 @@ void drawRays3D(void *g)
 				// Check if ray has hit a wall
 				// if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
 				//	exit(0);
+				if (side)
+				{
+					double dot = game->camera->dirY * rayDirY + game->camera->dirX * rayDirX;
+					if(dot > 0)
+						c = get_adjacent_cardinal(1, game->player->dirState);
+					else
+						c = get_adjacent_cardinal(-1, game->player->dirState);
+				}
+				else
+					c = get_adjacent_cardinal(2, game->player->dirState);
 				if (game->map[mapy][mapx] == '1')
 					hit = 1;
 			}
@@ -225,19 +284,48 @@ void drawRays3D(void *g)
 			int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
 			if (drawEnd >= (WINDOW_HEIGHT - 200))
 				drawEnd = (WINDOW_HEIGHT - 200) - 1;
-			int color = 0x000000ff;
-			if (side == 1)
-				color = color / 2;
+			//int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
 
+			//calculate value of wallX
+			double wallX; //where exactly the wall was hit
+			if (side == 0)
+				wallX = game->player->posY + perpWallDist * rayDirY;
+			else
+				wallX = game->player->posX + perpWallDist * rayDirX;
+			wallX -= floor((wallX));
+
+			//x coordinate on the texture
+			int texX = (int)(wallX * ((double)64));
+			if(side == 0 && rayDirX > 0)
+				texX = 64 - texX - 1;
+			if(side == 1 && rayDirY < 0)
+				texX = 64 - texX - 1;
+
+			// How much to increase the texture coordinate per screen pixel
+			double step = 1.0 * 64 / lineHeight;
+			// Starting texture coordinate
+			double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
+			for(int y = drawStart; y<drawEnd; y++)
+			{
+				// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+				int texY = (int)texPos & (64 - 1);
+				texPos += step;
+				uint32_t color = get_pixel_color(texX, texY, get_texture(c, game->textures)->addr);
+//				uint32_t color = 0x00ffff00;
+				//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+				if(side == 1)
+					color = (color >> 1) & 8355711;
+				//buffer[y][i] = color;
+				my_mlx_pixel_put(game->buffer, y, 0, color);
+			}
+			mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
 			int start_end[2];
 			start_end[0] = drawStart;
 			start_end[1] = drawEnd;
-			ft_verline(i, start_end, game, color);
+			//ft_verline(i, start_end, game, 0x000000ff);
 			i++;
 		}
-		// render_frame2D(game);
-		done = 1;
-	}
+	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 }
 
 int key_relase(int kc, t_game *game)
@@ -321,17 +409,12 @@ int main(int argc, char **argv)
 
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
+	game.player->dirState = 'W';
 	// game.config->caseWidth = game.config->caseHeight;
 	load_textures(&game);
-	// int i = 0;
+	int i = 0;
 	// printf("%p", (game.textures->wallText));
 	// printf("\n");
-	// 	uint32_t *val = (uint32_t *) game.textures->wallText;
-	// while(i < 30)
-	// {
-	// 	printf("%d\n", ((uint32_t *)game.textures->wallText)[i]);
-	// 	i++;
-	//
 	ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
