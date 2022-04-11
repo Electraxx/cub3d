@@ -150,7 +150,7 @@ void ft_verline(int line, int start, t_game *game, int *colors)
         j++;
         i++;
 	}
-	while (i < WINDOW_HEIGHT - 200)
+	while (i < WINDOW_HEIGHT)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x0000ff00);
 		i++;
@@ -310,14 +310,14 @@ void drawRays3D(void *g)
 			else
 				perpWallDist = (sideDistY - deltaDistY);
 			// Calculate height of line to draw on screen
-			int lineHeight = (int)((WINDOW_HEIGHT - 200) / perpWallDist);
+			int lineHeight = (int)((WINDOW_HEIGHT) / perpWallDist);
 			// calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
+			int drawStart = -lineHeight / 2 + (WINDOW_HEIGHT) / 2;
 			if (drawStart < 0)
 				drawStart = 0;
-			int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
-			if (drawEnd >= (WINDOW_HEIGHT - 200))
-				drawEnd = (WINDOW_HEIGHT - 200) - 1;
+			int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT) / 2;
+			if (drawEnd >= (WINDOW_HEIGHT))
+				drawEnd = (WINDOW_HEIGHT) - 1;
 			//int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 			//calculate value of wallX
@@ -364,6 +364,7 @@ void drawRays3D(void *g)
 //            start_end[1] = drawEnd;
 			i++;
 		}
+    ft_draw_lifebar(game);
 	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 }
 
@@ -422,7 +423,7 @@ int main(int argc, char **argv)
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
+	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
     lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
