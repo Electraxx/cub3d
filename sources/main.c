@@ -93,8 +93,6 @@ int render_frame2D(void *g)
 		i++;
 	}
 	printf("%f %f\n", game->camera->dirX, game->camera->dirY);
-	double rayx = game->player->posX + game->player->posX * (fabs(game->camera->dirX));
-	double rayy = game->player->posY + game->player->posY * (fabs(game->camera->dirY));
 	int z = 20;
 	double tposx = game->player->posX;
 	double tposy = game->player->posY;
