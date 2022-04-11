@@ -93,19 +93,19 @@ unsigned long createRGBA(t_color color)
 /*
  * cette fonction ta mere
  */
-void ft_verline(int line, int *drawStart_end, t_game *game, int color)
+void ft_verline(int line, int start, t_game *game, int *colors)
 {
 	int i;
 
 	i = 0;
-	while (i < drawStart_end[0])
+	while (i < start)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x00ff0000);
 		i++;
 	}
-	while (i < drawStart_end[1])
+	while (colors[i])
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, color);
+		my_mlx_pixel_put(game->buffer, 0, i, colors[i]);
 		i++;
 	}
 	while (i < WINDOW_HEIGHT - 200)
@@ -305,7 +305,9 @@ void drawRays3D(void *g)
 			double step = 1.0 * 64 / lineHeight;
 			// Starting texture coordinate
 			double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
-			for(int y = drawStart; y<drawEnd; y++)
+            int *textswag = malloc(sizeof(int) * (drawEnd - drawStart + 1));
+            int y = drawStart;
+			for(; y<drawEnd; y++)
 			{
 				// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
 				int texY = (int)texPos & (64 - 1);
@@ -316,13 +318,15 @@ void drawRays3D(void *g)
 				if(side == 1)
 					color = (color >> 1) & 8355711;
 				//buffer[y][i] = color;
-				my_mlx_pixel_put(game->buffer, y, 0, color);
+                textswag[y - drawStart] = color;
+                //my_mlx_pixel_put(game->buffer, y, 0, color);
 			}
-			mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
-			int start_end[2];
-			start_end[0] = drawStart;
-			start_end[1] = drawEnd;
-			//ft_verline(i, start_end, game, 0x000000ff);
+            textswag[y - drawStart] = 0;
+            ft_verline(i, drawStart, game, textswag);
+            //mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
+//            int start_end[2];
+//            start_end[0] = drawStart;
+//            start_end[1] = drawEnd;
 			i++;
 		}
 	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
