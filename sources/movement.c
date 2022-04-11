@@ -1,25 +1,5 @@
 #include "cub3d.h"
 
-void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
-{
-	int i = 0;
-	int j;
-	while (i < dimY)
-	{
-		j = 0;
-		while (j < dimX)
-		{
-			if (j == x && y == i)
-				printf("%c", c);
-			else
-				printf("%c", map[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
-
 void move(t_game *game, int dir)
 {
 	char		**map;
@@ -50,25 +30,17 @@ void move(t_game *game, int dir)
     map[(int)(player->posY)][(int)(player->posX)] = 'N';
 }
 
-char get_inverse_dir(char c)
+void do_action(t_game *game)
 {
-	if (c == 'w')
-		return 'e';
-	if (c == 's')
-		return 'n';
-	if (c == 'n')
-		return 's';
-	if (c == 'e')
-		return 'w';
+	if(game->player->current_action[FRONT_INDEX])
+		move(game, 1);
+	if(game->player->current_action[BACK_INDEX])
+		move(game, -1);
+	if(game->player->current_action[R_LEFT_INDEX])
+		turnCamera(game, 1);
+	if(game->player->current_action[R_RIGHT_INDEX])
+		turnCamera(game, -1);
 }
-
-/*
- * get wall facing dir with player pos - hit ray state -
- */
-/*char get_facing_wall_dir(game *game, int hit)
-{
-
-}*/
 
 void update_player_direction(t_game *game)
 {
