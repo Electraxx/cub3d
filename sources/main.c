@@ -136,7 +136,7 @@ void ft_draw_lifebar(t_game *game)
         }
         i++;
     }
-    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 100);
+    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 50);
 }
 
 void do_action(t_game *game)
@@ -198,133 +198,130 @@ void drawRays3D(void *g)
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
-		i = 0;
-		do_action(game);
-		while (i < WINDOW_WIDTH)
+	i = 0;
+	do_action(game);
+	while (i < WINDOW_WIDTH)
+	{
+		double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
+		double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
+		double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
+		int mapx = (int)game->player->posX;
+		int mapy = (int)game->player->posY;
+		deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
+		deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+		//exit(0);
+		double perpWallDist;
+
+		// what direction to step in x or y-direction (either +1 or -1)
+		double stepX;
+		double stepY;
+
+		int hit = 0; // was there a wall hit?
+		int side;	 // was a NS or a EW wall hit?
+		// calculate step and initial sideDist
+		if (rayDirX < 0)
 		{
-			double cameraX = 2 * (i - WINDOW_WIDTH/2) / ((double)(WINDOW_WIDTH)-1); // x-coordinate in camera space
-			double rayDirX = game->camera->dirX + game->camera->planeX * cameraX;
-			double rayDirY = game->camera->dirY + game->camera->planeY * cameraX;
-			int mapx = (int)game->player->posX;
-			int mapy = (int)game->player->posY;
-			deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-			deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-			//exit(0);
-			double perpWallDist;
-
-			// what direction to step in x or y-direction (either +1 or -1)
-			double stepX;
-			double stepY;
-
-			int hit = 0; // was there a wall hit?
-			int side;	 // was a NS or a EW wall hit?
-			// calculate step and initial sideDist
-			if (rayDirX < 0)
-			{
-				stepX = -1;
-				sideDistX = (game->player->posX - mapx) * deltaDistX;
-			}
-			else
-			{
-				stepX = 1;
-				sideDistX = (mapx + 1.0 - game->player->posX) * deltaDistX;
-			}
-			if (rayDirY < 0)
-			{
-				stepY = -1;
-				sideDistY = (game->player->posY - mapy) * deltaDistY;
-			}
-			else
-			{
-				stepY = 1;
-				sideDistY = (mapy + 1.0 - game->player->posY) * deltaDistY;
-			}
-			char c;
-			while (hit == 0)
-			{
-				// jump to next map square, either in x-direction, or in y-direction
-				if (sideDistX < sideDistY)
-				{
-					sideDistX += deltaDistX;
-					mapx += stepX;
-					side = 0;
-				}
-				else
-				{
-					sideDistY += deltaDistY;
-					mapy += stepY;
-					side = 1;
-				}
-				// Check if ray has hit a wall
-				// if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
-				//	exit(0);
-				if (side)
-				{
-					double dot = game->camera->dirY * rayDirY + game->camera->dirX * rayDirX;
-					if(dot > 0)
-						c = get_adjacent_cardinal(1, game->player->dirState);
-					else
-						c = get_adjacent_cardinal(-1, game->player->dirState);
-				}
-				else
-					c = get_adjacent_cardinal(2, game->player->dirState);
-				if (game->map[mapy][mapx] == '1')
-					hit = 1;
-			}
-			if (side == 0)
-				perpWallDist = (sideDistX - deltaDistX);
-			else
-				perpWallDist = (sideDistY - deltaDistY);
-			// Calculate height of line to draw on screen
-			int lineHeight = (int)((WINDOW_HEIGHT - 200) / perpWallDist);
-			// calculate lowest and highest pixel to fill in current stripe
-			int drawStart = -lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
-			if (drawStart < 0)
-				drawStart = 0;
-			int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT - 200) / 2;
-			if (drawEnd >= (WINDOW_HEIGHT - 200))
-				drawEnd = (WINDOW_HEIGHT - 200) - 1;
-			//int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
-
-			//calculate value of wallX
-			double wallX; //where exactly the wall was hit
-			if (side == 0)
-				wallX = game->player->posY + perpWallDist * rayDirY;
-			else
-				wallX = game->player->posX + perpWallDist * rayDirX;
-			wallX -= floor((wallX));
-
-			//x coordinate on the texture
-			int texX = (int)(wallX * ((double)64));
-			if(side == 0 && rayDirX > 0)
-				texX = 64 - texX - 1;
-			if(side == 1 && rayDirY < 0)
-				texX = 64 - texX - 1;
-
-			// How much to increase the texture coordinate per screen pixel
-			double step = 1.0 * 64 / lineHeight;
-			// Starting texture coordinate
-			double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
-			for(int y = drawStart; y<drawEnd; y++)
-			{
-				// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-				int texY = (int)texPos & (64 - 1);
-				texPos += step;
-				uint32_t color = get_pixel_color(texX, texY, get_texture(c, game->textures)->addr);
-//				uint32_t color = 0x00ffff00;
-				//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-				if(side == 1)
-					color = (color >> 1) & 8355711;
-				//buffer[y][i] = color;
-				my_mlx_pixel_put(game->buffer, y, 0, color);
-			}
-			mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
-			int start_end[2];
-			start_end[0] = drawStart;
-			start_end[1] = drawEnd;
-			//ft_verline(i, start_end, game, 0x000000ff);
-			i++;
+			stepX = -1;
+			sideDistX = (game->player->posX - mapx) * deltaDistX;
 		}
+		else
+		{
+			stepX = 1;
+			sideDistX = (mapx + 1.0 - game->player->posX) * deltaDistX;
+		}
+		if (rayDirY < 0)
+		{
+			stepY = -1;
+			sideDistY = (game->player->posY - mapy) * deltaDistY;
+		}
+		else
+		{
+			stepY = 1;
+			sideDistY = (mapy + 1.0 - game->player->posY) * deltaDistY;
+		}
+		char c;
+		while (hit == 0)
+		{
+			// jump to next map square, either in x-direction, or in y-direction
+			if (sideDistX < sideDistY)
+			{
+				sideDistX += deltaDistX;
+				mapx += stepX;
+				side = 0;
+			}
+			else
+			{
+				sideDistY += deltaDistY;
+				mapy += stepY;
+				side = 1;
+			}
+			// Check if ray has hit a wall
+			// if((int)game->player->posX > game->config->mapMaxWidth || (int)game->player->posY > game->config->mapMaxHeight)
+			//	exit(0);
+			if (side)
+			{
+				double dot = game->camera->dirY * rayDirY + game->camera->dirX * rayDirX;
+				if (dot > 0)
+					c = get_adjacent_cardinal(1, game->player->dirState);
+				else
+					c = get_adjacent_cardinal(-1, game->player->dirState);
+			}
+			else
+				c = get_adjacent_cardinal(2, game->player->dirState);
+			if (game->map[mapy][mapx] == '1')
+				hit = 1;
+		}
+		if (side == 0)
+			perpWallDist = (sideDistX - deltaDistX);
+		else
+			perpWallDist = (sideDistY - deltaDistY);
+		// Calculate height of line to draw on screen
+		int lineHeight = (int)((WINDOW_HEIGHT) / perpWallDist);
+		// calculate lowest and highest pixel to fill in current stripe
+		int drawStart = -lineHeight / 2 + (WINDOW_HEIGHT) / 2;
+		if (drawStart < 0)
+			drawStart = 0;
+		int drawEnd = lineHeight / 2 + (WINDOW_HEIGHT) / 2;
+		if (drawEnd >= (WINDOW_HEIGHT))
+			drawEnd = (WINDOW_HEIGHT) - 1;
+		//int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+
+		//calculate value of wallX
+		double wallX; //where exactly the wall was hit
+		if (side == 0)
+			wallX = game->player->posY + perpWallDist * rayDirY;
+		else
+			wallX = game->player->posX + perpWallDist * rayDirX;
+		wallX -= floor((wallX));
+
+		//x coordinate on the texture
+		int texX = (int)(wallX * ((double)64));
+		if(side == 0 && rayDirX > 0)
+			texX = 64 - texX - 1;
+		if(side == 1 && rayDirY < 0)
+			texX = 64 - texX - 1;
+		// How much to increase the texture coordinate per screen pixel
+		double step = 1.0 * 64 / lineHeight;
+		// Starting texture coordinate
+		double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
+		for (int y = drawStart; y < drawEnd; y++)
+		{
+			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+			int texY = (int)texPos & (64 - 1);
+			texPos += step;
+			uint32_t color = get_pixel_color(texX, texY, get_texture(c, game->textures)->addr);
+			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+			if (side == 1)
+				color = (color >> 1) & 8355711;
+			my_mlx_pixel_put(game->buffer, y, 0, color);
+		}
+		mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
+//			int start_end[2];
+//			start_end[0] = drawStart;
+//			start_end[1] = drawEnd;
+		i++;
+	}
+	ft_draw_lifebar(game);
 	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 }
 
@@ -354,7 +351,7 @@ int get_hp(int kc, t_game *game)
 
 int exit_game(int kc, t_game *game)
 {
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 int main(int argc, char **argv)
@@ -383,7 +380,7 @@ int main(int argc, char **argv)
 	mlxp.mlx_ptr = mlx_init();
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT - 200);
+	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
     lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
@@ -415,7 +412,7 @@ int main(int argc, char **argv)
 	int i = 0;
 	// printf("%p", (game.textures->wallText));
 	// printf("\n");
-	ft_draw_lifebar(&game);
+//	ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
