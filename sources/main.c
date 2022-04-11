@@ -1,6 +1,22 @@
 #include "cub3d.h"
 int g_debug = 0;
 
+unsigned int get_pixel_color(int x, int y, char *firstpixel)
+{
+    unsigned int *fp;;
+
+    fp = (unsigned int *)firstpixel;
+    return (fp[y * 64 + x]);
+}
+
+void    set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal)
+{
+    unsigned int *fp;;
+
+    fp = (unsigned int *)firstpixel;
+    fp[y * 64 + x] = newVal;
+}
+
 void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 {
 	size_t i;
@@ -29,7 +45,26 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 	}
 }
 
-void	load_textures(t_game *game		)
+void fix_png(t_image *img)
+{
+    int i;
+    int j;
+
+    i = 0;
+    while(i < 64)
+    {
+        j = 0;
+        while(j < 64)
+        {
+            if(get_pixel_color(i, j, img->addr) == 4278190080)
+                set_pixel_color(i, j, img->addr, 0x00ffffff);
+            j++;
+        }
+        i++;
+    }
+}
+
+void	load_textures(t_game *game)
 {
 	int a;
 	int b;
@@ -51,6 +86,10 @@ void	load_textures(t_game *game		)
 														 &game->textures->N_texture->line_length, &game->textures->N_texture->endian);
 	game->textures->S_texture->addr =  mlx_get_data_addr(game->textures->S_texture->img, &game->textures->S_texture->bits_per_pixel,
 														 &game->textures->S_texture->line_length, &game->textures->S_texture->endian);
+    fix_png(game->textures->S_texture);
+    fix_png(game->textures->W_texture);
+    fix_png(game->textures->N_texture);
+    fix_png(game->textures->E_texture);
 }
 
 int render_frame2D(void *g)
@@ -95,18 +134,21 @@ unsigned long createRGBA(t_color color)
  */
 void ft_verline(int line, int start, t_game *game, int *colors)
 {
-	int i;
+    int i;
+    int j;
 
-	i = 0;
+    i = 0;
+    j = 0;
 	while (i < start)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x00ff0000);
 		i++;
 	}
-	while (colors[i])
+	while (colors[j])
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, colors[i]);
-		i++;
+		my_mlx_pixel_put(game->buffer, 0, i, colors[j]);
+        j++;
+        i++;
 	}
 	while (i < WINDOW_HEIGHT - 200)
 	{
@@ -149,14 +191,6 @@ void do_action(t_game *game)
 		turnCamera(game, 1);
 	if(game->player->current_action[R_RIGHT_INDEX])
 		turnCamera(game, -1);
-}
-
-unsigned int get_pixel_color(int x, int y, char *firstpixel)
-{
-	unsigned int *fp;;
-
-	fp = (unsigned int *)firstpixel;
-	return (fp[y * 64 + x]);
 }
 
 char	get_adjacent_cardinal(int vec, char curr)
@@ -323,6 +357,7 @@ void drawRays3D(void *g)
 			}
             textswag[y - drawStart] = 0;
             ft_verline(i, drawStart, game, textswag);
+            free(textswag);
             //mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, i, 0);
 //            int start_end[2];
 //            start_end[0] = drawStart;
