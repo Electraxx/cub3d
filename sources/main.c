@@ -93,19 +93,19 @@ unsigned long createRGBA(t_color color)
 /*
  * cette fonction ta mere
  */
-void ft_verline(int line, int *drawStart_end, t_game *game, int color)
+void ft_verline(int line, int start, t_game *game, int *colors)
 {
 	int i;
 
 	i = 0;
-	while (i < drawStart_end[0])
+	while (i < start)
 	{
 		my_mlx_pixel_put(game->buffer, 0, i, 0x00ff0000);
 		i++;
 	}
-	while (i < drawStart_end[1])
+	while (colors[i])
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, color);
+		my_mlx_pixel_put(game->buffer, 0, i, colors[i]);
 		i++;
 	}
 	while (i < WINDOW_HEIGHT - 200)
