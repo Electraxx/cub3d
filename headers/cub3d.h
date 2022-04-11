@@ -56,10 +56,10 @@ typedef struct s_config{
 	char	*path_so;
 	char	*path_we;
 	char	*path_ea;
-	size_t		caseHeight;
-	size_t		caseWidth;
-	size_t		mapMaxWidth;
-	size_t		mapMaxHeight;
+	size_t	caseHeight;
+	size_t	caseWidth;
+	size_t	mapMaxWidth;
+	size_t	mapMaxHeight;
 } t_config;
 
 typedef struct s_vector{
@@ -71,6 +71,13 @@ typedef struct s_cardi_check{
 	int *val;
 	char **cardi;
 } t_cardi_check;
+
+typedef struct s_minimap{
+	int		x;
+	int		y;
+	float 	radiant;
+	t_image	*img;
+} t_minimap;
 
 typedef struct s_player
 {
@@ -114,11 +121,10 @@ typedef struct s_game
 	t_mlxp		*mlxp;
 	t_config	*config;
 	t_camera	*camera;
-	t_image *rayIgm;
-	t_image *minimap;
-    t_image *lifebar;
-    t_image *texture;
-	t_assets *textures;
+	t_image		*rayIgm;
+	t_minimap 	*minimap;
+    t_image		*lifebar;
+	t_assets	*textures;
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);

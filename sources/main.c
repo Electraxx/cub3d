@@ -1,5 +1,4 @@
 #include "cub3d.h"
-int g_debug = 0;
 
 void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 {
@@ -42,7 +41,6 @@ void	load_textures(t_game *game)
 	game->textures->N_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/roz.xpm", &a, &b);
 	game->textures->W_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
 	game->textures->S_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/wall.xpm", &a, &b);
-
 	game->textures->E_texture->addr =  mlx_get_data_addr(game->textures->E_texture->img, &game->textures->E_texture->bits_per_pixel,
 											 &game->textures->E_texture->line_length, &game->textures->E_texture->endian);
 	game->textures->W_texture->addr =  mlx_get_data_addr(game->textures->W_texture->img, &game->textures->W_texture->bits_per_pixel,
@@ -62,16 +60,34 @@ void load_square(int color, size_t posX, size_t posY, t_game *game, t_image *buf
 	i = 0;
 	j = 0;
 	conf = game->config;
-	while (i < conf->caseHeight)
+	while (i < conf->caseHeight - 1)
 	{
 		j = 0;
-		while (j < conf->caseWidth)
+		while (j < conf->caseWidth - 1)
 		{
+			if (color != 0)
+				printf("x : %ld, y : %ld\n", j + (16 * posX), i + (16 * posY));
 			my_mlx_pixel_put(buffer, j + (16 * posX), i + (16 * posY), color);
 			j++;
 		}
 		i++;
 	}
+	game->minimap->y++;
+}
+
+int in_circle(float x, float y, t_player *player)
+{
+	float	distance;
+	float 	radius = 4.0;
+
+	distance = sqrtf(powf(x - player->posX, 2.) + powf(y - player->posY, 2.));
+	if (distance <= radius)
+	{
+		if ((radius - distance) < 1.00000000)
+			return (2);
+		return (1);
+	}
+	return (0);
 }
 
 void	render_minimap(t_game *game, char **map, t_image *mm)
@@ -79,22 +95,36 @@ void	render_minimap(t_game *game, char **map, t_image *mm)
 	int	x;
 	int	y;
 	t_mlxp *mlxp;
+	double distance;
+	int change_line = 0;
 
 	y = 0;
+	game->minimap->y = 0;
+	game->minimap->x = 0;
 	mlxp = game->mlxp;
 	while (map[y])
 	{
 		x = 0;
+		game->minimap->x = 0;
 		while (map[y][x])
 		{
-			if (map[y][x] == '0')
-				load_square(0x0000ff00, x++, y, game, mm);
+			if (in_circle(x, y, game->player))
+			{
+				if (map[y][x] == '0')
+					load_square(0x0000ff00, x, y, game, mm);
+				else if (map[y][x] == 'N')
+					load_square(0x00ff0000, x, y, game, mm);
+				else
+					load_square(0x0000ffff, x, y, game, mm);
+//				game->minimap->x++;
+			}
 			else
-				load_square(0x0000ffff, x++, y, game, mm);
+				load_square(0x00000000, x, y, game, mm);
+			x++;
 		}
 		y++;
 	}
-	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm->img, 0, 0);
+	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm->img, 20, 20);
 }
 
 int render_frame2D(void *g)
@@ -160,25 +190,25 @@ void ft_verline(int line, int *drawStart_end, t_game *game, int color)
 
 void ft_draw_lifebar(t_game *game)
 {
-    int		j;
-    int		i;
+	int		j;
+	int		i;
 
-    i = 0;
-    while (i < WINDOW_WIDTH / 3)
-    {
-        j = -1;
-        while (++j < 30)
-        {
-            if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
-            else if (i < game->player->health)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
-            else
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
-        }
-        i++;
-    }
-    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 50);
+	i = 0;
+	while (i < WINDOW_WIDTH / 3)
+	{
+		j = -1;
+		while (++j < 30)
+		{
+			if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
+				my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
+			else if (i < game->player->health)
+				my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+			else
+				my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
+		}
+		i++;
+	}
+	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 50);
 }
 
 void do_action(t_game *game)
@@ -328,7 +358,6 @@ void drawRays3D(void *g)
 		if (drawEnd >= (WINDOW_HEIGHT))
 			drawEnd = (WINDOW_HEIGHT) - 1;
 		//int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
-
 		//calculate value of wallX
 		double wallX; //where exactly the wall was hit
 		if (side == 0)
@@ -365,6 +394,7 @@ void drawRays3D(void *g)
 		i++;
 	}
 	ft_draw_lifebar(game);
+	render_minimap(game, game->map, game->minimap->img);
 	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 }
 
@@ -378,7 +408,7 @@ int key_relase(int kc, t_game *game)
 		game->player->current_action[FRONT_INDEX] = 0;
 	if (kc == S_KEY)
 		game->player->current_action[BACK_INDEX] = 0;
-    return (0);
+	return (0);
 }
 
 int get_hp(int kc, t_game *game)
@@ -402,20 +432,20 @@ int main(int argc, char **argv)
 	t_mlxp mlxp;
 	t_cardi_check cardiCheck;
 	t_game game;
-    t_image img;
-    t_image lifebar_img;
 	t_image img;
+	t_image lifebar_img;
 	t_image minimap;
 	game.player = malloc(sizeof(t_player));
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
-	game.texture = malloc(sizeof(t_image));
-	game.minimap = malloc(sizeof(t_image));
+//	game.minimap = malloc(sizeof(t_image));
+	game.minimap = malloc(sizeof(t_minimap));
+	game.minimap->img = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
-    game.lifebar = &lifebar_img;
+	game.lifebar = &lifebar_img;
 	if (argc != 2)
 		return (1);
 	init_cardi_struct(&cardiCheck);
@@ -426,17 +456,20 @@ int main(int argc, char **argv)
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
-    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
+	lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
+	game.minimap->img->img = mlx_new_image(&mlxp, 400, 400);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
-    lifebar_img.addr = mlx_get_data_addr(lifebar_img.img, &lifebar_img.bits_per_pixel, &lifebar_img.line_length,
-                                         &lifebar_img.endian);
+	game.minimap->img->addr = mlx_get_data_addr(game.minimap->img->img, &game.minimap->img->bits_per_pixel,
+										  &game.minimap->img->line_length, &game.minimap->img->endian);
+	lifebar_img.addr = mlx_get_data_addr(lifebar_img.img, &lifebar_img.bits_per_pixel, &lifebar_img.line_length,
+										 &lifebar_img.endian);
 	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
 	// draw_map(mlx, game);
-    game.player->health = 150;
+	game.player->health = 150;
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
 	game.player->current_action = malloc(sizeof(int) * 4);
@@ -448,14 +481,9 @@ int main(int argc, char **argv)
 	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
 	game.config->mapMaxHeight = max_height(game.map);
-
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	game.player->dirState = 'W';
-	minimap.img = mlx_new_image(&mlxp, 300, 300);
-	minimap.addr = mlx_get_data_addr(minimap.img, &minimap.bits_per_pixel, &minimap.line_length,
-								 &minimap.endian);
-	game.minimap = &minimap;
 	// game.config->caseWidth = game.config->caseHeight;
 	load_textures(&game);
 	int i = 0;
