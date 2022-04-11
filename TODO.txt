@@ -1,10 +1,10 @@
-1. Slider sur les murs
+1. Slider sur les murs : ✔
 2. Minimap
 3. Ennemies
 4. Macron explosion
-5. Textures
+5. finir les textures
 6. Collectibles
-7. Barre de vie
+7. Barre de vie | Affichage ok | lié avec les HP du player ok
 8. Exit
 9. Armes (Petition)
 10. Portes

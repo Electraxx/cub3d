@@ -24,6 +24,16 @@
 #define SPEED 0.1
 #define ROT_SPEED 0.05
 
+typedef struct	s_image {
+    void	*img;
+    char	*addr;
+    int		bits_per_pixel;
+    int		line_length;
+    int		endian;
+	int 	width;
+	int 	height;
+}				t_image;
+
 typedef enum e_action_index{
 	FRONT_INDEX,
 	BACK_INDEX,
@@ -62,14 +72,12 @@ typedef struct s_cardi_check{
 	char **cardi;
 } t_cardi_check;
 
-// int g_debug = 0;
-
 typedef struct s_player
 {
 	double	posX;
 	double	posY;
-	double	v_angle;
-	double	ori;
+    int     health;
+	char 	dirState;
 	e_action_index *current_action;
 }	t_player;
 
@@ -80,14 +88,6 @@ typedef struct s_camera
 	double	dirX;
 	double	dirY;
 }	t_camera;
-
-typedef struct	s_image {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}				t_image;
 
 typedef struct s_mlxp
 {
@@ -100,7 +100,10 @@ typedef struct s_mlxp
 
 typedef struct s_assets
 {
-	void	*wallText;
+	t_image	*N_texture;
+	t_image	*S_texture;
+	t_image	*E_texture;
+	t_image	*W_texture;
 }	t_assets;
 
 typedef struct s_game
@@ -113,8 +116,9 @@ typedef struct s_game
 	t_camera	*camera;
 	t_image *rayIgm;
 	t_image *minimap;
+    t_image *lifebar;
+    t_image *texture;
 	t_assets *textures;
-	uint32_t textbuff[WINDOW_HEIGHT][WINDOW_WIDTH];
 }	t_game;
 
 void		init_cardi_struct(t_cardi_check *cardi);
@@ -151,5 +155,8 @@ int				max_height(char **map);
 int				key_hook(int keycode, t_game *game);
 void 			move(t_game *game, int dir);
 void			turnCamera(t_game *game, int dir);
+
+//main.c
+void            ft_draw_lifebar(t_game *game);
 
 #endif
