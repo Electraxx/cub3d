@@ -81,6 +81,24 @@ void ft_temp(int drawStart, int y,char c, double step, int drawEnd, int side, ui
     //textswag[y - drawStart] = 0;
 }
 
+t_image *get_ray_texture(t_game *game, int side, double rayDirX, double rayDirY)
+{
+	if(side)
+	{
+		if(rayDirY < 0)
+			return (get_texture('N', game->textures));
+		else
+			return (get_texture('S', game->textures));
+	}
+	else
+	{
+		if(rayDirX < 0)
+			return (get_texture('W', game->textures));
+		else
+			return (get_texture('E', game->textures));
+	}
+}
+
 void drawRays3D(void *g)
 {
 	int i = 0;
@@ -147,16 +165,6 @@ void drawRays3D(void *g)
 				side = 1;
 			}
 			// Check if ray has hit a wall
-			if (side)
-			{
-				double dot = game->camera->dirY * rayDirY + game->camera->dirX * rayDirX;
-				if(dot > 0)
-					c = get_adjacent_cardinal(1, game->player->dirState);
-				else
-					c = get_adjacent_cardinal(1, game->player->dirState);
-			}
-			else
-				c = get_adjacent_cardinal(2, game->player->dirState);
 			if (game->map[mapy][mapx] == '1')
 				hit = 1;
 		}
@@ -193,21 +201,7 @@ void drawRays3D(void *g)
 		double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
         uint32_t *textswag = malloc(sizeof(uint32_t) * (drawEnd - drawStart + 1));
 		//t_image *text = get_texture(c, game->textures);
-		t_image *text;
-		if(side)
-		{
-			if(rayDirY < 0)
-				text = get_texture('N', game->textures);
-			else
-				text = get_texture('S', game->textures);
-		}
-		else
-		{
-			if(rayDirX < 0)
-				text = get_texture('W', game->textures);
-			else
-				text = get_texture('E', game->textures);
-		}
+		t_image *text = get_ray_texture(game, side, rayDirX, rayDirY);
 		int y = drawStart;
         for(; y<drawEnd; y++) {
             // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
