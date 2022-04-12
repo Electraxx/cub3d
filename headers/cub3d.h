@@ -34,6 +34,37 @@ typedef struct	s_image {
 	int 	height;
 }				t_image;
 
+typedef struct	s_line_texture_data {
+	int texX;
+	double wallX;
+	double step;
+	double texPos;
+	uint32_t *pixelArray;
+}				t_line_texture_data;
+
+typedef struct	s_line_data {
+	int lineHeight;
+	int drawStart;
+	int drawEnd;
+	t_line_texture_data line_text_data;
+
+}				t_line_data;
+
+typedef struct	s_raycast_data {
+	double  sideDistX;
+	double  sideDistY;
+	double  deltaDistX;
+	double  deltaDistY;
+	double  cameraX;
+	int     mapX;
+	int     mapY;
+	double  stepX;
+	double  stepY;
+	int     hit;
+	int     side;
+	t_line_data line_data;
+}				t_raycast_data;
+
 typedef enum e_action_index{
 	FRONT_INDEX,
 	BACK_INDEX,

@@ -107,6 +107,7 @@ void drawRays3D(void *g)
 	double deltaDistX;
 	double deltaDistY;
 	t_game *game = (t_game *)g;
+	t_raycast_data  rayData;
 
 	i = 0;
 	do_action(game);
