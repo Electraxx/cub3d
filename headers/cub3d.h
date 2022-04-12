@@ -43,9 +43,10 @@ typedef struct	s_line_texture_data {
 }				t_line_texture_data;
 
 typedef struct	s_line_data {
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
+	int		lineHeight;
+	int		drawStart;
+	int		drawEnd;
+	double	perpWallDist;
 	t_line_texture_data line_text_data;
 
 }				t_line_data;
@@ -53,6 +54,8 @@ typedef struct	s_line_data {
 typedef struct	s_raycast_data {
 	double  sideDistX;
 	double  sideDistY;
+	double	rayDirX;
+	double	rayDirY;
 	double  deltaDistX;
 	double  deltaDistY;
 	double  cameraX;
@@ -196,6 +199,7 @@ void            ft_verline(int line, int start, t_game *game, uint32_t *colors, 
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
 void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
+void			draw_view(t_raycast_data *rayData);
 
 
 //todo
