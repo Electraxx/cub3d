@@ -54,6 +54,33 @@ t_image *get_texture(char c, t_assets *text)
 		return (NULL);
 }
 
+void ft_temp(int drawStart, int y,char c, double step, int drawEnd, int side, uint32_t *textswag, int texX, double *texPos, t_image *text, int texY)
+{
+
+    uint32_t color = get_pixel_color(texX, texY, text->addr);
+
+    if(side == 1) {
+        color = (color >> 1) & 8355711;
+    }
+    *textswag = color;
+    *texPos += step;//THIS|||
+//    if(side == 1) {
+//        *color = (*color >> 1) & 8355711;
+//    }
+//
+//    textswag[y - drawStart] = *color;
+   //int *textLine = load_line_texture(lineHeight, step, texPos, texX, side, texture);
+    /*ft_verline(i, drawStart, game, textLine, drawEnd - drawStart);*/
+
+//        if(side == 1)
+//            *color = (*color >> 1) & 8355711;
+//        //buffer[y][i] = color;
+//        *textswag[y - drawStart] = *color;
+        //my_mlx_pixel_put(game->buffer, y, 0, color);
+    //}
+    //textswag[y - drawStart] = 0;
+}
+
 void drawRays3D(void *g)
 {
 	int i = 0;
@@ -126,7 +153,7 @@ void drawRays3D(void *g)
 				if(dot > 0)
 					c = get_adjacent_cardinal(1, game->player->dirState);
 				else
-					c = get_adjacent_cardinal(-1, game->player->dirState);
+					c = get_adjacent_cardinal(1, game->player->dirState);
 			}
 			else
 				c = get_adjacent_cardinal(2, game->player->dirState);
@@ -164,33 +191,41 @@ void drawRays3D(void *g)
 		double step = 1.0 * 64.0 / lineHeight;
 		// Starting texture coordinate
 		double texPos = (drawStart - WINDOW_HEIGHT / 2 + lineHeight / 2) * step;
-		int *textswag = malloc(sizeof(int) * (drawEnd - drawStart + 1));
-		int y = drawStart;
-		//int *textLine = load_line_texture(lineHeight, step, texPos, texX, side, texture);
-		/*ft_verline(i, drawStart, game, textLine, drawEnd - drawStart);*/
-		char *text = get_texture(c, game->textures)->addr;
-		for(; y<drawEnd; y++)
+        uint32_t *textswag = malloc(sizeof(uint32_t) * (drawEnd - drawStart + 1));
+		//t_image *text = get_texture(c, game->textures);
+		t_image *text;
+		if(side)
 		{
-			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			int texY = (int)texPos & (64 - 1);
-			texPos += step;
-			uint32_t color = get_pixel_color(texX, texY, text);
-			if(side == 1)
-				color = (color >> 1) & 8355711;
-			//buffer[y][i] = color;
-			textswag[y - drawStart] = color;
-			//my_mlx_pixel_put(game->buffer, y, 0, color);
+			if(rayDirY < 0)
+				text = get_texture('N', game->textures);
+			else
+				text = get_texture('S', game->textures);
 		}
-		textswag[y - drawStart] = 0;
+		else
+		{
+			if(rayDirX < 0)
+				text = get_texture('W', game->textures);
+			else
+				text = get_texture('E', game->textures);
+		}
+		int y = drawStart;
+        for(; y<drawEnd; y++) {
+            // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+            int texY = (int) texPos & (64 - 1);
+            uint32_t *test = &textswag[y - drawStart];
+
+            ft_temp(drawStart, drawStart, c, step, drawEnd, side, test, texX, &texPos, text, texY);
+        }
+        textswag[y - drawStart] = 0;
 		//load2()
-		i++;
 		ft_verline(i, drawStart, game, textswag, lineHeight);
+        i++;
 	}
 	ft_draw_lifebar(game);
 	//mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
 }
 
-void ft_verline(int line, int start, t_game *game, int *colors, int lineHeight)
+void ft_verline(int line, int start, t_game *game, uint32_t *colors, int lineHeight)
 {
 	int i;
 	int j;

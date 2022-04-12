@@ -92,7 +92,7 @@ int render_frame2D(void *g)
 		}
 		i++;
 	}
-	printf("%f %f\n", game->camera->dirX, game->camera->dirY);
+	//printf("%f %f\n", game->camera->dirX, game->camera->dirY);
 	int z = 20;
 	double tposx = game->player->posX;
 	double tposy = game->player->posY;
