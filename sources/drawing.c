@@ -54,43 +54,43 @@ t_image *get_texture(char c, t_assets *text)
 		return (NULL);
 }
 
-void ft_temp(t_raycast_data *rayData, t_image *text)
+void load_text_line(t_raycast_data *rayData, t_image *text)
 {
-	int y = rayData->line_data.drawStart;
-	rayData->line_data.line_text_data.pixelArray = malloc(sizeof(uint32_t) * (rayData->line_data.lineHeight + 1));
-	for(; y<rayData->line_data.drawEnd; y++)
+	int					y;
+	t_line_texture_data *t_data;
+
+	y = rayData->line_data.drawStart;
+	t_data = &rayData->line_data.line_text_data;
+	t_data->pixelArray = malloc(sizeof(uint32_t) * (rayData->line_data.lineHeight + 1));
+	while (y < rayData->line_data.drawEnd)
 	{
-	rayData->line_data.line_text_data.texY = (int) rayData->line_data.line_text_data.texPos & (64 - 1);
-	//uint32_t *test = &textswag[y - rayData->line_data.drawStart];
-
-
-
-	uint32_t color = get_pixel_color(rayData->line_data.line_text_data.texX, rayData->line_data.line_text_data.texY, text->addr);
-
-	if(rayData->side == 1) {
-		color = (color >> 1) & 8355711;
+		t_data->texY = (int) t_data->texPos & (64 - 1);
+		uint32_t color = get_pixel_color(t_data->texX, t_data->texY, text->addr);
+		if(rayData->side == 1) {
+			color = (color >> 1) & 8355711;
+		}
+		t_data->pixelArray[y - rayData->line_data.drawStart] = color;
+		t_data->texPos += rayData->line_data.line_text_data.step;
+		y++;
 	}
-	rayData->line_data.line_text_data.pixelArray[y - rayData->line_data.drawStart] = color;
-	rayData->line_data.line_text_data.texPos += rayData->line_data.line_text_data.step;
-	}
-	rayData->line_data.line_text_data.pixelArray[y - rayData->line_data.drawStart] = 0;
+	t_data->pixelArray[y - rayData->line_data.drawStart] = 0;
 }
 
-t_image *get_ray_texture(t_game *game, int side, double rayDirX, double rayDirY)
+t_image *get_ray_texture(t_assets *assets, t_raycast_data *rdata)
 {
-	if(side)
+	if(rdata->side)
 	{
-		if(rayDirY < 0)
-			return (get_texture('N', game->textures));
+		if(rdata->rayDirY < 0)
+			return (get_texture('N', assets));
 		else
-			return (get_texture('S', game->textures));
+			return (get_texture('S', assets));
 	}
 	else
 	{
-		if(rayDirX < 0)
-			return (get_texture('W', game->textures));
+		if(rdata->rayDirX < 0)
+			return (get_texture('W', assets));
 		else
-			return (get_texture('E', game->textures));
+			return (get_texture('E', assets));
 	}
 }
 
@@ -124,7 +124,7 @@ void calc_sideDist(t_raycast_data *rdata, t_point pos)
 	}
 }
 
-void check_hit(t_raycast_data *rayData, char **map) //TODO make it return an int and check it directly
+void check_hit(t_raycast_data *rayData, char **map)
 {
 	while (rayData->hit == 0) {
 		if (rayData->sideDistX < rayData->sideDistY) {
@@ -145,23 +145,27 @@ void check_hit(t_raycast_data *rayData, char **map) //TODO make it return an int
 
 void calc_line(t_raycast_data *rayData)
 {
+	t_line_data *l_data;
+
+	l_data = &rayData->line_data;
 	if (rayData->side == 0)
-		rayData->line_data.perpWallDist = (rayData->sideDistX - rayData->deltaDistX);
+		l_data->perpWallDist = (rayData->sideDistX - rayData->deltaDistX);
 	else
-		rayData->line_data.perpWallDist = (rayData->sideDistY - rayData->deltaDistY);
-	rayData->line_data.lineHeight = (int) ((WINDOW_HEIGHT) / rayData->line_data.perpWallDist);
-	rayData->line_data.drawStart = -rayData->line_data.lineHeight / 2 + (WINDOW_HEIGHT) / 2;
-	if (rayData->line_data.drawStart < 0)
-		rayData->line_data.drawStart = 0;
-	rayData->line_data.drawEnd = rayData->line_data.lineHeight / 2 + (WINDOW_HEIGHT) / 2;
-	if (rayData->line_data.drawEnd >= (WINDOW_HEIGHT))
-		rayData->line_data.drawEnd = (WINDOW_HEIGHT) - 1;
+		l_data->perpWallDist = (rayData->sideDistY - rayData->deltaDistY);
+	l_data->lineHeight = (int) ((WINDOW_HEIGHT) / l_data->perpWallDist);
+	l_data->drawStart = -l_data->lineHeight / 2 + (WINDOW_HEIGHT) / 2;
+	if (l_data->drawStart < 0)
+		l_data->drawStart = 0;
+	l_data->drawEnd = l_data->lineHeight / 2 + (WINDOW_HEIGHT) / 2;
+	if (l_data->drawEnd >= (WINDOW_HEIGHT))
+		l_data->drawEnd = (WINDOW_HEIGHT) - 1;
 }
 
 void load_line(t_raycast_data *rayData, t_point pos,t_game *game, int line)
 {
 	t_line_texture_data *text_data;
 	t_line_data 		*l_data;
+	t_image 			*texture;
 
 	text_data = &rayData->line_data.line_text_data;
 	l_data = &rayData->line_data;
@@ -176,27 +180,22 @@ void load_line(t_raycast_data *rayData, t_point pos,t_game *game, int line)
 	text_data->step = 1.0 * 64.0 / l_data->lineHeight;
 	text_data->texPos = (l_data->drawStart - WINDOW_HEIGHT / 2 + l_data->lineHeight / 2) * text_data->step;
 	text_data->pixelArray = malloc(sizeof(uint32_t) * (l_data->drawEnd - l_data->drawStart + 1));
-	t_image *text = get_ray_texture(game, rayData->side, rayData->rayDirX, rayData->rayDirY);
-	ft_temp(rayData, text);
+	texture = get_ray_texture(game->textures, rayData);
+	load_text_line(rayData, texture);
 }
 
 void draw_view(t_raycast_data *rdata, t_game *game)
 {
 	int 				i;
-	t_line_data			*l_data;
-	t_line_texture_data *text_data;
-
 
 	i = -1;
-	l_data = &rdata->line_data;
-	text_data = &l_data->line_text_data;
 	while(++i <= WINDOW_WIDTH) {
 		init_ray(rdata, game->camera, i, game->player->pos);
 		calc_sideDist(rdata, game->player->pos);
 		check_hit(rdata, game->map);
 		calc_line(rdata);
 		load_line(rdata, game->player->pos, game, i);
-		ft_verline(i, l_data->drawStart, game, text_data->pixelArray, l_data->lineHeight);
+		ft_verline(i, rdata, game->buffer, game->mlxp);
 	}
 }
 
@@ -211,31 +210,31 @@ void draw(void *g)
 	ft_draw_lifebar(game);
 }
 
-void ft_verline(int line, int start, t_game *game, uint32_t *colors, int lineHeight)
+void ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx)
 {
 	int i;
 	int j;
+	uint32_t *pxline;
 
 	i = 0;
 	j = 0;
-	if(start < 0)
-		exit(0);
-	while (i < start)
+	pxline = rdata->line_data.line_text_data.pixelArray;
+	while (i < rdata->line_data.drawStart)
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, 0x00ff0000);
+		my_mlx_pixel_put(buffer, 0, i, 0x00ff0000);
 		i++;
 	}
-	while (colors[j])
+	while (rdata->line_data.line_text_data.pixelArray[j])
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, colors[j]);
+		my_mlx_pixel_put(buffer, 0, i, pxline[j]);
 		j++;
 		i++;
 	}
 	while (i < WINDOW_HEIGHT)
 	{
-		my_mlx_pixel_put(game->buffer, 0, i, 0x0000ff00);
+		my_mlx_pixel_put(buffer, 0, i, 0x0000ff00);
 		i++;
 	}
-	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, line, 0);
-	free(colors);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, line, 0);
+	free(pxline);
 }

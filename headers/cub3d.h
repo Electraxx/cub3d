@@ -200,7 +200,7 @@ void            ft_draw_lifebar(t_game *game);
 
 //drawing.c
 void            draw(void *g);
-void            ft_verline(int line, int start, t_game *game, uint32_t *colors, int lineHeight);
+void			ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx);
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
 void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);

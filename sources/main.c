@@ -48,32 +48,27 @@ void fix_png(t_image *img)
     }
 }
 
-void	load_textures(t_game *game)
+void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 {
 	int a;
 	int b;
-	game->textures->E_texture = malloc(sizeof (t_image));
+
+	asset->img = mlx_xpm_file_to_image(mlxp->mlx_ptr, path, &a, &b);
+	asset->addr =  mlx_get_data_addr(asset->img, &asset->bits_per_pixel, &asset->line_length, &asset->endian);
+	fix_png(asset);
+}
+
+void	load_textures(t_game *game)
+{
 	game->textures->S_texture = malloc(sizeof (t_image));
+	game->textures->E_texture = malloc(sizeof (t_image));
 	game->textures->W_texture = malloc(sizeof (t_image));
 	game->textures->N_texture = malloc(sizeof (t_image));
+	load_asset(game->textures->E_texture, "textures/flag.xpm", game->mlxp);
+	load_asset(game->textures->S_texture, "textures/wall.xpm", game->mlxp);
+	load_asset(game->textures->N_texture, "textures/roz.xpm", game->mlxp);
+	load_asset(game->textures->W_texture, "textures/mac64.xpm", game->mlxp);
 
-	game->textures->E_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/flag.xpm", &a, &b);
-	game->textures->N_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/roz.xpm", &a, &b);
-	game->textures->W_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/mac64.xpm", &a, &b);
-	game->textures->S_texture->img = mlx_xpm_file_to_image(game->mlxp->mlx_ptr, "textures/wall.xpm", &a, &b);
-
-	game->textures->E_texture->addr =  mlx_get_data_addr(game->textures->E_texture->img, &game->textures->E_texture->bits_per_pixel,
-											 &game->textures->E_texture->line_length, &game->textures->E_texture->endian);
-	game->textures->W_texture->addr =  mlx_get_data_addr(game->textures->W_texture->img, &game->textures->W_texture->bits_per_pixel,
-											 &game->textures->W_texture->line_length, &game->textures->W_texture->endian);
-	game->textures->N_texture->addr =  mlx_get_data_addr(game->textures->N_texture->img, &game->textures->N_texture->bits_per_pixel,
-														 &game->textures->N_texture->line_length, &game->textures->N_texture->endian);
-	game->textures->S_texture->addr =  mlx_get_data_addr(game->textures->S_texture->img, &game->textures->S_texture->bits_per_pixel,
-														 &game->textures->S_texture->line_length, &game->textures->S_texture->endian);
-    fix_png(game->textures->S_texture);
-    fix_png(game->textures->W_texture);
-    fix_png(game->textures->N_texture);
-    fix_png(game->textures->E_texture);
 }
 
 int render_frame2D(void *g)
