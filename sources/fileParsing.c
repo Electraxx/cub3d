@@ -60,13 +60,11 @@ void load_color(t_config *cfg, char *color, char type)
 {
 	char	**bytes;
 
-
 	bytes = ft_split(color,',');
-	if(type == 'C')
+	if (type == 'C')
 		cfg->ceiling = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
-	else if(type == 'F')
+	else if (type == 'F')
 		cfg->floor = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
-	ft_print_2d_str(bytes, 1, "");
 	ft_free_2d_str(bytes);
 }
 
@@ -90,7 +88,6 @@ error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *c
 			if (is_color_valid(temp) < 0)
 				return (is_color_valid(temp));
 			load_color(cfg, temp + 2, temp[0]);
-			printf("%s\n", temp);
 		}
 		else if (is_valid_cardinal(ft_substr(temp, 0, 2)))
 		{
