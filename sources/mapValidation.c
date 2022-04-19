@@ -107,8 +107,8 @@ void	player_setpos(char **map, t_player *player)
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
 				|| map[i][j] == 'W')
 				{
-					player->posX = j;
-					player->posY = i;
+					player->pos.x = j;
+					player->pos.y = i;
 				}
 			j++;
 		}

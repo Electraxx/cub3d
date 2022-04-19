@@ -16,30 +16,6 @@ void    set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal)
 	fp[y * 64 + x] = newVal;
 }
 
-
-int *load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture)
-{
-	int        *lineText;
-	int        i;
-	int        texY;
-	uint32_t   color;
-
-	i = 0;
-	lineText = malloc(sizeof(int) * (len + 1));
-	while(i < len)
-	{
-		texY = (int)texPos & (64 - 1);
-		texPos += step;
-		color = get_pixel_color(texX, texY, texture->addr);
-		if(side == 1)
-			color = (color >> 1) & 8355711;
-		lineText[i] = color;
-		i++;
-	}
-	lineText[i] = 0;
-	return (lineText);
-}
-
 t_image *get_texture(char c, t_assets *text)
 {
 	if (c == 'W')
@@ -179,7 +155,6 @@ void load_line(t_raycast_data *rayData, t_point pos,t_game *game, int line)
 		text_data->texX = 64 - text_data->texX - 1;
 	text_data->step = 1.0 * 64.0 / l_data->lineHeight;
 	text_data->texPos = (l_data->drawStart - WINDOW_HEIGHT / 2 + l_data->lineHeight / 2) * text_data->step;
-	text_data->pixelArray = malloc(sizeof(uint32_t) * (l_data->drawEnd - l_data->drawStart + 1));
 	texture = get_ray_texture(game->textures, rayData);
 	load_text_line(rayData, texture);
 }
@@ -236,5 +211,5 @@ void ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx)
 		i++;
 	}
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, line, 0);
-	free(pxline);
+	free(rdata->line_data.line_text_data.pixelArray);
 }

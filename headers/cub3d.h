@@ -90,8 +90,8 @@ typedef struct s_color{
 } t_color;
 
 typedef struct s_config{
-	t_color	*floor;
-	t_color	*ceiling;
+	size_t	*floor;
+	size_t	*ceiling;
 	char	*path_no;
 	char	*path_so;
 	char	*path_we;
