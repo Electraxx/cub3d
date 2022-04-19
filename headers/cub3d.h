@@ -24,6 +24,11 @@
 #define SPEED 0.1
 #define ROT_SPEED 0.05
 
+typedef struct	s_point {
+	double x;
+	double y;
+}				t_point;
+
 typedef struct	s_image {
     void	*img;
     char	*addr;
@@ -33,6 +38,41 @@ typedef struct	s_image {
 	int 	width;
 	int 	height;
 }				t_image;
+
+typedef struct	s_line_texture_data {
+	int texX;
+	int texY;
+	double wallX;
+	double step;
+	double texPos;
+	uint32_t *pixelArray;
+}				t_line_texture_data;
+
+typedef struct	s_line_data {
+	int		lineHeight;
+	int		drawStart;
+	int		drawEnd;
+	double	perpWallDist;
+	t_line_texture_data line_text_data;
+
+}				t_line_data;
+
+typedef struct	s_raycast_data {
+	double  sideDistX;
+	double  sideDistY;
+	double	rayDirX;
+	double	rayDirY;
+	double  deltaDistX;
+	double  deltaDistY;
+	double  cameraX;
+	int     mapX;
+	int     mapY;
+	double  stepX;
+	double  stepY;
+	int     hit;
+	int     side;
+	t_line_data line_data;
+}				t_raycast_data;
 
 typedef enum e_action_index{
 	FRONT_INDEX,
@@ -74,8 +114,7 @@ typedef struct s_cardi_check{
 
 typedef struct s_player
 {
-	double	posX;
-	double	posY;
+	t_point pos;
     int     health;
 	char 	dirState;
 	e_action_index *current_action;
@@ -158,5 +197,20 @@ void			turnCamera(t_game *game, int dir);
 
 //main.c
 void            ft_draw_lifebar(t_game *game);
+
+//drawing.c
+void            draw(void *g);
+void			ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx);
+unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
+void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
+int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
+void			draw_view(t_raycast_data *rdata, t_game *game);
+
+
+
+//todo
+char	get_adjacent_cardinal(int vec, char curr);
+void do_action(t_game *game);
+
 
 #endif

@@ -1,25 +1,5 @@
 #include "cub3d.h"
 
-void print_altered_map(int x, int y, char c, char **map, int dimX, int dimY)
-{
-	int i = 0;
-	int j;
-	while (i < dimY)
-	{
-		j = 0;
-		while (j < dimX)
-		{
-			if (j == x && y == i)
-				printf("%c", c);
-			else
-				printf("%c", map[i][j]);
-			j++;
-		}
-		printf("\n");
-		i++;
-	}
-}
-
 void move(t_game *game, int dir)
 {
 	char		**map;
@@ -31,44 +11,36 @@ void move(t_game *game, int dir)
 	map = game->map;
 	deltax = game->camera->dirX * SPEED * dir;
 	deltay = game->camera->dirY * SPEED * dir;
-	if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX + deltax)] != '1')
+	if (map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x + deltax)] != '1')
 	{
-		game->player->posX += deltax;
-		game->player->posY += deltay;
+		game->player->pos.x += deltax;
+		game->player->pos.y += deltay;
 	}
     // The two else if are here to check for wall slides
     // TODO Maybe modifier la speed quand tu wall slide
     // TODO Fix Crash quand on fonce dans les coins | SHOULD BE FINE
-    else if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] == '1'
-        && map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] != '1')
-        game->player->posX += deltax;
-    else if (map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] == '1'
-        && map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] != '1')
-        game->player->posY += deltay;
-    if ((int)(player->posY - deltay) != (int)(player->posY) || (int)(player->posY - deltax) != (int)(player->posX))
-        map[((int)(player->posY - deltay))][((int)(player->posX - deltax))] = '0';
-    map[(int)(player->posY)][(int)(player->posX)] = 'N';
+    else if (map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x)] == '1'
+        && map[(int)(game->player->pos.y)][(int)(game->player->pos.x + deltax)] != '1')
+        game->player->pos.x += deltax;
+    else if (map[(int)(game->player->pos.y)][(int)(game->player->pos.x + deltax)] == '1'
+        && map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x)] != '1')
+        game->player->pos.y += deltay;
+    if ((int)(player->pos.y - deltay) != (int)(player->pos.y) || (int)(player->pos.y - deltax) != (int)(player->pos.x))
+        map[((int)(player->pos.y - deltay))][((int)(player->pos.x - deltax))] = '0';
+    map[(int)(player->pos.y)][(int)(player->pos.x)] = 'N';
 }
 
-char get_inverse_dir(char c)
+void do_action(t_game *game)
 {
-	if (c == 'w')
-		return 'e';
-	if (c == 's')
-		return 'n';
-	if (c == 'n')
-		return 's';
-	if (c == 'e')
-		return 'w';
+	if(game->player->current_action[FRONT_INDEX])
+		move(game, 1);
+	if(game->player->current_action[BACK_INDEX])
+		move(game, -1);
+	if(game->player->current_action[R_LEFT_INDEX])
+		turnCamera(game, 1);
+	if(game->player->current_action[R_RIGHT_INDEX])
+		turnCamera(game, -1);
 }
-
-/*
- * get wall facing dir with player pos - hit ray state -
- */
-/*char get_facing_wall_dir(game *game, int hit)
-{
-
-}*/
 
 void update_player_direction(t_game *game)
 {
