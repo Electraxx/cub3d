@@ -97,16 +97,12 @@ typedef struct s_config{
 	char	*path_so;
 	char	*path_we;
 	char	*path_ea;
+	char 	firstDir;
 	size_t		caseHeight;
 	size_t		caseWidth;
 	size_t		mapMaxWidth;
 	size_t		mapMaxHeight;
 } t_config;
-
-typedef struct s_vector{
-	double	posX;
-	double	posY;
-} t_vector;
 
 typedef struct s_cardi_check{
 	int *val;
@@ -133,9 +129,6 @@ typedef struct s_mlxp
 {
 	void	*mlx_ptr;
 	void	*win_ptr;
-	char	**map;
-	int		wh;
-	int		ww;
 }	t_mlxp;
 
 typedef struct s_assets
@@ -161,15 +154,15 @@ typedef struct s_game
 	t_assets *textures;
 }	t_game;
 
-void		init_cardi_struct(t_cardi_check *cardi);
-error_type	texture_check(char *t_path, t_cardi_check *check_cardi);
-int			check_all_cardi(t_cardi_check *cardi);
+void			init_cardi_struct(t_cardi_check *cardi);
+error_type		texture_check(char *t_path, t_cardi_check *check_cardi);
+int				check_all_cardi(t_cardi_check *cardi);
 
 // colorValidations.c
-error_type is_color_valid(char *color_line);
+error_type		is_color_valid(char *color_line);
 
 // mapValidation.c
-error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
+error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
 error_type		parse_map(int fd, int lines_num, char ***map);
 void			fill_map(char ***map);
 void			player_setpos(char **map, t_player *player);

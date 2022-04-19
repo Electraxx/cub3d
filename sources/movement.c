@@ -42,22 +42,6 @@ void do_action(t_game *game)
 		turnCamera(game, -1);
 }
 
-void update_player_direction(t_game *game)
-{
-	double heading = atan2(game->camera->dirY, game->camera->dirX) * (180 / PI) + 180;
-	char c;
-	if (heading > 315 || heading < 45)
-		c = 'W';
-	if (heading > 45 && heading < 135)
-		c = 'N';
-	if (heading > 135 && heading < 225)
-		c = 'E';
-	if (heading > 225 && heading < 315)
-		c = 'S';
-	game->player->dirState = c;
-//	printf("heading : %c (%f)\n", c, heading);
-}
-
 void turnCamera(t_game *game, int dir)
 {
 	double oldDirX;
@@ -69,7 +53,6 @@ void turnCamera(t_game *game, int dir)
 	game->camera->dirY = oldDirX * sin(ROT_SPEED * dir) + game->camera->dirY * cos(ROT_SPEED * dir);
 	game->camera->planeX = game->camera->planeX * cos(ROT_SPEED * dir) - game->camera->planeY * sin(ROT_SPEED * dir);
 	game->camera->planeY = oldPlaneX * sin(ROT_SPEED * dir) + game->camera->planeY * cos(ROT_SPEED * dir);
-	update_player_direction(game);
 }
 
 int key_hook(int keycode, t_game *game)
