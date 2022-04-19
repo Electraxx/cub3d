@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 	int i = 0;
 	// printf("%p", (game.textures->wallText));
 	// printf("\n");
-	ft_draw_lifebar(&game);
+	//ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);

@@ -36,6 +36,7 @@ typedef struct	s_image {
 
 typedef struct	s_line_texture_data {
 	int texX;
+	int texY;
 	double wallX;
 	double step;
 	double texPos;
@@ -199,7 +200,7 @@ void            ft_verline(int line, int start, t_game *game, uint32_t *colors, 
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
 void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
-void			draw_view(t_raycast_data *rayData);
+void    draw_view(t_raycast_data *rayData, t_camera *camera, t_game *game);
 
 
 //todo
