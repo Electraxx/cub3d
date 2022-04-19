@@ -175,6 +175,22 @@ int exit_game(int kc, t_game *game)
 	exit(0);
 }
 
+void set_player_dir(t_camera *camera, char c)
+{
+	double oldDirX;
+	double oldPlaneX;
+
+	oldPlaneX = camera->planeX;
+	oldDirX = camera->dirX;
+
+	double deg = 270;
+	deg = deg * (PI/180);
+	camera->dirX = oldDirX * cos(deg) - camera->dirY * sin(deg);
+	camera->dirY = oldDirX * sin(deg) + camera->dirY * cos(deg);
+	camera->planeX = camera->planeX * cos(deg) - camera->planeY * sin(deg);
+	camera->planeY = oldPlaneX * sin(deg) + camera->planeY * cos(deg);
+}
+
 int main(int argc, char **argv)
 {
 	t_mlxp mlxp;
@@ -224,16 +240,11 @@ int main(int argc, char **argv)
 	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
 	game.config->mapMaxHeight = max_height(game.map);
-
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
-	game.player->dirState = 'W';
-	// game.config->caseWidth = game.config->caseHeight;
+	game.config->firstDir = 'W';
+	set_player_dir(game.camera, game.config->firstDir);
 	load_textures(&game);
-	int i = 0;
-	// printf("%p", (game.textures->wallText));
-	// printf("\n");
-	//ft_draw_lifebar(&game);
 	player_setpos(game.map, game.player);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
