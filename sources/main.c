@@ -94,13 +94,13 @@ int render_frame2D(void *g)
 	}
 	//printf("%f %f\n", game->camera->dirX, game->camera->dirY);
 	int z = 20;
-	double tposx = game->player->posX;
-	double tposy = game->player->posY;
+	double tposx = game->player->pos.x;
+	double tposy = game->player->pos.y;
 	while (z)
 	{
 		tposx += game->camera->dirX;
 		tposy += game->camera->dirY;
-		my_mlx_pixel_put(game->buffer, (int)(game->player->posX * 15) + tposx, (int)(game->player->posY * 15) + tposy, 0x0000ff00);
+		my_mlx_pixel_put(game->buffer, (int)(game->player->pos.x * 15) + tposx, (int)(game->player->pos.y * 15) + tposy, 0x0000ff00);
 		z--;
 	}
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
@@ -246,7 +246,7 @@ int main(int argc, char **argv)
 	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
 	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
 	mlx_hook(mlxp.win_ptr, 17, 0, exit_game, &game);
-	mlx_loop_hook(mlxp.mlx_ptr, (void *)drawRays3D, &game);
+	mlx_loop_hook(mlxp.mlx_ptr, (void *) draw, &game);
 	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
 	// printf("%f %f\n", game.player->posX, game.player->posY);

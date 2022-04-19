@@ -11,23 +11,23 @@ void move(t_game *game, int dir)
 	map = game->map;
 	deltax = game->camera->dirX * SPEED * dir;
 	deltay = game->camera->dirY * SPEED * dir;
-	if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX + deltax)] != '1')
+	if (map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x + deltax)] != '1')
 	{
-		game->player->posX += deltax;
-		game->player->posY += deltay;
+		game->player->pos.x += deltax;
+		game->player->pos.y += deltay;
 	}
     // The two else if are here to check for wall slides
     // TODO Maybe modifier la speed quand tu wall slide
     // TODO Fix Crash quand on fonce dans les coins | SHOULD BE FINE
-    else if (map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] == '1'
-        && map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] != '1')
-        game->player->posX += deltax;
-    else if (map[(int)(game->player->posY)][(int)(game->player->posX + deltax)] == '1'
-        && map[(int)(game->player->posY + deltay)][(int)(game->player->posX)] != '1')
-        game->player->posY += deltay;
-    if ((int)(player->posY - deltay) != (int)(player->posY) || (int)(player->posY - deltax) != (int)(player->posX))
-        map[((int)(player->posY - deltay))][((int)(player->posX - deltax))] = '0';
-    map[(int)(player->posY)][(int)(player->posX)] = 'N';
+    else if (map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x)] == '1'
+        && map[(int)(game->player->pos.y)][(int)(game->player->pos.x + deltax)] != '1')
+        game->player->pos.x += deltax;
+    else if (map[(int)(game->player->pos.y)][(int)(game->player->pos.x + deltax)] == '1'
+        && map[(int)(game->player->pos.y + deltay)][(int)(game->player->pos.x)] != '1')
+        game->player->pos.y += deltay;
+    if ((int)(player->pos.y - deltay) != (int)(player->pos.y) || (int)(player->pos.y - deltax) != (int)(player->pos.x))
+        map[((int)(player->pos.y - deltay))][((int)(player->pos.x - deltax))] = '0';
+    map[(int)(player->pos.y)][(int)(player->pos.x)] = 'N';
 }
 
 void do_action(t_game *game)

@@ -24,6 +24,11 @@
 #define SPEED 0.1
 #define ROT_SPEED 0.05
 
+typedef struct	s_point {
+	double x;
+	double y;
+}				t_point;
+
 typedef struct	s_image {
     void	*img;
     char	*addr;
@@ -109,8 +114,7 @@ typedef struct s_cardi_check{
 
 typedef struct s_player
 {
-	double	posX;
-	double	posY;
+	t_point pos;
     int     health;
 	char 	dirState;
 	e_action_index *current_action;
@@ -195,12 +199,13 @@ void			turnCamera(t_game *game, int dir);
 void            ft_draw_lifebar(t_game *game);
 
 //drawing.c
-void            drawRays3D(void *g);
+void            draw(void *g);
 void            ft_verline(int line, int start, t_game *game, uint32_t *colors, int lineHeight);
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
 void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
-void    draw_view(t_raycast_data *rayData, t_camera *camera, t_game *game);
+void			draw_view(t_raycast_data *rdata, t_game *game);
+
 
 
 //todo
