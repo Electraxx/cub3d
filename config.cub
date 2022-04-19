@@ -2,8 +2,8 @@ NO ./texture1.lol
 SO ./texture1.lol
 WE ./texture1.lol
 EA ./texture1.lol
-F 220,100,0
-C 225,30,0
+F 0,0,255
+C 0,0,255
 
         1111111111111111111111111
         1000000000110000000000001

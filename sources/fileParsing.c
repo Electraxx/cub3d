@@ -60,11 +60,10 @@ void load_color(t_config *cfg, char *color, char type)
 {
 	char	**bytes;
 
-
 	bytes = ft_split(color,',');
-	if(type == 'C')
+	if (type == 'C')
 		cfg->ceiling = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
-	else if(type == 'F')
+	else if (type == 'F')
 		cfg->floor = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
 	ft_free_2d_str(bytes);
 }
