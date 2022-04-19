@@ -175,20 +175,58 @@ int exit_game(int kc, t_game *game)
 	exit(0);
 }
 
-void set_player_dir(t_camera *camera, char c)
+//Default is W
+void set_player_dir(t_camera *camera, char goal)
 {
 	double oldDirX;
 	double oldPlaneX;
+	char	curr;
+	int 	i;
+
+	curr = 'W';
+	i = 0;
+	while(curr != goal)
+	{
+		curr = get_adjacent_cardinal(1, curr);
+		i++;
+	}
 
 	oldPlaneX = camera->planeX;
 	oldDirX = camera->dirX;
+	double rad = (i * -90) * (PI / 180);
+	printf("i = %d rad \n", i);
+	camera->dirX = oldDirX * cos(rad) - camera->dirY * sin(rad);
+	camera->dirY = oldDirX * sin(rad) + camera->dirY * cos(rad);
+	camera->planeX = camera->planeX * cos(rad) - camera->planeY * sin(rad);
+	camera->planeY = oldPlaneX * sin(rad) + camera->planeY * cos(rad);
+}
 
-	double deg = 270;
-	deg = deg * (PI/180);
-	camera->dirX = oldDirX * cos(deg) - camera->dirY * sin(deg);
-	camera->dirY = oldDirX * sin(deg) + camera->dirY * cos(deg);
-	camera->planeX = camera->planeX * cos(deg) - camera->planeY * sin(deg);
-	camera->planeY = oldPlaneX * sin(deg) + camera->planeY * cos(deg);
+void get_player_orientation(char **map, t_config *cfg)
+{
+	int i;
+	int j;
+	char *cardi;
+	char *tmp;
+
+	i = 0;
+	j = 0;
+	cardi = ft_strcpy("NESW");
+	while(map[i]) {
+		j = 0;
+		while (cardi[j])
+		{
+			tmp = ft_strchr(map[i], cardi[j]);
+			if(tmp != NULL)
+			{
+				cfg->firstDir = tmp[0];
+				free(cardi);
+				return ;
+			}
+			j++;
+		}
+		i++;
+	}
+	free(cardi);
 }
 
 int main(int argc, char **argv)
@@ -242,10 +280,10 @@ int main(int argc, char **argv)
 	game.config->mapMaxHeight = max_height(game.map);
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
-	game.config->firstDir = 'W';
-	set_player_dir(game.camera, game.config->firstDir);
 	load_textures(&game);
 	player_setpos(game.map, game.player);
+	get_player_orientation(game.map, game.config);
+	set_player_dir(game.camera, game.config->firstDir); //TODO load the char that represents the player into the struct
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 //	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
