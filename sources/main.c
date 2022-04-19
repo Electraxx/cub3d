@@ -102,9 +102,9 @@ int render_frame2D(void *g)
 	return (0);
 }
 
-unsigned long createRGBA(t_color color)
+unsigned int createRGBA(int r, int g, int b, int a)
 {
-	return ((color.r & 0xff) << 24) + ((color.g & 0xff) << 16) + ((color.b & 0xff) << 8) + (color.a & 0xff);
+	return ((a & 0xff) << 24) + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
 void ft_draw_lifebar(t_game *game)

@@ -46,7 +46,7 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
-	ret = ft_parse_first_6_lines(fd, cardiCheck);
+	ret = ft_parse_first_6_lines(fd, cardiCheck, game->config);
 	if (ret < 0)
 		print_error_exit(ret);
 	ret = parse_map(fd, lines_number, &map);
@@ -56,7 +56,20 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	return (CHECK_OK);
 }
 
-error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck)
+void load_color(t_config *cfg, char *color, char type)
+{
+	char	**bytes;
+
+
+	bytes = ft_split(color,',');
+	if(type == 'C')
+		cfg->ceiling = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
+	else if(type == 'F')
+		cfg->floor = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
+	ft_free_2d_str(bytes);
+}
+
+error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg)
 {
 	char	*temp;
 	int		valid_line_count;
@@ -75,6 +88,7 @@ error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck)
 		{
 			if (is_color_valid(temp) < 0)
 				return (is_color_valid(temp));
+			load_color(cfg, temp + 2, temp[0]);
 		}
 		else if (is_valid_cardinal(ft_substr(temp, 0, 2)))
 		{

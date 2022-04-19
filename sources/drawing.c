@@ -70,9 +70,9 @@ t_image *get_ray_texture(t_assets *assets, t_raycast_data *rdata)
 	}
 }
 
-void init_ray(t_raycast_data *rayData, t_camera *camera, int line, t_point pos)
+void init_ray(t_raycast_data *rayData, t_camera *camera, t_point pos)
 {
-	rayData->cameraX = 2 * (line - WINDOW_WIDTH / 2) / ((double) (WINDOW_WIDTH) - 1);
+	rayData->cameraX = 2 * (rayData->line - WINDOW_WIDTH / 2) / ((double) (WINDOW_WIDTH) - 1);
 	rayData->rayDirY = camera->dirY + camera->planeY * rayData->cameraX;
 	rayData->rayDirX = camera->dirX + camera->planeX * rayData->cameraX;
 	rayData->mapX = (int) pos.x;
@@ -137,7 +137,7 @@ void calc_line(t_raycast_data *rayData)
 		l_data->drawEnd = (WINDOW_HEIGHT) - 1;
 }
 
-void load_line(t_raycast_data *rayData, t_point pos,t_game *game, int line)
+void load_line(t_raycast_data *rayData, t_point pos,t_game *game)
 {
 	t_line_texture_data *text_data;
 	t_line_data 		*l_data;
@@ -161,16 +161,14 @@ void load_line(t_raycast_data *rayData, t_point pos,t_game *game, int line)
 
 void draw_view(t_raycast_data *rdata, t_game *game)
 {
-	int 				i;
-
-	i = -1;
-	while(++i <= WINDOW_WIDTH) {
-		init_ray(rdata, game->camera, i, game->player->pos);
+	rdata->line = -1;
+	while(++rdata->line <= WINDOW_WIDTH) {
+		init_ray(rdata, game->camera, game->player->pos);
 		calc_sideDist(rdata, game->player->pos);
 		check_hit(rdata, game->map);
 		calc_line(rdata);
-		load_line(rdata, game->player->pos, game, i);
-		ft_verline(i, rdata, game->buffer, game->mlxp);
+		load_line(rdata, game->player->pos, game);
+		ft_verline(rdata, game->buffer, game->mlxp, game->config);
 	}
 }
 
@@ -185,7 +183,7 @@ void draw(void *g)
 	ft_draw_lifebar(game);
 }
 
-void ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx)
+void ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cfg)
 {
 	int i;
 	int j;
@@ -196,7 +194,7 @@ void ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx)
 	pxline = rdata->line_data.line_text_data.pixelArray;
 	while (i < rdata->line_data.drawStart)
 	{
-		my_mlx_pixel_put(buffer, 0, i, 0x00ff0000);
+		my_mlx_pixel_put(buffer, 0, i, cfg->ceiling);
 		i++;
 	}
 	while (rdata->line_data.line_text_data.pixelArray[j])
@@ -207,9 +205,9 @@ void ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx)
 	}
 	while (i < WINDOW_HEIGHT)
 	{
-		my_mlx_pixel_put(buffer, 0, i, 0x0000ff00);
+		my_mlx_pixel_put(buffer, 0, i, cfg->floor);
 		i++;
 	}
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, line, 0);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, rdata->line, 0);
 	free(rdata->line_data.line_text_data.pixelArray);
 }

@@ -71,6 +71,7 @@ typedef struct	s_raycast_data {
 	double  stepY;
 	int     hit;
 	int     side;
+	int 	line;
 	t_line_data line_data;
 }				t_raycast_data;
 
@@ -90,8 +91,8 @@ typedef struct s_color{
 } t_color;
 
 typedef struct s_config{
-	size_t	*floor;
-	size_t	*ceiling;
+	size_t	floor;
+	size_t	ceiling;
 	char	*path_no;
 	char	*path_so;
 	char	*path_we;
@@ -165,10 +166,10 @@ error_type	texture_check(char *t_path, t_cardi_check *check_cardi);
 int			check_all_cardi(t_cardi_check *cardi);
 
 // colorValidations.c
-error_type 		is_color_valid(char *color_line);
+error_type is_color_valid(char *color_line);
 
 // mapValidation.c
-error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck);
+error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
 error_type		parse_map(int fd, int lines_num, char ***map);
 void			fill_map(char ***map);
 void			player_setpos(char **map, t_player *player);
@@ -200,7 +201,7 @@ void            ft_draw_lifebar(t_game *game);
 
 //drawing.c
 void            draw(void *g);
-void			ft_verline(int line, t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx);
+void			ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cfg);
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
 void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
@@ -211,6 +212,7 @@ void			draw_view(t_raycast_data *rdata, t_game *game);
 //todo
 char	get_adjacent_cardinal(int vec, char curr);
 void do_action(t_game *game);
+unsigned int createRGBA(int r, int g, int b, int a);
 
 
 #endif
