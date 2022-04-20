@@ -187,6 +187,7 @@ int				max_height(char **map);
 int				key_hook(int keycode, t_game *game);
 void 			move(t_game *game, int dir);
 void			turnCamera(t_game *game, int dir);
+int				key_relase(int kc, t_game *game);
 
 //main.c
 void            ft_draw_lifebar(t_game *game);
@@ -212,6 +213,10 @@ int get_hp(int kc, t_game *game);
 char	get_adjacent_cardinal(int vec, char curr);
 void set_player_dir(t_camera *camera, char goal);
 void get_player_orientation(char **map, t_config *cfg);
+
+//helper.c
+int				exit_game(int kc, t_game *game);
+unsigned int	createRGBA(int r, int g, int b, int a);
 
 //todo
 void do_action(t_game *game);
