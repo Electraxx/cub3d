@@ -41,3 +41,35 @@ void	load_textures(t_game *game)
 	load_asset(game->textures.W_texture, "textures/mac64.xpm", &game->mlxp);
 
 }
+
+t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)
+{
+	if (rdata->side)
+	{
+		if (rdata->rayDirY < 0)
+			return (get_texture('N', assets));
+		else
+			return (get_texture('S', assets));
+	}
+	else
+	{
+		if (rdata->rayDirX < 0)
+			return (get_texture('W', assets));
+		else
+			return (get_texture('E', assets));
+	}
+}
+
+t_image	*get_texture(char c, t_assets *text)
+{
+	if (c == 'W')
+		return (text->W_texture);
+	else if (c == 'E')
+		return (text->E_texture);
+	else if (c == 'N')
+		return (text->N_texture);
+	else if (c == 'S')
+		return (text->S_texture);
+	else
+		return (NULL);
+}
