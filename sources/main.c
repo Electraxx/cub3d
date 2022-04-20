@@ -22,7 +22,7 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 		j = 0;
 		while (j < 16)
 		{
-			my_mlx_pixel_put(game->buffer, j + (posX * 16), i + (posY * 16), color);
+			my_mlx_pixel_put(&game->coll_buffer, j + (posX * 16), i + (posY * 16), color);
 			j++;
 		}
 		i++;
@@ -95,10 +95,10 @@ int render_frame2D(void *g)
 	{
 		tposx += game->camera.dirX;
 		tposy += game->camera.dirY;
-		my_mlx_pixel_put(game->buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
+		my_mlx_pixel_put(&game->coll_buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
 		z--;
 	}
-	mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, game->buffer->img, 0, 0);
+	mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, &game->coll_buffer.img, 0, 0);
 	return (0);
 }
 
@@ -229,13 +229,16 @@ void get_player_orientation(char **map, t_config *cfg)
 	free(cardi);
 }
 
+void	init(t_game *game)
+{
+
+}
+
 int main(int argc, char **argv)
 {
 	t_cardi_check cardiCheck;
 	t_game game;
-    t_image img;
 	game.minimap = malloc(sizeof(t_image));
-	game.buffer = &img;
 	if (argc != 2)
 		return (1);
 	init_cardi_struct(&cardiCheck);
@@ -245,11 +248,11 @@ int main(int argc, char **argv)
 	game.mlxp.mlx_ptr = mlx_init();
 	game.mlxp.win_ptr = mlx_new_window(game.mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	img.img = mlx_new_image(game.mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
+	game.coll_buffer.img = mlx_new_image(game.mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
     game.lifebar.img = mlx_new_image(game.mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
-	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
-								 &img.endian);
+	game.coll_buffer.addr = mlx_get_data_addr(game.coll_buffer.img, &game.coll_buffer.bits_per_pixel, &game.coll_buffer.line_length,
+								 &game.coll_buffer.endian);
     game.lifebar.addr = mlx_get_data_addr(game.lifebar.img, &game.lifebar.bits_per_pixel, &game.lifebar.line_length,
 										  &game.lifebar.endian);
 	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
