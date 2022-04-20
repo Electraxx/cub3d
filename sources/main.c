@@ -41,19 +41,15 @@ void load_params(t_game *game)
 	set_player_dir(&game->camera, game->config.firstDir);
 }
 
-void	load_buffers(t_game *game)
+void	load_buffers_window(t_game *game)
 {
 	game->mlxp.mlx_ptr = mlx_init();
 	game->mlxp.win_ptr = mlx_new_window(game->mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	game->coll_buffer.img = mlx_new_image(game->mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
-	game->lifebar.img = mlx_new_image(game->mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
-	game->coll_buffer.addr = mlx_get_data_addr(game->coll_buffer.img, &game->coll_buffer.bits_per_pixel, &game->coll_buffer.line_length,
-											  &game->coll_buffer.endian);
-	game->lifebar.addr = mlx_get_data_addr(game->lifebar.img, &game->lifebar.bits_per_pixel, &game->lifebar.line_length,
-										  &game->lifebar.endian);
+	init_buffer(&game->coll_buffer, game->mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
+	init_buffer(&game->lifebar, game->mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_game	game;
 
@@ -61,7 +57,7 @@ int main(int argc, char **argv)
 		return (1);
 	game.minimap = malloc(sizeof(t_image));
 	load_and_check(&game, argv);
-	load_buffers(&game);
+	load_buffers_window(&game);
 	load_params(&game);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 	loop_init(&game);

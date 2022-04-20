@@ -25,7 +25,7 @@ void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 	int b;
 
 	asset->img = mlx_xpm_file_to_image(mlxp->mlx_ptr, path, &a, &b);
-	asset->addr =  mlx_get_data_addr(asset->img, &asset->bits_per_pixel, &asset->line_length, &asset->endian);
+	asset->addr =  mlx_get_data_addr(asset->img, &asset->bpp, &asset->ll, &asset->endian);
 	fix_png(asset);
 }
 

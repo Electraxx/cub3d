@@ -32,11 +32,9 @@ typedef struct	s_point {
 typedef struct	s_image {
     void	*img;
     char	*addr;
-    int		bits_per_pixel;
-    int		line_length;
+    int		bpp;
+    int		ll;
     int		endian;
-	int 	width;
-	int 	height;
 }				t_image;
 
 typedef struct	s_line_texture_data {
@@ -217,6 +215,7 @@ void get_player_orientation(char **map, t_config *cfg);
 //helper.c
 int				exit_game(int kc, t_game *game);
 unsigned int	createRGBA(int r, int g, int b, int a);
+void init_buffer(t_image *buf, void *mlxp, int width, int height);
 
 //todo
 void do_action(t_game *game);
