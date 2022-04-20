@@ -89,13 +89,13 @@ int render_frame2D(void *g)
 	}
 	//printf("%f %f\n", game->camera->dirX, game->camera->dirY);
 	int z = 20;
-	double tposx = game->player->pos.x;
-	double tposy = game->player->pos.y;
+	double tposx = game->player.pos.x;
+	double tposy = game->player.pos.y;
 	while (z)
 	{
 		tposx += game->camera->dirX;
 		tposy += game->camera->dirY;
-		my_mlx_pixel_put(game->buffer, (int)(game->player->pos.x * 15) + tposx, (int)(game->player->pos.y * 15) + tposy, 0x0000ff00);
+		my_mlx_pixel_put(game->buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
 		z--;
 	}
 	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
@@ -120,7 +120,7 @@ void ft_draw_lifebar(t_game *game)
         {
             if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
                 my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
-            else if (i < game->player->health)
+            else if (i < game->player.health)
                 my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
             else
                 my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
@@ -138,7 +138,7 @@ char	get_adjacent_cardinal(int vec, char curr)
 
 	i = 0;
 	cardinal = ft_strcpy("NESW");
-	while(curr != cardinal[i])
+	while (curr != cardinal[i])
 			i++;
 	i += vec;
 	ret = cardinal[i % 4];
@@ -149,13 +149,13 @@ char	get_adjacent_cardinal(int vec, char curr)
 int key_relase(int kc, t_game *game)
 {
 	if (kc == D_KEY)
-		game->player->current_action[R_RIGHT_INDEX] = 0;
+		game->player.current_action[R_RIGHT_INDEX] = 0;
 	if (kc == A_KEY)
-		game->player->current_action[R_LEFT_INDEX] = 0;
+		game->player.current_action[R_LEFT_INDEX] = 0;
 	if (kc == W_KEY)
-		game->player->current_action[FRONT_INDEX] = 0;
+		game->player.current_action[FRONT_INDEX] = 0;
 	if (kc == S_KEY)
-		game->player->current_action[BACK_INDEX] = 0;
+		game->player.current_action[BACK_INDEX] = 0;
     return (0);
 }
 
@@ -236,7 +236,6 @@ int main(int argc, char **argv)
 	t_game game;
     t_image img;
     t_image lifebar_img;
-	game.player = malloc(sizeof(t_player));
 	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
@@ -266,14 +265,14 @@ int main(int argc, char **argv)
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
 	// draw_map(mlx, game);
-    game.player->health = 150;
+    game.player.health = 150;
 	game.camera->dirX = -1;
 	game.camera->dirY = 0;
-	game.player->current_action = malloc(sizeof(int) * 4);
-	game.player->current_action[0] = 0;
-	game.player->current_action[1] = 0;
-	game.player->current_action[2] = 0;
-	game.player->current_action[3] = 0;
+	game.player.current_action = malloc(sizeof(int) * 4);
+	game.player.current_action[0] = 0;
+	game.player.current_action[1] = 0;
+	game.player.current_action[2] = 0;
+	game.player.current_action[3] = 0;
 	game.camera->planeX = 0;
 	game.camera->planeY = 0.66;
 	game.config->caseWidth = 16;
@@ -281,7 +280,7 @@ int main(int argc, char **argv)
 	game.config->caseHeight = 16;
 	game.config->mapMaxWidth = max_width(game.map);
 	load_textures(&game);
-	player_setpos(game.map, game.player);
+	player_setpos(game.map, &game.player);
 	get_player_orientation(game.map, game.config);
 	set_player_dir(game.camera, game.config->firstDir); //TODO load the char that represents the player into the struct
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
