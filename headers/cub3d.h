@@ -149,7 +149,7 @@ typedef struct s_game
 	t_camera	*camera;
 	t_image *rayIgm;
 	t_image *minimap;
-    t_image *lifebar;
+    t_image lifebar;
     t_image *texture;
 	t_assets *textures;
 }	t_game;

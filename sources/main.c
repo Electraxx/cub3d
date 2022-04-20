@@ -119,15 +119,15 @@ void ft_draw_lifebar(t_game *game)
         while (++j < 30)
         {
             if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00ffffff);
             else if (i < game->player.health)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00ff0000);
             else
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00000000);
         }
         i++;
     }
-    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 100);
+    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar.img, 10, WINDOW_HEIGHT - 100); //TODO check
 }
 
 char	get_adjacent_cardinal(int vec, char curr)
@@ -235,7 +235,6 @@ int main(int argc, char **argv)
 	t_cardi_check cardiCheck;
 	t_game game;
     t_image img;
-    t_image lifebar_img;
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
@@ -243,7 +242,6 @@ int main(int argc, char **argv)
 	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
 	game.buffer = &img;
-    game.lifebar = &lifebar_img;
 	if (argc != 2)
 		return (1);
 	init_cardi_struct(&cardiCheck);
@@ -254,12 +252,12 @@ int main(int argc, char **argv)
 	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
-    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
+    game.lifebar.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
-    lifebar_img.addr = mlx_get_data_addr(lifebar_img.img, &lifebar_img.bits_per_pixel, &lifebar_img.line_length,
-                                         &lifebar_img.endian);
+    game.lifebar.addr = mlx_get_data_addr(game.lifebar.img, &game.lifebar.bits_per_pixel, &game.lifebar.line_length,
+										  &game.lifebar.endian);
 	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
