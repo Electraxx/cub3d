@@ -172,6 +172,7 @@ int get_hp(int kc, t_game *game)
 
 int exit_game(int kc, t_game *game)
 {
+	free(game->player.current_action);
 	exit(0);
 }
 
@@ -234,58 +235,70 @@ void	init(t_game *game)
 
 }
 
-int main(int argc, char **argv)
+void loop_init(t_game *game)
+{
+	mlx_hook(game->mlxp.win_ptr, 2, 0, key_hook, game);
+	mlx_hook(game->mlxp.win_ptr, 3, 0, key_relase, game);
+	mlx_hook(game->mlxp.win_ptr, 17, 0, exit_game, game);
+	mlx_loop_hook(game->mlxp.mlx_ptr, (void *) draw, game);
+	mlx_loop(game->mlxp.mlx_ptr);
+}
+
+void	load_and_check(t_game *game, char **argv)
 {
 	t_cardi_check cardiCheck;
-	t_game game;
-	game.minimap = malloc(sizeof(t_image));
+
+	init_cardi_struct(&cardiCheck);
+	ft_parse_file(argv[1], &cardiCheck, game);
+	fill_map(&game->map);
+}
+
+void load_params(t_game *game)
+{
+	game->player.health = 150;
+	game->camera.dirX = -1;
+	game->camera.dirY = 0;
+	game->player.current_action = malloc(sizeof(int) * 4);
+	game->player.current_action[0] = 0;
+	game->player.current_action[1] = 0;
+	game->player.current_action[2] = 0;
+	game->player.current_action[3] = 0;
+	game->camera.planeX = 0;
+	game->camera.planeY = 0.66;
+	game->config.caseWidth = 16;
+	game->config.mapMaxHeight = max_height(game->map);
+	game->config.caseHeight = 16;
+	game->config.mapMaxWidth = max_width(game->map);
+	load_textures(game);
+	player_setpos(game->map, &game->player);
+	get_player_orientation(game->map, &game->config);
+	set_player_dir(&game->camera, game->config.firstDir);
+}
+
+void	load_buffers(t_game *game)
+{
+	game->mlxp.mlx_ptr = mlx_init();
+	game->mlxp.win_ptr = mlx_new_window(game->mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+	game->coll_buffer.img = mlx_new_image(game->mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
+	game->lifebar.img = mlx_new_image(game->mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
+	game->coll_buffer.addr = mlx_get_data_addr(game->coll_buffer.img, &game->coll_buffer.bits_per_pixel, &game->coll_buffer.line_length,
+											  &game->coll_buffer.endian);
+	game->lifebar.addr = mlx_get_data_addr(game->lifebar.img, &game->lifebar.bits_per_pixel, &game->lifebar.line_length,
+										  &game->lifebar.endian);
+}
+
+int main(int argc, char **argv)
+{
+	t_game	game;
+
 	if (argc != 2)
 		return (1);
-	init_cardi_struct(&cardiCheck);
-	ft_parse_file(argv[1], &cardiCheck, &game);
-	fill_map(&game.map);
-	ft_print_map(game.map);
-	game.mlxp.mlx_ptr = mlx_init();
-	game.mlxp.win_ptr = mlx_new_window(game.mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	game.coll_buffer.img = mlx_new_image(game.mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
-    game.lifebar.img = mlx_new_image(game.mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
-	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
-	game.coll_buffer.addr = mlx_get_data_addr(game.coll_buffer.img, &game.coll_buffer.bits_per_pixel, &game.coll_buffer.line_length,
-								 &game.coll_buffer.endian);
-    game.lifebar.addr = mlx_get_data_addr(game.lifebar.img, &game.lifebar.bits_per_pixel, &game.lifebar.line_length,
-										  &game.lifebar.endian);
-	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
-	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
-	//  &game.rayIgm->endian);
-	// draw_map(mlx, game);
-    game.player.health = 150;
-	game.camera.dirX = -1;
-	game.camera.dirY = 0;
-	game.player.current_action = malloc(sizeof(int) * 4);
-	game.player.current_action[0] = 0;
-	game.player.current_action[1] = 0;
-	game.player.current_action[2] = 0;
-	game.player.current_action[3] = 0;
-	game.camera.planeX = 0;
-	game.camera.planeY = 0.66;
-	game.config.caseWidth = 16;
-	game.config.mapMaxHeight = max_height(game.map);
-	game.config.caseHeight = 16;
-	game.config.mapMaxWidth = max_width(game.map);
-	load_textures(&game);
-	player_setpos(game.map, &game.player);
-	get_player_orientation(game.map, &game.config);
-	set_player_dir(&game.camera, game.config.firstDir); //TODO load the char that represents the player into the struct
+	game.minimap = malloc(sizeof(t_image));
+	load_and_check(&game, argv);
+	load_buffers(&game);
+	load_params(&game);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
+	loop_init(&game);
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 //	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
-	mlx_hook(game.mlxp.win_ptr, 2, 0, key_hook, &game);
-	mlx_hook(game.mlxp.win_ptr, 3, 0, key_relase, &game);
-	mlx_hook(game.mlxp.win_ptr, 17, 0, exit_game, &game);
-	mlx_loop_hook(game.mlxp.mlx_ptr, (void *) draw, &game);
-	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
-	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
-	// printf("%f %f\n", game.player->posX, game.player->posY);
-	mlx_loop(game.mlxp.mlx_ptr);
 }
