@@ -163,7 +163,7 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 	rdata->line = -1;
 	rdata->line_data.line_text_data.pixelArray = malloc(sizeof (uint32_t) * (WINDOW_HEIGHT + 1));
 	while(++rdata->line <= WINDOW_WIDTH) {
-		init_ray(rdata, game->camera, game->player.pos);
+		init_ray(rdata, &game->camera, game->player.pos);
 		calc_sideDist(rdata, game->player.pos);
 		check_hit(rdata, game->map);
 		calc_line(rdata);

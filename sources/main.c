@@ -93,8 +93,8 @@ int render_frame2D(void *g)
 	double tposy = game->player.pos.y;
 	while (z)
 	{
-		tposx += game->camera->dirX;
-		tposy += game->camera->dirY;
+		tposx += game->camera.dirX;
+		tposy += game->camera.dirY;
 		my_mlx_pixel_put(game->buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
 		z--;
 	}
@@ -234,9 +234,6 @@ int main(int argc, char **argv)
 	t_cardi_check cardiCheck;
 	t_game game;
     t_image img;
-	game.camera = malloc(sizeof(t_camera));
-	game.rayIgm = malloc(sizeof(t_image));
-	game.texture = malloc(sizeof(t_image));
 	game.minimap = malloc(sizeof(t_image));
 	game.buffer = &img;
 	if (argc != 2)
@@ -260,15 +257,15 @@ int main(int argc, char **argv)
 	//  &game.rayIgm->endian);
 	// draw_map(mlx, game);
     game.player.health = 150;
-	game.camera->dirX = -1;
-	game.camera->dirY = 0;
+	game.camera.dirX = -1;
+	game.camera.dirY = 0;
 	game.player.current_action = malloc(sizeof(int) * 4);
 	game.player.current_action[0] = 0;
 	game.player.current_action[1] = 0;
 	game.player.current_action[2] = 0;
 	game.player.current_action[3] = 0;
-	game.camera->planeX = 0;
-	game.camera->planeY = 0.66;
+	game.camera.planeX = 0;
+	game.camera.planeY = 0.66;
 	game.config.caseWidth = 16;
 	game.config.mapMaxHeight = max_height(game.map);
 	game.config.caseHeight = 16;
@@ -276,7 +273,7 @@ int main(int argc, char **argv)
 	load_textures(&game);
 	player_setpos(game.map, &game.player);
 	get_player_orientation(game.map, &game.config);
-	set_player_dir(game.camera, game.config.firstDir); //TODO load the char that represents the player into the struct
+	set_player_dir(&game.camera, game.config.firstDir); //TODO load the char that represents the player into the struct
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 //	mlx_key_hook(mlxp.win_ptr, get_hp, &game);

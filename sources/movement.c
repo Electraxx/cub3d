@@ -8,8 +8,8 @@ void move(t_game *game, int dir)
 	t_player 	*player;
 
 	map = game->map;
-	deltax = game->camera->dirX * SPEED * dir;
-	deltay = game->camera->dirY * SPEED * dir;
+	deltax = game->camera.dirX * SPEED * dir;
+	deltay = game->camera.dirY * SPEED * dir;
 	player = &game->player;
 	if (map[(int)(player->pos.y + deltay)][(int)(player->pos.x + deltax)] != '1')
 	{
@@ -47,12 +47,12 @@ void turnCamera(t_game *game, int dir)
 	double oldDirX;
 	double oldPlaneX;
 	
-	oldPlaneX = game->camera->planeX;
-	oldDirX = game->camera->dirX;
-	game->camera->dirX = oldDirX * cos(ROT_SPEED * dir) - game->camera->dirY * sin(ROT_SPEED * dir);
-	game->camera->dirY = oldDirX * sin(ROT_SPEED * dir) + game->camera->dirY * cos(ROT_SPEED * dir);
-	game->camera->planeX = game->camera->planeX * cos(ROT_SPEED * dir) - game->camera->planeY * sin(ROT_SPEED * dir);
-	game->camera->planeY = oldPlaneX * sin(ROT_SPEED * dir) + game->camera->planeY * cos(ROT_SPEED * dir);
+	oldPlaneX = game->camera.planeX;
+	oldDirX = game->camera.dirX;
+	game->camera.dirX = oldDirX * cos(ROT_SPEED * dir) - game->camera.dirY * sin(ROT_SPEED * dir);
+	game->camera.dirY = oldDirX * sin(ROT_SPEED * dir) + game->camera.dirY * cos(ROT_SPEED * dir);
+	game->camera.planeX = game->camera.planeX * cos(ROT_SPEED * dir) - game->camera.planeY * sin(ROT_SPEED * dir);
+	game->camera.planeY = oldPlaneX * sin(ROT_SPEED * dir) + game->camera.planeY * cos(ROT_SPEED * dir);
 }
 
 int key_hook(int keycode, t_game *game)
