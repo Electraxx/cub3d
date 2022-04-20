@@ -31,3 +31,9 @@ int	max_width(char **map)
 	}
 	return max;
 }
+
+void init_buffer(t_image *buf, void *mlxp, int width, int height)
+{
+	buf->img = mlx_new_image(mlxp, width, height);
+	buf->addr = mlx_get_data_addr(buf->img, &buf->bpp, &buf->ll, &buf->endian);
+}

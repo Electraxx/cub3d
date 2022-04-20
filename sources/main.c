@@ -1,7 +1,6 @@
 #include "cub3d.h"
-int g_debug = 0;
 
-void loop_init(t_game *game)
+void	loop_init(t_game *game)
 {
 	mlx_hook(game->mlxp.win_ptr, 2, 0, key_hook, game);
 	mlx_hook(game->mlxp.win_ptr, 3, 0, key_relase, game);
@@ -12,14 +11,14 @@ void loop_init(t_game *game)
 
 void	load_and_check(t_game *game, char **argv)
 {
-	t_cardi_check cardiCheck;
+	t_cardi_check	cardi;
 
-	init_cardi_struct(&cardiCheck);
-	ft_parse_file(argv[1], &cardiCheck, game);
+	init_cardi_struct(&cardi);
+	ft_parse_file(argv[1], &cardi, game);
 	fill_map(&game->map);
 }
 
-void load_params(t_game *game)
+void	load_params(t_game *game)
 {
 	game->player.health = 150;
 	game->camera.dirX = -1;
@@ -41,19 +40,15 @@ void load_params(t_game *game)
 	set_player_dir(&game->camera, game->config.firstDir);
 }
 
-void	load_buffers(t_game *game)
+void	load_buffers_window(t_game *game)
 {
 	game->mlxp.mlx_ptr = mlx_init();
-	game->mlxp.win_ptr = mlx_new_window(game->mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
-	game->coll_buffer.img = mlx_new_image(game->mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
-	game->lifebar.img = mlx_new_image(game->mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
-	game->coll_buffer.addr = mlx_get_data_addr(game->coll_buffer.img, &game->coll_buffer.bits_per_pixel, &game->coll_buffer.line_length,
-											  &game->coll_buffer.endian);
-	game->lifebar.addr = mlx_get_data_addr(game->lifebar.img, &game->lifebar.bits_per_pixel, &game->lifebar.line_length,
-										  &game->lifebar.endian);
+	game->mlxp.win_ptr = mlx_new_window(game->mlxp.mlx_ptr, W_W, W_H, "cub3d");
+	init_buffer(&game->coll_buffer, game->mlxp.mlx_ptr, 1, W_H);
+	init_buffer(&game->lifebar, game->mlxp.mlx_ptr, W_W / 3, 30);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_game	game;
 
@@ -61,7 +56,7 @@ int main(int argc, char **argv)
 		return (1);
 	game.minimap = malloc(sizeof(t_image));
 	load_and_check(&game, argv);
-	load_buffers(&game);
+	load_buffers_window(&game);
 	load_params(&game);
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 	loop_init(&game);

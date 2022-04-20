@@ -11,8 +11,8 @@
 # include <pthread.h>
 # include <math.h>
 
-#define WINDOW_WIDTH 640
-#define WINDOW_HEIGHT 480
+#define W_W 640
+#define W_H 480
 
 #define PI 3.141592653589
 
@@ -32,11 +32,9 @@ typedef struct	s_point {
 typedef struct	s_image {
     void	*img;
     char	*addr;
-    int		bits_per_pixel;
-    int		line_length;
+    int		bpp;
+    int		ll;
     int		endian;
-	int 	width;
-	int 	height;
 }				t_image;
 
 typedef struct	s_line_texture_data {
@@ -204,6 +202,8 @@ void			draw_view(t_raycast_data *rdata, t_game *game);
 void	load_textures(t_game *game);
 void	load_asset(t_image *asset, char *path, t_mlxp *mlxp);
 void	fix_png(t_image *img);
+t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata);
+t_image	*get_texture(char c, t_assets *text);
 
 //ui.c
 void ft_draw_lifebar(t_game *game);
@@ -217,10 +217,18 @@ void get_player_orientation(char **map, t_config *cfg);
 //helper.c
 int				exit_game(int kc, t_game *game);
 unsigned int	createRGBA(int r, int g, int b, int a);
+void init_buffer(t_image *buf, void *mlxp, int width, int height);
 
 //todo
 void do_action(t_game *game);
 unsigned int createRGBA(int r, int g, int b, int a);
+
+//raycast.c
+void	calc_sideDist(t_raycast_data *rdata, t_point pos);
+void	check_hit(t_raycast_data *rayData, char **map);
+void	calc_line(t_raycast_data *rayData);
+void	load_line(t_raycast_data *rayData, t_point pos, t_game *game);
+void	load_text_line(t_raycast_data *rayData, t_image *text);
 
 
 #endif

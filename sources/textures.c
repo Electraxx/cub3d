@@ -25,7 +25,7 @@ void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 	int b;
 
 	asset->img = mlx_xpm_file_to_image(mlxp->mlx_ptr, path, &a, &b);
-	asset->addr =  mlx_get_data_addr(asset->img, &asset->bits_per_pixel, &asset->line_length, &asset->endian);
+	asset->addr =  mlx_get_data_addr(asset->img, &asset->bpp, &asset->ll, &asset->endian);
 	fix_png(asset);
 }
 
@@ -40,4 +40,36 @@ void	load_textures(t_game *game)
 	load_asset(game->textures.N_texture, "textures/roz.xpm", &game->mlxp);
 	load_asset(game->textures.W_texture, "textures/mac64.xpm", &game->mlxp);
 
+}
+
+t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)
+{
+	if (rdata->side)
+	{
+		if (rdata->rayDirY < 0)
+			return (get_texture('N', assets));
+		else
+			return (get_texture('S', assets));
+	}
+	else
+	{
+		if (rdata->rayDirX < 0)
+			return (get_texture('W', assets));
+		else
+			return (get_texture('E', assets));
+	}
+}
+
+t_image	*get_texture(char c, t_assets *text)
+{
+	if (c == 'W')
+		return (text->W_texture);
+	else if (c == 'E')
+		return (text->E_texture);
+	else if (c == 'N')
+		return (text->N_texture);
+	else if (c == 'S')
+		return (text->S_texture);
+	else
+		return (NULL);
 }
