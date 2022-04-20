@@ -145,7 +145,7 @@ typedef struct s_game
 	t_player	player;
 	t_image		*buffer;
 	t_mlxp		*mlxp;
-	t_config	*config;
+	t_config	config;
 	t_camera	*camera;
 	t_image *rayIgm;
 	t_image *minimap;

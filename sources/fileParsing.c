@@ -46,7 +46,7 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
-	ret = ft_parse_first_6_lines(fd, cardiCheck, game->config);
+	ret = ft_parse_first_6_lines(fd, cardiCheck, &game->config);
 	if (ret < 0)
 		print_error_exit(ret);
 	ret = parse_map(fd, lines_number, &map);

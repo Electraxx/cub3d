@@ -168,7 +168,7 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 		check_hit(rdata, game->map);
 		calc_line(rdata);
 		load_line(rdata, game->player.pos, game);
-		ft_verline(rdata, game->buffer, game->mlxp, game->config);
+		ft_verline(rdata, game->buffer, game->mlxp, &game->config);
 	}
 	free(rdata->line_data.line_text_data.pixelArray);
 }

@@ -10,7 +10,7 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 
 	i =  0;
 	j = 0;
-	conf = game->config;
+	conf = &game->config;
 	if (tile == '1')
 		color = 0x00ff0000;
 	else if (tile == '0')
@@ -236,7 +236,6 @@ int main(int argc, char **argv)
 	t_game game;
     t_image img;
     t_image lifebar_img;
-	game.config = malloc(sizeof(t_config));
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
 	game.textures = malloc(sizeof(t_assets));
@@ -275,14 +274,14 @@ int main(int argc, char **argv)
 	game.player.current_action[3] = 0;
 	game.camera->planeX = 0;
 	game.camera->planeY = 0.66;
-	game.config->caseWidth = 16;
-	game.config->mapMaxHeight = max_height(game.map);
-	game.config->caseHeight = 16;
-	game.config->mapMaxWidth = max_width(game.map);
+	game.config.caseWidth = 16;
+	game.config.mapMaxHeight = max_height(game.map);
+	game.config.caseHeight = 16;
+	game.config.mapMaxWidth = max_width(game.map);
 	load_textures(&game);
 	player_setpos(game.map, &game.player);
-	get_player_orientation(game.map, game.config);
-	set_player_dir(game.camera, game.config->firstDir); //TODO load the char that represents the player into the struct
+	get_player_orientation(game.map, &game.config);
+	set_player_dir(game.camera, game.config.firstDir); //TODO load the char that represents the player into the struct
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 //	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
