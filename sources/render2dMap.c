@@ -1,76 +1,60 @@
 #include "../headers/cub3d.h"
 
-/*void	set_background(t_mlxp p)
+void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 {
-	int		i;
-	int		j;
-	int		a;
-	int		b;
-	void	*img;
+	size_t i;
+	size_t j;
+	int color;
+	t_config *conf;
 
-	i = 0;
-	while (p.map[i])
+	i =  0;
+	j = 0;
+	conf = &game->config;
+	if (tile == '1')
+		color = 0x00ff0000;
+	else if (tile == '0')
+		color = 0;
+	else
+		color = 0x000000ff;
+	while (i < 16)
 	{
 		j = 0;
-		while (p.map[i][j])
+		while (j < 16)
 		{
-			img = mlx_xpm_file_to_image(p.mlx_ptr, get_res_path('0'), &a, &b);
-			//mlx_put_image_to_window(p.mlx_ptr, p.win_ptr, img, j * 32, i * 32);
+			my_mlx_pixel_put(&game->coll_buffer, j + (posX * 16), i + (posY * 16), color);
 			j++;
 		}
 		i++;
 	}
-}*/
-
-void	my_mlx_pixel_put(t_image *image, int x, int y, int color)
-{
-	char	*dst;
-
-	dst = image->addr + (y * image->line_length + x * (image->bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
 }
 
-int	max_height(char **map)
+int render_frame2D(void *g)
 {
-	return ft_2dim_char_sz(map);
-}
+	t_game *game = (t_game *)g;
+	int i = 0;
+	int j = 0;
 
-int	max_width(char **map)
-{
-	size_t	max;
-	size_t	i;
-
-	max = 0;
-	i = 0;
-	while(map[i])
-	{
-		if(ft_strlen(map[i]) > max)
-			max = ft_strlen(map[i]);
-		i++;
-	}
-	return max;
-}
-
-/*void	draw_map(t_mlxp p, t_game game)
-{
-	int		k;
-	int		j;
-	void	*i;
-	int		a;
-	char	*r;
-
-	k = 0;
-	set_background(p);
-	while (p.map[k])
+	while (game->map[i])
 	{
 		j = 0;
-		while (p.map[k][j])
+		while (game->map[i][j])
 		{
-			r = get_res_path(p.map[k][j]);
-			i = mlx_xpm_file_to_image(p.mlx_ptr, r, &a, &a);
-			mlx_put_image_to_window(p.mlx_ptr, p.win_ptr, i, j * 32, k * 32);
+			load_tile(game->map[i][j], j, i, game);
 			j++;
 		}
-		k++;
+		i++;
 	}
-}*/
+	//printf("%f %f\n", game->camera->dirX, game->camera->dirY);
+	int z = 20;
+	double tposx = game->player.pos.x;
+	double tposy = game->player.pos.y;
+	while (z)
+	{
+		tposx += game->camera.dirX;
+		tposy += game->camera.dirY;
+		my_mlx_pixel_put(&game->coll_buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
+		z--;
+	}
+	mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, &game->coll_buffer.img, 0, 0);
+	return (0);
+}

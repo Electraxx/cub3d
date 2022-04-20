@@ -55,6 +55,19 @@ void turnCamera(t_game *game, int dir)
 	game->camera.planeY = oldPlaneX * sin(ROT_SPEED * dir) + game->camera.planeY * cos(ROT_SPEED * dir);
 }
 
+int key_relase(int kc, t_game *game)
+{
+	if (kc == D_KEY)
+		game->player.current_action[R_RIGHT_INDEX] = 0;
+	if (kc == A_KEY)
+		game->player.current_action[R_LEFT_INDEX] = 0;
+	if (kc == W_KEY)
+		game->player.current_action[FRONT_INDEX] = 0;
+	if (kc == S_KEY)
+		game->player.current_action[BACK_INDEX] = 0;
+	return (0);
+}
+
 int key_hook(int keycode, t_game *game)
 {
 	if (keycode == D_KEY)
