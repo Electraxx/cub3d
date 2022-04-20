@@ -37,7 +37,6 @@ void load_text_line(t_raycast_data *rayData, t_image *text)
 
 	y = rayData->line_data.drawStart;
 	t_data = &rayData->line_data.line_text_data;
-	t_data->pixelArray = malloc(sizeof(uint32_t) * (rayData->line_data.lineHeight + 1));
 	while (y < rayData->line_data.drawEnd)
 	{
 		t_data->texY = (int) t_data->texPos & (64 - 1);
@@ -162,6 +161,7 @@ void load_line(t_raycast_data *rayData, t_point pos,t_game *game)
 void draw_view(t_raycast_data *rdata, t_game *game)
 {
 	rdata->line = -1;
+	rdata->line_data.line_text_data.pixelArray = malloc(sizeof (uint32_t) * (WINDOW_HEIGHT + 1));
 	while(++rdata->line <= WINDOW_WIDTH) {
 		init_ray(rdata, game->camera, game->player->pos);
 		calc_sideDist(rdata, game->player->pos);
@@ -170,6 +170,7 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 		load_line(rdata, game->player->pos, game);
 		ft_verline(rdata, game->buffer, game->mlxp, game->config);
 	}
+	free(rdata->line_data.line_text_data.pixelArray);
 }
 
 void draw(void *g)
@@ -209,5 +210,4 @@ void ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cf
 		i++;
 	}
 	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, rdata->line, 0);
-	free(rdata->line_data.line_text_data.pixelArray);
 }
