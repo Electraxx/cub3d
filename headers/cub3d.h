@@ -199,10 +199,21 @@ void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
 void			draw_view(t_raycast_data *rdata, t_game *game);
 
+//textures.c
+void	load_textures(t_game *game);
+void	load_asset(t_image *asset, char *path, t_mlxp *mlxp);
+void	fix_png(t_image *img);
 
+//ui.c
+void ft_draw_lifebar(t_game *game);
+int get_hp(int kc, t_game *game);
+
+//directions.c
+char	get_adjacent_cardinal(int vec, char curr);
+void set_player_dir(t_camera *camera, char goal);
+void get_player_orientation(char **map, t_config *cfg);
 
 //todo
-char	get_adjacent_cardinal(int vec, char curr);
 void do_action(t_game *game);
 unsigned int createRGBA(int r, int g, int b, int a);
 
