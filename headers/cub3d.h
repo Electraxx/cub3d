@@ -151,7 +151,7 @@ typedef struct s_game
 	t_image *minimap;
     t_image lifebar;
     t_image *texture;
-	t_assets *textures;
+	t_assets textures;
 }	t_game;
 
 void			init_cardi_struct(t_cardi_check *cardi);

@@ -60,14 +60,14 @@ void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 
 void	load_textures(t_game *game)
 {
-	game->textures->S_texture = malloc(sizeof (t_image));
-	game->textures->E_texture = malloc(sizeof (t_image));
-	game->textures->W_texture = malloc(sizeof (t_image));
-	game->textures->N_texture = malloc(sizeof (t_image));
-	load_asset(game->textures->E_texture, "textures/flag.xpm", game->mlxp);
-	load_asset(game->textures->S_texture, "textures/wall.xpm", game->mlxp);
-	load_asset(game->textures->N_texture, "textures/roz.xpm", game->mlxp);
-	load_asset(game->textures->W_texture, "textures/mac64.xpm", game->mlxp);
+	game->textures.S_texture = malloc(sizeof (t_image));
+	game->textures.E_texture = malloc(sizeof (t_image));
+	game->textures.W_texture = malloc(sizeof (t_image));
+	game->textures.N_texture = malloc(sizeof (t_image));
+	load_asset(game->textures.E_texture, "textures/flag.xpm", game->mlxp);
+	load_asset(game->textures.S_texture, "textures/wall.xpm", game->mlxp);
+	load_asset(game->textures.N_texture, "textures/roz.xpm", game->mlxp);
+	load_asset(game->textures.W_texture, "textures/mac64.xpm", game->mlxp);
 
 }
 
@@ -237,7 +237,6 @@ int main(int argc, char **argv)
     t_image img;
 	game.camera = malloc(sizeof(t_camera));
 	game.rayIgm = malloc(sizeof(t_image));
-	game.textures = malloc(sizeof(t_assets));
 	game.texture = malloc(sizeof(t_image));
 	game.minimap = malloc(sizeof(t_image));
 	game.mlxp = &mlxp;
