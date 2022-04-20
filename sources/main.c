@@ -51,82 +51,6 @@ void	load_textures(t_game *game)
 														 &game->textures->S_texture->line_length, &game->textures->S_texture->endian);
 }
 
-void load_square(int color, size_t posX, size_t posY, t_game *game, t_image *buffer)
-{
-	size_t i;
-	size_t j;
-	t_config *conf;
-
-	i = 0;
-	j = 0;
-	conf = game->config;
-	while (i < conf->caseHeight - 1)
-	{
-		j = 0;
-		while (j < conf->caseWidth - 1)
-		{
-			if (color != 0)
-				printf("x : %ld, y : %ld\n", j + (16 * posX), i + (16 * posY));
-			my_mlx_pixel_put(buffer, j + (16 * posX), i + (16 * posY), color);
-			j++;
-		}
-		i++;
-	}
-	game->minimap->y++;
-}
-
-int in_circle(float x, float y, t_player *player)
-{
-	float	distance;
-	float 	radius = 4.0;
-
-	distance = sqrtf(powf(x - player->posX, 2.) + powf(y - player->posY, 2.));
-	if (distance <= radius)
-	{
-		if ((radius - distance) < 1.00000000)
-			return (2);
-		return (1);
-	}
-	return (0);
-}
-
-void	render_minimap(t_game *game, char **map, t_image *mm)
-{
-	int	x;
-	int	y;
-	t_mlxp *mlxp;
-	double distance;
-	int change_line = 0;
-
-	y = 0;
-	game->minimap->y = 0;
-	game->minimap->x = 0;
-	mlxp = game->mlxp;
-	while (map[y])
-	{
-		x = 0;
-		game->minimap->x = 0;
-		while (map[y][x])
-		{
-			if (in_circle(x, y, game->player))
-			{
-				if (map[y][x] == '0')
-					load_square(0x0000ff00, x, y, game, mm);
-				else if (map[y][x] == 'N')
-					load_square(0x00ff0000, x, y, game, mm);
-				else
-					load_square(0x0000ffff, x, y, game, mm);
-//				game->minimap->x++;
-			}
-			else
-				load_square(0x00000000, x, y, game, mm);
-			x++;
-		}
-		y++;
-	}
-	mlx_put_image_to_window(mlxp->mlx_ptr, mlxp->win_ptr, mm->img, 20, 20);
-}
-
 int render_frame2D(void *g)
 {
 	t_game *game = (t_game *)g;
@@ -457,7 +381,7 @@ int main(int argc, char **argv)
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
 	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
 	lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
-	game.minimap->img->img = mlx_new_image(&mlxp, 400, 400);
+	game.minimap->img->img = mlx_new_image(&mlxp, 144, 144);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);

@@ -19,7 +19,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7febd72d-58fd-4203-b922-d40fad96aabc" name="Changes" comment="Merge branch 'main' into minimap&#10;&#10;# Conflicts:&#10;#&#9;.idea/misc.xml&#10;#&#9;libft/libft.a&#10;#&#9;sources/main.c">
+      <change afterPath="$PROJECT_DIR$/sources/minimap.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/headers/cub3d.h" beforeDir="false" afterPath="$PROJECT_DIR$/headers/cub3d.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sources/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/sources/main.c" afterDir="false" />
     </list>
@@ -99,11 +101,6 @@
     <property name="settings.editor.selected.configurable" value="proofread" />
   </component>
   <component name="RunManager" selected="Makefile Application.all">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="all" type="CLionNativeAppRunConfigurationType" PROGRAM_PARAMS="config.cub" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$ContentRoot$" PASS_PARENT_ENVS_2="true" PROJECT_NAME="cub3d" TARGET_NAME="all" CONFIG_NAME="all" version="1" RUN_PATH="cub3d">
       <method v="2">
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
@@ -129,9 +126,9 @@
         <option name="CLION.COMPOUND.BUILD" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="GradleAppRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
-        <option name="com.jetbrains.cidr.cpp.gradle.execution.GradleNativeBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
     <list>
@@ -153,6 +150,17 @@
       <workItem from="1649255384669" duration="2231000" />
       <workItem from="1649321794006" duration="14411000" />
       <workItem from="1649405225350" duration="3781000" />
+      <workItem from="1649748704852" duration="5000" />
+      <workItem from="1649752276882" duration="5037000" />
+      <workItem from="1649769855808" duration="6910000" />
+      <workItem from="1650354832841" duration="211000" />
+      <workItem from="1650358302246" duration="4197000" />
+      <workItem from="1650368052266" duration="4247000" />
+      <workItem from="1650381116807" duration="1378000" />
+      <workItem from="1650449889295" duration="2170000" />
+      <workItem from="1650458838185" duration="2621000" />
+      <workItem from="1650467534343" duration="2612000" />
+      <workItem from="1650475163540" duration="467000" />
     </task>
     <servers />
   </component>
@@ -188,15 +196,11 @@
     <option name="LAST_COMMIT_MESSAGE" value="Merge branch 'main' into minimap&#10;&#10;# Conflicts:&#10;#&#9;.idea/misc.xml&#10;#&#9;libft/libft.a&#10;#&#9;sources/main.c" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/sources/main.c</url>
-          <line>69</line>
-          <option name="timeStamp" value="8" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="CLionNativeAppRunConfigurationType">
+        <watch expression="head-&gt;y * 16" language="ObjectiveC" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

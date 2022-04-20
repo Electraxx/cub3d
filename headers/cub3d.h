@@ -72,12 +72,24 @@ typedef struct s_cardi_check{
 	char **cardi;
 } t_cardi_check;
 
+typedef struct s_minimap_tile{
+	int		x;
+	int		y;
+	char	type;
+	int 	color;
+	struct s_minimap_tile	*next;
+	struct s_minimap_tile	*prev;
+}	t_mini_tile;
+
 typedef struct s_minimap{
 	int		x;
 	int		y;
-	float 	radiant;
+	float	radiant;
+	struct s_minimap_tile *tiles;
 	t_image	*img;
-} t_minimap;
+}	t_minimap;
+
+
 
 typedef struct s_player
 {
@@ -164,5 +176,8 @@ void			turnCamera(t_game *game, int dir);
 
 //main.c
 void            ft_draw_lifebar(t_game *game);
+
+// minimap.c
+void	render_minimap(t_game *game, char **map, t_image *mm);
 
 #endif
