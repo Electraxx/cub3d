@@ -1,18 +1,18 @@
 #include "../headers/cub3d.h"
 
-void fix_png(t_image *img)
+void	fix_png(t_image *img)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
-	while(i < 64)
+	while (i < 64)
 	{
 		j = 0;
-		while(j < 64)
+		while (j < 64)
 		{
-			if(get_pixel_color(i, j, img->addr) == 4278190080)
-				set_pixel_color(i, j, img->addr, 0x00ffffff);
+			if (get_pixel_color(i, j, img->addr) == 4278190080)
+				my_mlx_pixel_put(img, i, j, 0x00ffffff);
 			j++;
 		}
 		i++;

@@ -194,7 +194,6 @@ void            ft_draw_lifebar(t_game *game);
 void            draw(void *g);
 void			ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cfg);
 unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
-void    		set_pixel_color(int x, int y, char *firstpixel, unsigned int newVal);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
 void			draw_view(t_raycast_data *rdata, t_game *game);
 
