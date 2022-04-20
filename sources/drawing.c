@@ -154,7 +154,7 @@ void load_line(t_raycast_data *rayData, t_point pos,t_game *game)
 		text_data->texX = 64 - text_data->texX - 1;
 	text_data->step = 1.0 * 64.0 / l_data->lineHeight;
 	text_data->texPos = (l_data->drawStart - WINDOW_HEIGHT / 2 + l_data->lineHeight / 2) * text_data->step;
-	texture = get_ray_texture(game->textures, rayData);
+	texture = get_ray_texture(&game->textures, rayData);
 	load_text_line(rayData, texture);
 }
 
@@ -163,12 +163,12 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 	rdata->line = -1;
 	rdata->line_data.line_text_data.pixelArray = malloc(sizeof (uint32_t) * (WINDOW_HEIGHT + 1));
 	while(++rdata->line <= WINDOW_WIDTH) {
-		init_ray(rdata, game->camera, game->player->pos);
-		calc_sideDist(rdata, game->player->pos);
+		init_ray(rdata, &game->camera, game->player.pos);
+		calc_sideDist(rdata, game->player.pos);
 		check_hit(rdata, game->map);
 		calc_line(rdata);
-		load_line(rdata, game->player->pos, game);
-		ft_verline(rdata, game->buffer, game->mlxp, game->config);
+		load_line(rdata, game->player.pos, game);
+		ft_verline(rdata, game->buffer, &game->mlxp, &game->config);
 	}
 	free(rdata->line_data.line_text_data.pixelArray);
 }

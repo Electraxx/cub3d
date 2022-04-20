@@ -10,7 +10,7 @@ void load_tile(char tile, size_t posX, size_t posY, t_game *game)
 
 	i =  0;
 	j = 0;
-	conf = game->config;
+	conf = &game->config;
 	if (tile == '1')
 		color = 0x00ff0000;
 	else if (tile == '0')
@@ -60,14 +60,14 @@ void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 
 void	load_textures(t_game *game)
 {
-	game->textures->S_texture = malloc(sizeof (t_image));
-	game->textures->E_texture = malloc(sizeof (t_image));
-	game->textures->W_texture = malloc(sizeof (t_image));
-	game->textures->N_texture = malloc(sizeof (t_image));
-	load_asset(game->textures->E_texture, "textures/flag.xpm", game->mlxp);
-	load_asset(game->textures->S_texture, "textures/wall.xpm", game->mlxp);
-	load_asset(game->textures->N_texture, "textures/roz.xpm", game->mlxp);
-	load_asset(game->textures->W_texture, "textures/mac64.xpm", game->mlxp);
+	game->textures.S_texture = malloc(sizeof (t_image));
+	game->textures.E_texture = malloc(sizeof (t_image));
+	game->textures.W_texture = malloc(sizeof (t_image));
+	game->textures.N_texture = malloc(sizeof (t_image));
+	load_asset(game->textures.E_texture, "textures/flag.xpm", &game->mlxp);
+	load_asset(game->textures.S_texture, "textures/wall.xpm", &game->mlxp);
+	load_asset(game->textures.N_texture, "textures/roz.xpm", &game->mlxp);
+	load_asset(game->textures.W_texture, "textures/mac64.xpm", &game->mlxp);
 
 }
 
@@ -89,16 +89,16 @@ int render_frame2D(void *g)
 	}
 	//printf("%f %f\n", game->camera->dirX, game->camera->dirY);
 	int z = 20;
-	double tposx = game->player->pos.x;
-	double tposy = game->player->pos.y;
+	double tposx = game->player.pos.x;
+	double tposy = game->player.pos.y;
 	while (z)
 	{
-		tposx += game->camera->dirX;
-		tposy += game->camera->dirY;
-		my_mlx_pixel_put(game->buffer, (int)(game->player->pos.x * 15) + tposx, (int)(game->player->pos.y * 15) + tposy, 0x0000ff00);
+		tposx += game->camera.dirX;
+		tposy += game->camera.dirY;
+		my_mlx_pixel_put(game->buffer, (int)(game->player.pos.x * 15) + tposx, (int)(game->player.pos.y * 15) + tposy, 0x0000ff00);
 		z--;
 	}
-	mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->buffer->img, 0, 0);
+	mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, game->buffer->img, 0, 0);
 	return (0);
 }
 
@@ -119,15 +119,15 @@ void ft_draw_lifebar(t_game *game)
         while (++j < 30)
         {
             if (j < 5 || j > 25 || i < 5 || i > WINDOW_WIDTH / 3 - 5)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ffffff);
-            else if (i < game->player->health)
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00ff0000);
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00ffffff);
+            else if (i < game->player.health)
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00ff0000);
             else
-                my_mlx_pixel_put(game->lifebar, i, j, 0x00000000);
+                my_mlx_pixel_put(&game->lifebar, i, j, 0x00000000);
         }
         i++;
     }
-    mlx_put_image_to_window(game->mlxp->mlx_ptr, game->mlxp->win_ptr, game->lifebar->img, 10, WINDOW_HEIGHT - 100);
+    mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, game->lifebar.img, 10, WINDOW_HEIGHT - 100); //TODO check
 }
 
 char	get_adjacent_cardinal(int vec, char curr)
@@ -138,7 +138,7 @@ char	get_adjacent_cardinal(int vec, char curr)
 
 	i = 0;
 	cardinal = ft_strcpy("NESW");
-	while(curr != cardinal[i])
+	while (curr != cardinal[i])
 			i++;
 	i += vec;
 	ret = cardinal[i % 4];
@@ -149,13 +149,13 @@ char	get_adjacent_cardinal(int vec, char curr)
 int key_relase(int kc, t_game *game)
 {
 	if (kc == D_KEY)
-		game->player->current_action[R_RIGHT_INDEX] = 0;
+		game->player.current_action[R_RIGHT_INDEX] = 0;
 	if (kc == A_KEY)
-		game->player->current_action[R_LEFT_INDEX] = 0;
+		game->player.current_action[R_LEFT_INDEX] = 0;
 	if (kc == W_KEY)
-		game->player->current_action[FRONT_INDEX] = 0;
+		game->player.current_action[FRONT_INDEX] = 0;
 	if (kc == S_KEY)
-		game->player->current_action[BACK_INDEX] = 0;
+		game->player.current_action[BACK_INDEX] = 0;
     return (0);
 }
 
@@ -231,68 +231,58 @@ void get_player_orientation(char **map, t_config *cfg)
 
 int main(int argc, char **argv)
 {
-	t_mlxp mlxp;
 	t_cardi_check cardiCheck;
 	t_game game;
     t_image img;
-    t_image lifebar_img;
-	game.player = malloc(sizeof(t_player));
-	game.config = malloc(sizeof(t_config));
-	game.camera = malloc(sizeof(t_camera));
-	game.rayIgm = malloc(sizeof(t_image));
-	game.textures = malloc(sizeof(t_assets));
-	game.texture = malloc(sizeof(t_image));
 	game.minimap = malloc(sizeof(t_image));
-	game.mlxp = &mlxp;
 	game.buffer = &img;
-    game.lifebar = &lifebar_img;
 	if (argc != 2)
 		return (1);
 	init_cardi_struct(&cardiCheck);
 	ft_parse_file(argv[1], &cardiCheck, &game);
 	fill_map(&game.map);
 	ft_print_map(game.map);
-	mlxp.mlx_ptr = mlx_init();
-	mlxp.win_ptr = mlx_new_window(mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
+	game.mlxp.mlx_ptr = mlx_init();
+	game.mlxp.win_ptr = mlx_new_window(game.mlxp.mlx_ptr, WINDOW_WIDTH, WINDOW_HEIGHT, "cub3d");
 	// game.minimap= mlx_new_image(&mlxp, 400, WINDOW_HEIGHT);
-	img.img = mlx_new_image(&mlxp, 1, WINDOW_HEIGHT);
-    lifebar_img.img = mlx_new_image(&mlxp, WINDOW_WIDTH / 3, 30);
+	img.img = mlx_new_image(game.mlxp.mlx_ptr, 1, WINDOW_HEIGHT);
+    game.lifebar.img = mlx_new_image(game.mlxp.mlx_ptr, WINDOW_WIDTH / 3, 30);
 	// img.img = mlx_new_image(&mlxp, WINDOW_WIDTH, WINDOW_HEIGHT);
 	img.addr = mlx_get_data_addr(img.img, &img.bits_per_pixel, &img.line_length,
 								 &img.endian);
-    lifebar_img.addr = mlx_get_data_addr(lifebar_img.img, &lifebar_img.bits_per_pixel, &lifebar_img.line_length,
-                                         &lifebar_img.endian);
+    game.lifebar.addr = mlx_get_data_addr(game.lifebar.img, &game.lifebar.bits_per_pixel, &game.lifebar.line_length,
+										  &game.lifebar.endian);
 	// game.rayIgm = mlx_new_image(&mlxp, 3, 3);
 	// game.rayIgm->addr = mlx_get_data_addr(&game.rayIgm->img, &game.rayIgm->bits_per_pixel, &game.rayIgm->line_length,
 	//  &game.rayIgm->endian);
 	// draw_map(mlx, game);
-    game.player->health = 150;
-	game.camera->dirX = -1;
-	game.camera->dirY = 0;
-	game.player->current_action = malloc(sizeof(int) * 4);
-	game.player->current_action[0] = 0;
-	game.player->current_action[1] = 0;
-	game.player->current_action[2] = 0;
-	game.player->current_action[3] = 0;
-	game.camera->planeX = 0;
-	game.camera->planeY = 0.66;
-	game.config->caseWidth = 16;
-	game.config->mapMaxHeight = max_height(game.map);
-	game.config->caseHeight = 16;
-	game.config->mapMaxWidth = max_width(game.map);
+    game.player.health = 150;
+	game.camera.dirX = -1;
+	game.camera.dirY = 0;
+	game.player.current_action = malloc(sizeof(int) * 4);
+	game.player.current_action[0] = 0;
+	game.player.current_action[1] = 0;
+	game.player.current_action[2] = 0;
+	game.player.current_action[3] = 0;
+	game.camera.planeX = 0;
+	game.camera.planeY = 0.66;
+	game.config.caseWidth = 16;
+	game.config.mapMaxHeight = max_height(game.map);
+	game.config.caseHeight = 16;
+	game.config.mapMaxWidth = max_width(game.map);
 	load_textures(&game);
-	player_setpos(game.map, game.player);
-	get_player_orientation(game.map, game.config);
-	set_player_dir(game.camera, game.config->firstDir); //TODO load the char that represents the player into the struct
+	player_setpos(game.map, &game.player);
+	get_player_orientation(game.map, &game.config);
+	set_player_dir(&game.camera, game.config.firstDir); //TODO load the char that represents the player into the struct
 // TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 //	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
 //	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
-	mlx_hook(mlxp.win_ptr, 2, 0, key_hook, &game);
-	mlx_hook(mlxp.win_ptr, 3, 0, key_relase, &game);
-	mlx_hook(mlxp.win_ptr, 17, 0, exit_game, &game);
-	mlx_loop_hook(mlxp.mlx_ptr, (void *) draw, &game);
+	mlx_hook(game.mlxp.win_ptr, 2, 0, key_hook, &game);
+	mlx_hook(game.mlxp.win_ptr, 3, 0, key_relase, &game);
+	mlx_hook(game.mlxp.win_ptr, 17, 0, exit_game, &game);
+	mlx_loop_hook(game.mlxp.mlx_ptr, (void *) draw, &game);
 	// mlx_hook(e.win, 2, (1L << 0), &key_press, &e);
 	// mlx_loop_hook(mlxp.mlx_ptr, (void *)render_frame2D, &game);
 	// printf("%f %f\n", game.player->posX, game.player->posY);
-	mlx_loop(mlxp.mlx_ptr);
+	mlx_loop(game.mlxp.mlx_ptr);
 }

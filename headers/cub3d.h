@@ -142,16 +142,15 @@ typedef struct s_assets
 typedef struct s_game
 {
 	char		**map;
-	t_player	*player;
+	t_player	player;
 	t_image		*buffer;
-	t_mlxp		*mlxp;
-	t_config	*config;
-	t_camera	*camera;
-	t_image *rayIgm;
+	t_mlxp		mlxp;
+	t_config	config;
+	t_camera	camera;
+	t_image rayIgm;
 	t_image *minimap;
-    t_image *lifebar;
-    t_image *texture;
-	t_assets *textures;
+    t_image lifebar;
+	t_assets textures;
 }	t_game;
 
 void			init_cardi_struct(t_cardi_check *cardi);
