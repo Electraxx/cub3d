@@ -28,9 +28,9 @@ void	fill_map(char ***map)
 
 	max = max_width(*map);
 	i = 0;
-	while((*map)[i])
+	while ((*map)[i])
 	{
-		if(ft_strlen((*map)[i]) < max)
+		if (ft_strlen((*map)[i]) < max)
 		{
 			tempstr = ft_calloc((max + 1), sizeof(char));
 			ft_bchar(tempstr, max, '1');
@@ -106,10 +106,10 @@ void	player_setpos(char **map, t_player *player)
 		{
 			if (map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'E'
 				|| map[i][j] == 'W')
-				{
-					player->pos.x = j;
-					player->pos.y = i;
-				}
+			{
+				player->pos.x = j;
+				player->pos.y = i;
+			}
 			j++;
 		}
 		i++;

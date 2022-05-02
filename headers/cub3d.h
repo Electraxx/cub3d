@@ -4,38 +4,49 @@
 # include <get_next_line.h>
 # include <fcntl.h>
 # include "error.h"
-# include "colorValidation.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include "../minilibx/mlx.h"
 # include <pthread.h>
 # include <math.h>
 
-#define W_W 640
-#define W_H 480
+# define W_W 640
+# define W_H 480
 
-#define PI 3.141592653589
+# define PI 3.141592653589
 
-#define W_KEY 13
-#define S_KEY 1
-#define A_KEY 0
-#define D_KEY 2
+# define W_KEY 13
+# define S_KEY 1
+# define A_KEY 0
+# define D_KEY 2
 
-#define SPEED 0.1
-#define ROT_SPEED 0.05
+# define SPEED 0.1
+# define ROT_SPEED 0.05
 
-typedef struct	s_point {
-	double x;
-	double y;
+typedef struct s_point {
+	double	x;
+	double	y;
 }				t_point;
 
-typedef struct	s_image {
-    void	*img;
-    char	*addr;
-    int		bpp;
-    int		ll;
-    int		endian;
-}				t_image;
+typedef enum e_error_type
+{
+	MAP_ERROR = -1,
+	TEXTURE_ERROR = -2,
+	COLOR_ERROR = -3,
+	MISSING_TEXTURE = -4,
+	MISSING_CARDINAL = -5,
+	PLAYER_ERROR = -6,
+	WALL_ERROR = -7,
+	CHECK_OK = 1
+} error_type;
+
+typedef struct s_image {
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		ll;
+	int		endian;
+} t_image;
 
 typedef struct	s_line_texture_data {
 	int texX;
@@ -145,10 +156,10 @@ typedef struct s_game
 	t_mlxp		mlxp;
 	t_config	config;
 	t_camera	camera;
-	t_image rayIgm;
-	t_image *minimap;
-    t_image lifebar;
-	t_assets textures;
+	t_image		ray_img;
+	t_image		*minimap;
+	t_image		lifebar;
+	t_assets	textures;
 }	t_game;
 
 void			init_cardi_struct(t_cardi_check *cardi);
@@ -186,51 +197,47 @@ int				max_height(char **map);
 
 //movement.c
 int				key_hook(int keycode, t_game *game);
-void 			move(t_game *game, int dir);
+void			move(t_game *game, int dir);
 void			turnCamera(t_game *game, int dir);
 int				key_relase(int kc, t_game *game);
 
-//main.c
-void            ft_draw_lifebar(t_game *game);
-
 //drawing.c
-void            draw(void *g);
+void			draw(void *g);
 void			ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cfg);
-unsigned int 	get_pixel_color(int x, int y, char *firstpixel);
+unsigned int	get_pixel_color(int x, int y, char *firstpixel);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
 void			draw_view(t_raycast_data *rdata, t_game *game);
 
 //textures.c
-void	load_textures(t_game *game);
-void	load_asset(t_image *asset, char *path, t_mlxp *mlxp);
-void	fix_png(t_image *img);
-t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata);
-t_image	*get_texture(char c, t_assets *text);
+void			load_textures(t_game *game);
+void			load_asset(t_image *asset, char *path, t_mlxp *mlxp);
+void			fix_png(t_image *img);
+t_image			*get_ray_texture(t_assets *assets, t_raycast_data *rdata);
+t_image			*get_texture(char c, t_assets *text);
 
 //ui.c
-void ft_draw_lifebar(t_game *game);
-int get_hp(int kc, t_game *game);
+void			ft_draw_lifebar(t_game *game);
+int				get_hp(int kc, t_game *game);
 
 //directions.c
-char	get_adjacent_cardinal(int vec, char curr);
-void set_player_dir(t_camera *camera, char goal);
-void get_player_orientation(char **map, t_config *cfg);
+char			get_adjacent_cardinal(int vec, char curr);
+void			set_player_dir(t_camera *camera, char goal);
+void			get_player_orientation(char **map, t_config *cfg);
 
 //helper.c
 int				exit_game(int kc, t_game *game);
 unsigned int	createRGBA(int r, int g, int b, int a);
-void init_buffer(t_image *buf, void *mlxp, int width, int height);
+void			init_buffer(t_image *buf, void *mlxp, int width, int height);
 
 //todo
-void do_action(t_game *game);
-unsigned int createRGBA(int r, int g, int b, int a);
+void			do_action(t_game *game);
 
 //raycast.c
-void	calc_sideDist(t_raycast_data *rdata, t_point pos);
-void	check_hit(t_raycast_data *rayData, char **map);
-void	calc_line(t_raycast_data *rayData);
-void	load_line(t_raycast_data *rayData, t_point pos, t_game *game);
-void	load_text_line(t_raycast_data *rayData, t_image *text);
+void			calc_sideDist(t_raycast_data *rdata, t_point pos);
+void			check_hit(t_raycast_data *rayData, char **map);
+void			calc_line(t_raycast_data *rayData);
+void			load_line(t_raycast_data *rayData, t_point pos, t_game *game);
+void			load_text_line(t_raycast_data *rayData, t_image *text);
 
 
 #endif

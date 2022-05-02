@@ -4,9 +4,9 @@ error_type check_all_cardi(t_cardi_check *cardi)
 {
 	int	i = 0;
 
-	while(i < 4)
+	while (i < 4)
 	{
-		if(!cardi->val[i])
+		if (!cardi->val[i])
 			return (MISSING_CARDINAL);
 		i++;
 	}

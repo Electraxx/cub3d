@@ -31,7 +31,6 @@ void set_player_dir(t_camera *camera, char goal)
 		curr = get_adjacent_cardinal(1, curr);
 		i++;
 	}
-
 	oldPlaneX = camera->planeX;
 	oldDirX = camera->dirX;
 	double rad = (i * -90) * (PI / 180);
