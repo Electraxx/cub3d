@@ -19,13 +19,13 @@ void	fix_png(t_image *img)
 	}
 }
 
-void load_asset(t_image *asset, char *path, t_mlxp *mlxp)
+void	load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 {
-	int a;
-	int b;
+	int	a;
+	int	b;
 
 	asset->img = mlx_xpm_file_to_image(mlxp->mlx_ptr, path, &a, &b);
-	asset->addr =  mlx_get_data_addr(asset->img, &asset->bpp, &asset->ll, &asset->endian);
+	asset->addr = mlx_get_data_addr(asset->img, &asset->bpp, &asset->ll, &asset->endian);
 	fix_png(asset);
 }
 
@@ -35,11 +35,10 @@ void	load_textures(t_game *game)
 	game->textures.E_texture = malloc(sizeof (t_image));
 	game->textures.W_texture = malloc(sizeof (t_image));
 	game->textures.N_texture = malloc(sizeof (t_image));
-	load_asset(game->textures.E_texture, "textures/flag.xpm", &game->mlxp);
-	load_asset(game->textures.S_texture, "textures/wall.xpm", &game->mlxp);
-	load_asset(game->textures.N_texture, "textures/roz.xpm", &game->mlxp);
-	load_asset(game->textures.W_texture, "textures/mac64.xpm", &game->mlxp);
-
+	load_asset(game->textures.E_texture, game->config.path_ea, &game->mlxp);
+	load_asset(game->textures.S_texture, game->config.path_so, &game->mlxp);
+	load_asset(game->textures.N_texture, game->config.path_no, &game->mlxp);
+	load_asset(game->textures.W_texture, game->config.path_we, &game->mlxp);
 }
 
 t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)

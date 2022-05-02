@@ -157,6 +157,7 @@ int				check_all_cardi(t_cardi_check *cardi);
 
 // colorValidations.c
 error_type		is_color_valid(char *color_line);
+void			load_color(t_config *cfg, char *color, char type);
 
 // mapValidation.c
 error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
@@ -165,7 +166,9 @@ void			fill_map(char ***map);
 void			player_setpos(char **map, t_player *player);
 
 // textureValidation.c
-int 			is_valid_cardinal(char *cardinal);
+int				is_valid_cardinal(char *cardinal);
+void			load_texture(t_config *cfg, char *path, char type);
+
 
 // debug.c
 void			ft_print_map(char **map);

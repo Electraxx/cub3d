@@ -1,7 +1,7 @@
-NO ./texture1.lol
-SO ./texture1.lol
-WE ./texture1.lol
-EA ./texture1.lol
+NO ./textures/flag.xpm
+SO ./textures/mac64.xpm
+WE ./textures/roz.xpm
+EA ./textures/wall.xpm
 F 0,0,255
 C 0,0,255
 

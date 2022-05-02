@@ -22,7 +22,7 @@ static int	get_number_of_lines(int fd)
 
 static int	ft_check_extension(char *path)
 {
-	int	i;
+	size_t	i;
 
 	i = ft_strlen(path);
 	path += (i - 4);
@@ -33,10 +33,10 @@ static int	ft_check_extension(char *path)
 
 int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
-	int		fd;
-	int		ret;
-	char	**map;
-	int		lines_number;
+	int			fd;
+	error_type	ret;
+	char		**map;
+	int			lines_number;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
@@ -56,25 +56,8 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	return (CHECK_OK);
 }
 
-void load_color(t_config *cfg, char *color, char type)
+error_type	ft_check_colors_card(char *temp, t_cardi_check *cardiCheck, t_config *cfg, int fd)
 {
-	char	**bytes;
-
-	bytes = ft_split(color,',');
-	if (type == 'C')
-		cfg->ceiling = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
-	else if (type == 'F')
-		cfg->floor = createRGBA(ft_atoi(bytes[0]),ft_atoi(bytes[1]),ft_atoi(bytes[2]), 0);
-	ft_free_2d_str(bytes);
-}
-
-error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg)
-{
-	char	*temp;
-	int		valid_line_count;
-
-	temp = get_next_line(fd, 1);
-	valid_line_count = 0;
 	while (temp)
 	{
 		if (temp[0] == '\n')
@@ -93,14 +76,22 @@ error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *c
 		{
 			if (texture_check(temp, cardiCheck) < 0)
 				return (texture_check(temp, cardiCheck));
+			load_texture(cfg, temp + 3, temp[0]);
 		}
 		else
 			break ;
-		valid_line_count++;
 		free(temp);
 		temp = get_next_line(fd, 0);
 	}
-	if (valid_line_count != 6)
-		return (MAP_ERROR);
 	return (CHECK_OK);
+}
+
+error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg)
+{
+	char		*temp;
+	error_type	ret;
+
+	temp = get_next_line(fd, 1);
+	ret = ft_check_colors_card(temp, cardiCheck, cfg, fd);
+	return (ret);
 }
