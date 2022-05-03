@@ -34,7 +34,7 @@ AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -g3 #-Wall -Wextra -Werror -g
+CFLAGS		= -g3 -O0 -Wall -Wextra -Werror
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

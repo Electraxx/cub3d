@@ -28,7 +28,7 @@ typedef struct s_point {
 	double	y;
 }				t_point;
 
-typedef enum e_error_type
+typedef enum e_t_error_type
 {
 	MAP_ERROR = -1,
 	TEXTURE_ERROR = -2,
@@ -39,7 +39,7 @@ typedef enum e_error_type
 	WALL_ERROR = -7,
 	FORMAT_ERROR = -8,
 	CHECK_OK = 1
-} error_type;
+} t_error_type;
 
 typedef struct s_image {
 	void	*img;
@@ -49,13 +49,13 @@ typedef struct s_image {
 	int		endian;
 } t_image;
 
-typedef struct	s_line_texture_data {
-	int texX;
-	int texY;
-	double wallX;
-	double step;
-	double texPos;
-	uint32_t *pixelArray;
+typedef struct s_line_texture_data {
+	int			texX;
+	int			texY;
+	double		wallX;
+	double		step;
+	double		texPos;
+	uint32_t	*pixelArray;
 }				t_line_texture_data;
 
 typedef struct	s_line_data {
@@ -158,7 +158,6 @@ typedef struct s_game
 	t_config	config;
 	t_camera	camera;
 	t_image		ray_img;
-	t_image		*minimap;
 	t_image		lifebar;
 	t_assets	textures;
 }	t_game;
@@ -166,15 +165,15 @@ typedef struct s_game
 // init.c
 void			init_cardi_struct(t_cardi_check *cardi);
 void			init_config_struct(t_config *cfg);
-error_type		texture_check(char *t_path, t_cardi_check *check_cardi);
+t_error_type		texture_check(char *t_path, t_cardi_check *check_cardi);
 
 // colorValidations.c
-error_type		is_color_valid(char *color_line);
+t_error_type		is_color_valid(char *color_line);
 void			load_color(t_config *cfg, char *color, char type);
 
 // mapValidation.c
-error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
-error_type		parse_map(int fd, int lines_num, char ***map);
+t_error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
+t_error_type	parse_map(int fd, int lines_num, char ***map);
 void			fill_map(char ***map);
 
 // textureValidation.c
@@ -182,10 +181,10 @@ int				is_valid_cardinal(char *cardinal);
 void			load_texture(t_config *cfg, char *path, char type);
 
 // fileParsing.c
-error_type		ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game);
+t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game);
 
 // error.c
-void			print_error_exit(error_type error);
+void			print_error_exit(t_error_type error);
 
 //render2d
 void			my_mlx_pixel_put(t_image *image, int x, int y, int color);

@@ -2,6 +2,12 @@
 
 int	exit_game(int kc, t_game *game)
 {
+	ft_free_2d_str(game->map);
+	free(game->config.path_no);
+	free(game->config.path_we);
+	free(game->config.path_ea);
+	free(game->config.path_so);
+	(void)kc;
 	free(game->player.current_action);
 	exit(0);
 }
