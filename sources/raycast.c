@@ -2,25 +2,25 @@
 
 void	calc_sidedist(t_raycast_data *rdata, t_point pos)
 {
-	if (rdata->rayDirX < 0)
+	if (rdata->raydirx < 0)
 	{
-		rdata->stepX = -1;
-		rdata->sideDistX = (pos.x - rdata->mapX) * rdata->deltaDistX;
+		rdata->stepx = -1;
+		rdata->sidedistx = (pos.x - rdata->mapx) * rdata->deltadistx;
 	}
 	else
 	{
-		rdata->stepX = 1;
-		rdata->sideDistX = (rdata->mapX + 1.0 - pos.x) * rdata->deltaDistX;
+		rdata->stepx = 1;
+		rdata->sidedistx = (rdata->mapx + 1.0 - pos.x) * rdata->deltadistx;
 	}
-	if (rdata->rayDirY < 0)
+	if (rdata->raydiry < 0)
 	{
-		rdata->stepY = -1;
-		rdata->sideDistY = (pos.y - rdata->mapY) * rdata->deltaDistY;
+		rdata->stepy = -1;
+		rdata->sidedisty = (pos.y - rdata->mapy) * rdata->deltadisty;
 	}
 	else
 	{
-		rdata->stepY = 1;
-		rdata->sideDistY = (rdata->mapY + 1.0 - pos.y) * rdata->deltaDistY;
+		rdata->stepy = 1;
+		rdata->sidedisty = (rdata->mapy + 1.0 - pos.y) * rdata->deltadisty;
 	}
 }
 
@@ -28,19 +28,19 @@ void	check_hit(t_raycast_data *rayData, char **map)
 {
 	while (rayData->hit == 0)
 	{
-		if (rayData->sideDistX < rayData->sideDistY)
+		if (rayData->sidedistx < rayData->sidedisty)
 		{
-			rayData->sideDistX += rayData->deltaDistX;
-			rayData->mapX += rayData->stepX;
+			rayData->sidedistx += rayData->deltadistx;
+			rayData->mapx += rayData->stepx;
 			rayData->side = 0;
 		}
 		else
 		{
-			rayData->sideDistY += rayData->deltaDistY;
-			rayData->mapY += rayData->stepY;
+			rayData->sidedisty += rayData->deltadisty;
+			rayData->mapy += rayData->stepy;
 			rayData->side = 1;
 		}
-		if (map[rayData->mapY][rayData->mapX] == '1')
+		if (map[rayData->mapy][rayData->mapx] == '1')
 			rayData->hit = 1;
 	}
 }
@@ -51,16 +51,16 @@ void	calc_line(t_raycast_data *rayData)
 
 	l_data = &rayData->line_data;
 	if (rayData->side == 0)
-		l_data->perpWallDist = (rayData->sideDistX - rayData->deltaDistX);
+		l_data->perpwalldist = (rayData->sidedistx - rayData->deltadistx);
 	else
-		l_data->perpWallDist = (rayData->sideDistY - rayData->deltaDistY);
-	l_data->lineHeight = (int)((W_H) / l_data->perpWallDist);
-	l_data->drawStart = -l_data->lineHeight / 2 + (W_H) / 2;
-	if (l_data->drawStart < 0)
-		l_data->drawStart = 0;
-	l_data->drawEnd = l_data->lineHeight / 2 + (W_H) / 2;
-	if (l_data->drawEnd >= (W_H))
-		l_data->drawEnd = (W_H) - 1;
+		l_data->perpwalldist = (rayData->sidedisty - rayData->deltadisty);
+	l_data->lineheight = (int)((W_H) / l_data->perpwalldist);
+	l_data->drawstart = -l_data->lineheight / 2 + (W_H) / 2;
+	if (l_data->drawstart < 0)
+		l_data->drawstart = 0;
+	l_data->drawend = l_data->lineheight / 2 + (W_H) / 2;
+	if (l_data->drawend >= (W_H))
+		l_data->drawend = (W_H) - 1;
 }
 
 void	load_line(t_raycast_data *rayData, t_point pos, t_game *game)
@@ -72,17 +72,17 @@ void	load_line(t_raycast_data *rayData, t_point pos, t_game *game)
 	text_data = &rayData->line_data.line_text_data;
 	l_data = &rayData->line_data;
 	if (rayData->side == 0)
-		text_data->wallX = pos.y + l_data->perpWallDist * rayData->rayDirY;
+		text_data->wallx = pos.y + l_data->perpwalldist * rayData->raydiry;
 	else
-		text_data->wallX = pos.x + l_data->perpWallDist * rayData->rayDirX;
-	text_data->wallX -= floor(text_data->wallX);
-	text_data->texX = (int)(text_data->wallX * (64.0));
-	if ((rayData->side == 0 && rayData->rayDirX > 0)
-		|| (rayData->side == 1 && rayData->rayDirY < 0))
-		text_data->texX = 64 - text_data->texX - 1;
-	text_data->step = 1.0 * 64.0 / l_data->lineHeight;
-	text_data->texPos = (l_data->drawStart - W_H / 2 + l_data->lineHeight / 2)
-		* text_data->step;
+		text_data->wallx = pos.x + l_data->perpwalldist * rayData->raydirx;
+	text_data->wallx -= floor(text_data->wallx);
+	text_data->texx = (int)(text_data->wallx * (64.0));
+	if ((rayData->side == 0 && rayData->raydirx > 0)
+		|| (rayData->side == 1 && rayData->raydiry < 0))
+		text_data->texx = 64 - text_data->texx - 1;
+	text_data->step = 1.0 * 64.0 / l_data->lineheight;
+	text_data->texpos = (l_data->drawstart - W_H / 2 + l_data->lineheight / 2)
+						* text_data->step;
 	texture = get_ray_texture(&game->textures, rayData);
 	load_text_line(rayData, texture);
 }

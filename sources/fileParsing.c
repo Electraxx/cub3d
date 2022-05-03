@@ -31,7 +31,7 @@ static int	ft_check_extension(char *path)
 	return (1);
 }
 
-error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
+t_error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
 	t_config *cfg, int *cnt)
 {
 	if ((temp[0] == 'F' || temp[0] == 'C'))
@@ -53,12 +53,12 @@ error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
 	return (FORMAT_ERROR);
 }
 
-error_type	ft_check_lines(t_cardi_check *cardiCheck,
+t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 		t_config *cfg, int fd)
 {
-	int			count;
-	error_type	type;
-	char		*temp;
+	int				count;
+	t_error_type	type;
+	char			*temp;
 
 	temp = get_next_line(fd, 1);
 	count = 0;
@@ -84,10 +84,10 @@ error_type	ft_check_lines(t_cardi_check *cardiCheck,
 
 int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
-	int			fd;
-	error_type	ret;
-	char		**map;
-	int			lines_number;
+	int				fd;
+	t_error_type	ret;
+	char			**map;
+	int				lines_number;
 
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))

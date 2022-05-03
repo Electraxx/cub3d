@@ -31,13 +31,13 @@ void	set_player_dir(t_camera *camera, char goal)
 		curr = get_adjacent_cardinal(1, curr);
 		i++;
 	}
-	old_planex = camera->planeX;
-	old_dirx = camera->dirX;
+	old_planex = camera->planex;
+	old_dirx = camera->dirx;
 	rad = (i * -90) * (PI / 180);
-	camera->dirX = old_dirx * cos(rad) - camera->dirY * sin(rad);
-	camera->dirY = old_dirx * sin(rad) + camera->dirY * cos(rad);
-	camera->planeX = camera->planeX * cos(rad) - camera->planeY * sin(rad);
-	camera->planeY = old_planex * sin(rad) + camera->planeY * cos(rad);
+	camera->dirx = old_dirx * cos(rad) - camera->diry * sin(rad);
+	camera->diry = old_dirx * sin(rad) + camera->diry * cos(rad);
+	camera->planex = camera->planex * cos(rad) - camera->planey * sin(rad);
+	camera->planey = old_planex * sin(rad) + camera->planey * cos(rad);
 }
 
 void	get_player_orientation(char **map, t_config *cfg)
@@ -57,7 +57,7 @@ void	get_player_orientation(char **map, t_config *cfg)
 			tmp = ft_strchr(map[i], cardi[j]);
 			if (tmp != NULL)
 			{
-				cfg->firstDir = tmp[0];
+				cfg->firstdir = tmp[0];
 				free(cardi);
 				return ;
 			}

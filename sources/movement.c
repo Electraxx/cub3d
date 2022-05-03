@@ -7,8 +7,8 @@ void	move(t_game *g, int dir)
 	t_player	*player;
 
 	map = g->map;
-	delta.x = g->camera.dirX * SPEED * dir;
-	delta.y = g->camera.dirY * SPEED * dir;
+	delta.x = g->camera.dirx * SPEED * dir;
+	delta.y = g->camera.diry * SPEED * dir;
 	player = &g->player;
 	if (map[(int)(player->pos.y + delta.y)]
 	[(int)(player->pos.x + delta.x)] != '1')
@@ -46,16 +46,16 @@ void	turncamera(t_game *game, int dir)
 	double	odx;
 	double	opx;
 
-	opx = game->camera.planeX;
-	odx = game->camera.dirX;
-	game->camera.dirX = odx * cos(ROT_SPEED * dir)
-		- game->camera.dirY * sin(ROT_SPEED * dir);
-	game->camera.dirY = odx * sin(ROT_SPEED * dir)
-		+ game->camera.dirY * cos(ROT_SPEED * dir);
-	game->camera.planeX = game->camera.planeX * cos(ROT_SPEED * dir)
-		- game->camera.planeY * sin(ROT_SPEED * dir);
-	game->camera.planeY = opx * sin(ROT_SPEED * dir)
-		+ game->camera.planeY * cos(ROT_SPEED * dir);
+	opx = game->camera.planex;
+	odx = game->camera.dirx;
+	game->camera.dirx = odx * cos(ROT_SPEED * dir)
+		- game->camera.diry * sin(ROT_SPEED * dir);
+	game->camera.diry = odx * sin(ROT_SPEED * dir)
+		+ game->camera.diry * cos(ROT_SPEED * dir);
+	game->camera.planex = game->camera.planex * cos(ROT_SPEED * dir)
+		- game->camera.planey * sin(ROT_SPEED * dir);
+	game->camera.planey = opx * sin(ROT_SPEED * dir)
+		+ game->camera.planey * cos(ROT_SPEED * dir);
 }
 
 int	key_relase(int kc, t_game *game)

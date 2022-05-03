@@ -1,6 +1,6 @@
 #include "../headers/cub3d.h"
 
-void	print_error_exit(error_type error)
+void	print_error_exit(t_error_type error)
 {
 	if (error == MAP_ERROR)
 		printf("Map error\n");

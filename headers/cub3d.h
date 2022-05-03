@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: qbrechbu <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:20:58 by qbrechbu          #+#    #+#             */
+/*   Updated: 2022/05/03 16:21:03 by qbrechbu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 # include <libft.h>
@@ -28,7 +40,7 @@ typedef struct s_point {
 	double	y;
 }				t_point;
 
-typedef enum e_t_error_type
+typedef enum e_error_type
 {
 	MAP_ERROR = -1,
 	TEXTURE_ERROR = -2,
@@ -39,7 +51,7 @@ typedef enum e_t_error_type
 	WALL_ERROR = -7,
 	FORMAT_ERROR = -8,
 	CHECK_OK = 1
-} t_error_type;
+}	t_error_type;
 
 typedef struct s_image {
 	void	*img;
@@ -47,43 +59,43 @@ typedef struct s_image {
 	int		bpp;
 	int		ll;
 	int		endian;
-} t_image;
+}	t_image;
 
 typedef struct s_line_texture_data {
-	int			texX;
-	int			texY;
-	double		wallX;
+	int			texx;
+	int			texy;
+	double		wallx;
 	double		step;
-	double		texPos;
-	uint32_t	*pixelArray;
+	double		texpos;
+	uint32_t	*pixelarray;
 }				t_line_texture_data;
 
-typedef struct	s_line_data {
-	int		lineHeight;
-	int		drawStart;
-	int		drawEnd;
-	double	perpWallDist;
-	t_line_texture_data line_text_data;
+typedef struct s_line_data {
+	int					lineheight;
+	int					drawstart;
+	int					drawend;
+	double				perpwalldist;
+	t_line_texture_data	line_text_data;
 
-}				t_line_data;
+}	t_line_data;
 
-typedef struct	s_raycast_data {
-	double  sideDistX;
-	double  sideDistY;
-	double	rayDirX;
-	double	rayDirY;
-	double  deltaDistX;
-	double  deltaDistY;
-	double  cameraX;
-	int     mapX;
-	int     mapY;
-	double  stepX;
-	double  stepY;
-	int     hit;
-	int     side;
-	int 	line;
-	t_line_data line_data;
-}				t_raycast_data;
+typedef struct s_raycast_data {
+	double		sidedistx;
+	double		sidedisty;
+	double		raydirx;
+	double		raydiry;
+	double		deltadistx;
+	double		deltadisty;
+	double		camerax;
+	int			mapx;
+	int			mapy;
+	double		stepx;
+	double		stepy;
+	int			hit;
+	int			side;
+	int			line;
+	t_line_data	line_data;
+}	t_raycast_data;
 
 typedef enum e_action_index{
 	FRONT_INDEX,
@@ -91,14 +103,7 @@ typedef enum e_action_index{
 	R_LEFT_INDEX,
 	R_RIGHT_INDEX,
 	NONE
-} e_action_index;
-
-typedef struct s_color{
-	int	a;
-	int	r;
-	int	g;
-	int	b;
-} t_color;
+}	t_action_index;
 
 typedef struct s_config{
 	size_t	floor;
@@ -107,32 +112,27 @@ typedef struct s_config{
 	char	*path_so;
 	char	*path_we;
 	char	*path_ea;
-	char	firstDir;
-	size_t	caseHeight;
-	size_t	caseWidth;
-	size_t	mapMaxWidth;
-	size_t	mapMaxHeight;
-} t_config;
+	char	firstdir;
+}	t_config;
 
 typedef struct s_cardi_check{
 	int		*val;
 	char	**cardi;
-} t_cardi_check;
+}	t_cardi_check;
 
 typedef struct s_player
 {
 	t_point			pos;
 	int				health;
-	char			dirState;
 	e_action_index	*current_action;
 }	t_player;
 
 typedef struct s_camera
 {
-	double	planeX;
-	double	planeY;
-	double	dirX;
-	double	dirY;
+	double	planex;
+	double	planey;
+	double	dirx;
+	double	diry;
 }	t_camera;
 
 typedef struct s_mlxp
@@ -143,10 +143,10 @@ typedef struct s_mlxp
 
 typedef struct s_assets
 {
-	t_image	*N_texture;
-	t_image	*S_texture;
-	t_image	*E_texture;
-	t_image	*W_texture;
+	t_image	*n_texture;
+	t_image	*s_texture;
+	t_image	*e_texture;
+	t_image	*w_texture;
 }	t_assets;
 
 typedef struct s_game
@@ -165,14 +165,14 @@ typedef struct s_game
 // init.c
 void			init_cardi_struct(t_cardi_check *cardi);
 void			init_config_struct(t_config *cfg);
-t_error_type		texture_check(char *t_path, t_cardi_check *check_cardi);
+t_error_type	texture_check(char *t_path, t_cardi_check *check_cardi);
 
 // colorValidations.c
-t_error_type		is_color_valid(char *color_line);
+t_error_type	is_color_valid(char *color_line);
 void			load_color(t_config *cfg, char *color, char type);
 
 // mapValidation.c
-t_error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
+t_error_type	ft_parse_first_6_lines(int fd, t_cardi_check *ca, t_config *c);
 t_error_type	parse_map(int fd, int lines_num, char ***map);
 void			fill_map(char ***map);
 
@@ -181,7 +181,7 @@ int				is_valid_cardinal(char *cardinal);
 void			load_texture(t_config *cfg, char *path, char type);
 
 // fileParsing.c
-t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game);
+t_error_type	ft_parse_file(char *path, t_cardi_check *cardi, t_game *game);
 
 // error.c
 void			print_error_exit(t_error_type error);
@@ -199,9 +199,8 @@ int				key_relase(int kc, t_game *game);
 
 //drawing.c
 void			draw(void *g);
-void			verline(t_raycast_data *rdata, t_image *buf,t_mlxp *mlx, t_config *cfg);
+void			verline(t_raycast_data *r, t_image *b, t_mlxp *m, t_config *c);
 unsigned int	get_pixel_color(int x, int y, char *firstpixel);
-int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
 void			draw_view(t_raycast_data *rdata, t_game *game);
 
 //textures.c
@@ -213,7 +212,6 @@ t_image			*get_texture(char c, t_assets *text);
 
 //ui.c
 void			ft_draw_lifebar(t_game *game);
-int				get_hp(int kc, t_game *game);
 
 //directions.c
 char			get_adjacent_cardinal(int vec, char curr);

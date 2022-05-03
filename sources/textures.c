@@ -32,14 +32,14 @@ void	load_asset(t_image *asset, char *path, t_mlxp *mlxp)
 
 void	load_textures(t_game *game)
 {
-	game->textures.S_texture = malloc(sizeof (t_image));
-	game->textures.E_texture = malloc(sizeof (t_image));
-	game->textures.W_texture = malloc(sizeof (t_image));
-	game->textures.N_texture = malloc(sizeof (t_image));
-	load_asset(game->textures.E_texture, game->config.path_ea, &game->mlxp);
-	load_asset(game->textures.S_texture, game->config.path_so, &game->mlxp);
-	load_asset(game->textures.N_texture, game->config.path_no, &game->mlxp);
-	load_asset(game->textures.W_texture, game->config.path_we, &game->mlxp);
+	game->textures.s_texture = malloc(sizeof (t_image));
+	game->textures.e_texture = malloc(sizeof (t_image));
+	game->textures.w_texture = malloc(sizeof (t_image));
+	game->textures.n_texture = malloc(sizeof (t_image));
+	load_asset(game->textures.e_texture, game->config.path_ea, &game->mlxp);
+	load_asset(game->textures.s_texture, game->config.path_so, &game->mlxp);
+	load_asset(game->textures.n_texture, game->config.path_no, &game->mlxp);
+	load_asset(game->textures.w_texture, game->config.path_we, &game->mlxp);
 	free(game->config.path_we);
 	free(game->config.path_ea);
 	free(game->config.path_so);
@@ -50,14 +50,14 @@ t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)
 {
 	if (rdata->side)
 	{
-		if (rdata->rayDirY < 0)
+		if (rdata->raydiry < 0)
 			return (get_texture('N', assets));
 		else
 			return (get_texture('S', assets));
 	}
 	else
 	{
-		if (rdata->rayDirX < 0)
+		if (rdata->raydirx < 0)
 			return (get_texture('W', assets));
 		else
 			return (get_texture('E', assets));
@@ -67,13 +67,13 @@ t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)
 t_image	*get_texture(char c, t_assets *text)
 {
 	if (c == 'W')
-		return (text->W_texture);
+		return (text->w_texture);
 	else if (c == 'E')
-		return (text->E_texture);
+		return (text->e_texture);
 	else if (c == 'N')
-		return (text->N_texture);
+		return (text->n_texture);
 	else if (c == 'S')
-		return (text->S_texture);
+		return (text->s_texture);
 	else
 		return (NULL);
 }

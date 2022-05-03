@@ -21,23 +21,19 @@ void	load_and_check(t_game *game, char **argv)
 void	load_params(t_game *game)
 {
 	game->player.health = 150;
-	game->camera.dirX = -1;
-	game->camera.dirY = 0;
+	game->camera.dirx = -1;
+	game->camera.diry = 0;
 	game->player.current_action = malloc(sizeof(int) * 4);
 	game->player.current_action[0] = 0;
 	game->player.current_action[1] = 0;
 	game->player.current_action[2] = 0;
 	game->player.current_action[3] = 0;
-	game->camera.planeX = 0;
-	game->camera.planeY = 0.66;
-	game->config.caseWidth = 16;
-	game->config.mapMaxHeight = max_height(game->map);
-	game->config.caseHeight = 16;
-	game->config.mapMaxWidth = max_width(game->map);
+	game->camera.planex = 0;
+	game->camera.planey = 0.66;
 	load_textures(game);
 	player_setpos(game->map, &game->player);
 	get_player_orientation(game->map, &game->config);
-	set_player_dir(&game->camera, game->config.firstDir);
+	set_player_dir(&game->camera, game->config.firstdir);
 }
 
 void	load_buffers_window(t_game *game)
@@ -54,7 +50,6 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (1);
-	game.minimap = malloc(sizeof(t_image));
 	load_and_check(&game, argv);
 	load_buffers_window(&game);
 	load_params(&game);
