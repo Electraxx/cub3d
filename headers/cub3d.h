@@ -123,7 +123,7 @@ typedef struct s_player
 {
 	t_point			pos;
 	int				health;
-	e_action_index	*current_action;
+	t_action_index	*current_action;
 }	t_player;
 
 typedef struct s_camera

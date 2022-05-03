@@ -93,8 +93,8 @@ void	load_line(t_raycast_data *rayData, t_point pos, t_game *game)
 		|| (rayData->side == 1 && rayData->raydiry < 0))
 		text_data->texx = 64 - text_data->texx - 1;
 	text_data->step = 1.0 * 64.0 / l_data->lineheight;
-	text_data->texpos = (l_data->drawstart - W_H / 2 + l_data->lineheight / 2)
-						* text_data->step;
+	text_data->texpos = (l_data->drawstart - W_H
+			/ 2 + l_data->lineheight / 2) * text_data->step;
 	texture = get_ray_texture(&game->textures, rayData);
 	load_text_line(rayData, texture);
 }
