@@ -1,61 +1,63 @@
 #include "cub3d.h"
 
-void move(t_game *game, int dir)
+void	move(t_game *g, int dir)
 {
 	char		**map;
-	double		deltax;
-	double		deltay;
-	t_player 	*player;
+	t_point		delta;
+	t_player	*player;
 
-	map = game->map;
-	deltax = game->camera.dirX * SPEED * dir;
-	deltay = game->camera.dirY * SPEED * dir;
-	player = &game->player;
-	if (map[(int)(player->pos.y + deltay)][(int)(player->pos.x + deltax)] != '1')
+	delta.x = g->camera.dirX * SPEED * dir;
+	delta.y = g->camera.dirY * SPEED * dir;
+	player = &g->player;
+	if (map[(int)(player->pos.y + delta.y)]
+		[(int)(player->pos.x + delta.x)] != '1')
 	{
-		player->pos.x += deltax;
-		player->pos.y += deltay;
+		player->pos.x += delta.x;
+		player->pos.y += delta.y;
 	}
-    // The two else if are here to check for wall slides
-    // TODO Maybe modifier la speed quand tu wall slide
-    // TODO Fix Crash quand on fonce dans les coins | SHOULD BE FINE
-    else if (map[(int)(player->pos.y + deltay)][(int)(player->pos.x)] == '1'
-        && map[(int)(player->pos.y)][(int)(player->pos.x + deltax)] != '1')
-		player->pos.x += deltax;
-    else if (map[(int)(player->pos.y)][(int)(player->pos.x + deltax)] == '1'
-        && map[(int)(player->pos.y + deltay)][(int)(player->pos.x)] != '1')
-        game->player.pos.y += deltay;
-    if ((int)(player->pos.y - deltay) != (int)(player->pos.y) || (int)(player->pos.y - deltax) != (int)(player->pos.x))
-        map[((int)(player->pos.y - deltay))][((int)(player->pos.x - deltax))] = '0';
-    map[(int)(player->pos.y)][(int)(player->pos.x)] = 'N';
+	else if (g->map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] == '1'
+		&& g->map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] != '1')
+		player->pos.x += delta.x;
+	else if (g->map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] == '1'
+		&& g->map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] != '1')
+		g->player.pos.y += delta.y;
+	if ((int)(player->pos.y - delta.y) != (int)(player->pos.y)
+		|| (int)(player->pos.y - delta.x) != (int)(player->pos.x))
+		g->map[((int)(player->pos.y - delta.y))]
+		[((int)(player->pos.x - delta.x))] = '0';
+	map[(int)(player->pos.y)][(int)(player->pos.x)] = 'N';
 }
 
-void do_action(t_game *game)
+void	do_action(t_game *game)
 {
-	if(game->player.current_action[FRONT_INDEX])
+	if (game->player.current_action[FRONT_INDEX])
 		move(game, 1);
-	if(game->player.current_action[BACK_INDEX])
+	if (game->player.current_action[BACK_INDEX])
 		move(game, -1);
-	if(game->player.current_action[R_LEFT_INDEX])
-		turnCamera(game, 1);
-	if(game->player.current_action[R_RIGHT_INDEX])
-		turnCamera(game, -1);
+	if (game->player.current_action[R_LEFT_INDEX])
+		turncamera(game, 1);
+	if (game->player.current_action[R_RIGHT_INDEX])
+		turncamera(game, -1);
 }
 
-void turnCamera(t_game *game, int dir)
+void	turncamera(t_game *game, int dir)
 {
-	double oldDirX;
-	double oldPlaneX;
-	
-	oldPlaneX = game->camera.planeX;
-	oldDirX = game->camera.dirX;
-	game->camera.dirX = oldDirX * cos(ROT_SPEED * dir) - game->camera.dirY * sin(ROT_SPEED * dir);
-	game->camera.dirY = oldDirX * sin(ROT_SPEED * dir) + game->camera.dirY * cos(ROT_SPEED * dir);
-	game->camera.planeX = game->camera.planeX * cos(ROT_SPEED * dir) - game->camera.planeY * sin(ROT_SPEED * dir);
-	game->camera.planeY = oldPlaneX * sin(ROT_SPEED * dir) + game->camera.planeY * cos(ROT_SPEED * dir);
+	double	odx;
+	double	opx;
+
+	opx = game->camera.planeX;
+	odx = game->camera.dirX;
+	game->camera.dirX = odx * cos(ROT_SPEED * dir)
+		- game->camera.dirY * sin(ROT_SPEED * dir);
+	game->camera.dirY = odx * sin(ROT_SPEED * dir)
+		+ game->camera.dirY * cos(ROT_SPEED * dir);
+	game->camera.planeX = game->camera.planeX * cos(ROT_SPEED * dir)
+		- game->camera.planeY * sin(ROT_SPEED * dir);
+	game->camera.planeY = opx * sin(ROT_SPEED * dir)
+		+ game->camera.planeY * cos(ROT_SPEED * dir);
 }
 
-int key_relase(int kc, t_game *game)
+int	key_relase(int kc, t_game *game)
 {
 	if (kc == D_KEY)
 		game->player.current_action[R_RIGHT_INDEX] = 0;
@@ -68,7 +70,7 @@ int key_relase(int kc, t_game *game)
 	return (0);
 }
 
-int key_hook(int keycode, t_game *game)
+int	key_hook(int keycode, t_game *game)
 {
 	if (keycode == D_KEY)
 		game->player.current_action[R_RIGHT_INDEX] = 1;
@@ -80,6 +82,5 @@ int key_hook(int keycode, t_game *game)
 		game->player.current_action[BACK_INDEX] = 1;
 	if (keycode == 14)
 		game->player.health += 10;
-//	ft_draw_lifebar(game);
 	return (0);
 }

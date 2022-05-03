@@ -40,7 +40,7 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 	while (++rdata->line <= W_W)
 	{
 		init_ray(rdata, &game->camera, game->player.pos);
-		calc_sideDist(rdata, game->player.pos);
+		calc_sidedist(rdata, game->player.pos);
 		check_hit(rdata, game->map);
 		calc_line(rdata);
 		load_line(rdata, game->player.pos, game);

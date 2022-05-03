@@ -1,5 +1,6 @@
 #include "../headers/cub3d.h"
-void ft_draw_lifebar(t_game *game)
+
+void	ft_draw_lifebar(t_game *game)
 {
 	int		j;
 	int		i;
@@ -19,16 +20,6 @@ void ft_draw_lifebar(t_game *game)
 		}
 		i++;
 	}
-	mlx_put_image_to_window(game->mlxp.mlx_ptr, game->mlxp.win_ptr, game->lifebar.img, 10, W_H - 100); //TODO check
-}
-
-int get_hp(int kc, t_game *game)
-{
-//	if (kc == 1)
-//	{
-//		game->player->health += 10;
-//		ft_draw_lifebar(game);
-//	}
-	printf("%d\n", kc);
-	return (0);
+	mlx_put_image_to_window
+	(game->mlxp.mlx_ptr, game->mlxp.win_ptr, game->lifebar.img, 10, W_H - 100);
 }
