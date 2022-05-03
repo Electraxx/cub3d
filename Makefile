@@ -1,7 +1,7 @@
 SRCS_DIR	= sources/
 SRCS_DIR_GNL = sources/gnl/
 SRCS_FILES_GNL = get_next_line.c
-SRCS_FILES	=	main.c init.c error.c player.c mapValidation.c debug.c colorValidation.c textureValidation.c \
+SRCS_FILES	=	main.c init.c error.c player.c mapValidation.c colorValidation.c textureValidation.c \
 				fileParsing.c movement.c drawing.c textures.c ui.c directions.c helper.c pixels.c \
 				raycast.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
