@@ -176,7 +176,6 @@ void			load_color(t_config *cfg, char *color, char type);
 error_type		ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg);
 error_type		parse_map(int fd, int lines_num, char ***map);
 void			fill_map(char ***map);
-void			player_setpos(char **map, t_player *player);
 
 // textureValidation.c
 int				is_valid_cardinal(char *cardinal);
@@ -196,12 +195,12 @@ int				max_height(char **map);
 //movement.c
 int				key_hook(int keycode, t_game *game);
 void			move(t_game *game, int dir);
-void			turnCamera(t_game *game, int dir);
+void			turncamera(t_game *game, int dir);
 int				key_relase(int kc, t_game *game);
 
 //drawing.c
 void			draw(void *g);
-void			ft_verline(t_raycast_data *rdata, t_image *buffer,t_mlxp *mlx, t_config *cfg);
+void			verline(t_raycast_data *rdata, t_image *buf,t_mlxp *mlx, t_config *cfg);
 unsigned int	get_pixel_color(int x, int y, char *firstpixel);
 int				*load_line_texture(int len, int step, int texPos, int texX, int side, t_image *texture);
 void			draw_view(t_raycast_data *rdata, t_game *game);
@@ -224,18 +223,21 @@ void			get_player_orientation(char **map, t_config *cfg);
 
 //helper.c
 int				exit_game(int kc, t_game *game);
-unsigned int	createRGBA(int r, int g, int b, int a);
+unsigned int	creatergba(int r, int g, int b, int a);
 void			init_buffer(t_image *buf, void *mlxp, int width, int height);
 
 //todo
 void			do_action(t_game *game);
 
 //raycast.c
-void			calc_sideDist(t_raycast_data *rdata, t_point pos);
+void			calc_sidedist(t_raycast_data *rdata, t_point pos);
 void			check_hit(t_raycast_data *rayData, char **map);
 void			calc_line(t_raycast_data *rayData);
 void			load_line(t_raycast_data *rayData, t_point pos, t_game *game);
 void			load_text_line(t_raycast_data *rayData, t_image *text);
 
+//player.c
+void			player_setpos(char **map, t_player *player);
+int				player_check(char **map);
 
 #endif
