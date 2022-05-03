@@ -9,7 +9,7 @@ static int	get_number_of_lines(int fd)
 	ret = 0;
 	while (temp)
 	{
-		if (temp[0] != '\n')
+		if (temp[0])
 			ret++;
 		free(temp);
 		temp = get_next_line(fd, 0);
@@ -31,6 +31,57 @@ static int	ft_check_extension(char *path)
 	return (1);
 }
 
+error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
+	t_config *cfg, int *cnt)
+{
+	if ((temp[0] == 'F' || temp[0] == 'C'))
+	{
+		if (is_color_valid(temp) < 0)
+			return (is_color_valid(temp));
+		load_color(cfg, temp + 2, temp[0]);
+		(*cnt)++;
+		return (CHECK_OK);
+	}
+	else if (is_valid_cardinal(ft_substr(temp, 0, 2)))
+	{
+		if (texture_check(temp, cardiCheck) < 0)
+			return (texture_check(temp, cardiCheck));
+		load_texture(cfg, temp + 3, temp[0]);
+		(*cnt)++;
+		return (CHECK_OK);
+	}
+	return (FORMAT_ERROR);
+}
+
+error_type	ft_check_lines(t_cardi_check *cardiCheck,
+		t_config *cfg, int fd)
+{
+	int			count;
+	error_type	type;
+	char		*temp;
+
+	temp = get_next_line(fd, 1);
+	count = 0;
+	while (temp && count < 6)
+	{
+		type = ft_check_line(temp, cardiCheck, cfg, &count);
+		if (!temp[0])
+		{
+			free(temp);
+			temp = get_next_line(fd, 0);
+			continue ;
+		}
+		else if (type != CHECK_OK)
+		{
+			free(temp);
+			return (type);
+		}
+		free(temp);
+		temp = get_next_line(fd, 0);
+	}
+	return (CHECK_OK);
+}
+
 int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
 	int			fd;
@@ -46,7 +97,8 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
-	ret = ft_parse_first_6_lines(fd, cardiCheck, &game->config);
+	init_config_struct(&game->config);
+	ret = ft_check_lines(cardiCheck, &game->config, fd);
 	if (ret < 0)
 		print_error_exit(ret);
 	ret = parse_map(fd, lines_number, &map);
@@ -54,44 +106,4 @@ int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	if (ret < 0)
 		print_error_exit(ret);
 	return (CHECK_OK);
-}
-
-error_type	ft_check_colors_card(char *temp, t_cardi_check *cardiCheck, t_config *cfg, int fd)
-{
-	while (temp)
-	{
-		if (temp[0] == '\n')
-		{
-			free(temp);
-			temp = get_next_line(fd, 0);
-			continue ;
-		}
-		else if ((temp[0] == 'F' || temp[0] == 'C') && temp[1] == ' ')
-		{
-			if (is_color_valid(temp) < 0)
-				return (is_color_valid(temp));
-			load_color(cfg, temp + 2, temp[0]);
-		}
-		else if (is_valid_cardinal(ft_substr(temp, 0, 2)))
-		{
-			if (texture_check(temp, cardiCheck) < 0)
-				return (texture_check(temp, cardiCheck));
-			load_texture(cfg, temp + 3, temp[0]);
-		}
-		else
-			break ;
-		free(temp);
-		temp = get_next_line(fd, 0);
-	}
-	return (CHECK_OK);
-}
-
-error_type	ft_parse_first_6_lines(int fd, t_cardi_check *cardiCheck, t_config *cfg)
-{
-	char		*temp;
-	error_type	ret;
-
-	temp = get_next_line(fd, 1);
-	ret = ft_check_colors_card(temp, cardiCheck, cfg, fd);
-	return (ret);
 }

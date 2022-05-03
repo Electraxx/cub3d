@@ -13,3 +13,11 @@ void	init_cardi_struct(t_cardi_check *cardi)
 	cardi->cardi[2] = ft_strcpy("WE");
 	cardi->cardi[3] = ft_strcpy("EA");
 }
+
+void	init_config_struct(t_config *cfg)
+{
+	cfg->path_no = NULL;
+	cfg->path_ea = NULL;
+	cfg->path_so = NULL;
+	cfg->path_we = NULL;
+}

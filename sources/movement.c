@@ -68,7 +68,7 @@ int key_relase(int kc, t_game *game)
 	return (0);
 }
 
-int key_hook(int keycode, t_game *game)
+int	key_hook(int keycode, t_game *game)
 {
 	if (keycode == D_KEY)
 		game->player.current_action[R_RIGHT_INDEX] = 1;
@@ -80,6 +80,5 @@ int key_hook(int keycode, t_game *game)
 		game->player.current_action[BACK_INDEX] = 1;
 	if (keycode == 14)
 		game->player.health += 10;
-//	ft_draw_lifebar(game);
 	return (0);
 }

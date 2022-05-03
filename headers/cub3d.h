@@ -37,6 +37,7 @@ typedef enum e_error_type
 	MISSING_CARDINAL = -5,
 	PLAYER_ERROR = -6,
 	WALL_ERROR = -7,
+	FORMAT_ERROR = -8,
 	CHECK_OK = 1
 } error_type;
 
@@ -106,24 +107,24 @@ typedef struct s_config{
 	char	*path_so;
 	char	*path_we;
 	char	*path_ea;
-	char 	firstDir;
-	size_t		caseHeight;
-	size_t		caseWidth;
-	size_t		mapMaxWidth;
-	size_t		mapMaxHeight;
+	char	firstDir;
+	size_t	caseHeight;
+	size_t	caseWidth;
+	size_t	mapMaxWidth;
+	size_t	mapMaxHeight;
 } t_config;
 
 typedef struct s_cardi_check{
-	int *val;
-	char **cardi;
+	int		*val;
+	char	**cardi;
 } t_cardi_check;
 
 typedef struct s_player
 {
-	t_point pos;
-    int     health;
-	char 	dirState;
-	e_action_index *current_action;
+	t_point			pos;
+	int				health;
+	char			dirState;
+	e_action_index	*current_action;
 }	t_player;
 
 typedef struct s_camera
@@ -162,9 +163,10 @@ typedef struct s_game
 	t_assets	textures;
 }	t_game;
 
+// init.c
 void			init_cardi_struct(t_cardi_check *cardi);
+void			init_config_struct(t_config *cfg);
 error_type		texture_check(char *t_path, t_cardi_check *check_cardi);
-int				check_all_cardi(t_cardi_check *cardi);
 
 // colorValidations.c
 error_type		is_color_valid(char *color_line);
@@ -179,10 +181,6 @@ void			player_setpos(char **map, t_player *player);
 // textureValidation.c
 int				is_valid_cardinal(char *cardinal);
 void			load_texture(t_config *cfg, char *path, char type);
-
-
-// debug.c
-void			ft_print_map(char **map);
 
 // fileParsing.c
 error_type		ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game);

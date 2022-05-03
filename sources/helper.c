@@ -1,19 +1,19 @@
 #include "../headers/cub3d.h"
 
-int exit_game(int kc, t_game *game)
+int	exit_game(int kc, t_game *game)
 {
 	free(game->player.current_action);
 	exit(0);
 }
 
-unsigned int createRGBA(int r, int g, int b, int a)
+unsigned int	createRGBA(int r, int g, int b, int a)
 {
 	return ((a & 0xff) << 24) + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 
 int	max_height(char **map)
 {
-	return ft_2dim_char_sz(map);
+	return (ft_2dim_char_sz(map));
 }
 
 int	max_width(char **map)
@@ -23,13 +23,13 @@ int	max_width(char **map)
 
 	max = 0;
 	i = 0;
-	while(map[i])
+	while (map[i])
 	{
-		if(ft_strlen(map[i]) > max)
+		if (ft_strlen(map[i]) > max)
 			max = ft_strlen(map[i]);
 		i++;
 	}
-	return max;
+	return (max);
 }
 
 void init_buffer(t_image *buf, void *mlxp, int width, int height)

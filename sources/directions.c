@@ -3,8 +3,8 @@
 char	get_adjacent_cardinal(int vec, char curr)
 {
 	char	*cardinal;
-	int 	i;
-	char 	ret;
+	int		i;
+	char	ret;
 
 	i = 0;
 	cardinal = ft_strcpy("NESW");
@@ -13,50 +13,48 @@ char	get_adjacent_cardinal(int vec, char curr)
 	i += vec;
 	ret = cardinal[i % 4];
 	free(cardinal);
-	return ret;
+	return (ret);
 }
 
-//Default is W
-void set_player_dir(t_camera *camera, char goal)
+void	set_player_dir(t_camera *camera, char goal)
 {
-	double oldDirX;
-	double oldPlaneX;
+	double	old_dirx;
+	double	old_planex;
 	char	curr;
-	int 	i;
+	int		i;
 
 	curr = 'W';
 	i = 0;
-	while(curr != goal)
+	while (curr != goal)
 	{
 		curr = get_adjacent_cardinal(1, curr);
 		i++;
 	}
-	oldPlaneX = camera->planeX;
-	oldDirX = camera->dirX;
+	old_planex = camera->planeX;
+	old_dirx = camera->dirX;
 	double rad = (i * -90) * (PI / 180);
-	printf("i = %d rad \n", i);
-	camera->dirX = oldDirX * cos(rad) - camera->dirY * sin(rad);
-	camera->dirY = oldDirX * sin(rad) + camera->dirY * cos(rad);
+	camera->dirX = old_dirx * cos(rad) - camera->dirY * sin(rad);
+	camera->dirY = old_dirx * sin(rad) + camera->dirY * cos(rad);
 	camera->planeX = camera->planeX * cos(rad) - camera->planeY * sin(rad);
-	camera->planeY = oldPlaneX * sin(rad) + camera->planeY * cos(rad);
+	camera->planeY = old_planex * sin(rad) + camera->planeY * cos(rad);
 }
 
-void get_player_orientation(char **map, t_config *cfg)
+void	get_player_orientation(char **map, t_config *cfg)
 {
-	int i;
-	int j;
-	char *cardi;
-	char *tmp;
+	int		i;
+	int		j;
+	char	*cardi;
+	char	*tmp;
 
 	i = 0;
-	j = 0;
 	cardi = ft_strcpy("NESW");
-	while(map[i]) {
+	while (map[i])
+	{
 		j = 0;
 		while (cardi[j])
 		{
 			tmp = ft_strchr(map[i], cardi[j]);
-			if(tmp != NULL)
+			if (tmp != NULL)
 			{
 				cfg->firstDir = tmp[0];
 				free(cardi);
