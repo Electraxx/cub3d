@@ -94,7 +94,7 @@ t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 	return (CHECK_OK);
 }
 
-int	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
+t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
 	int				fd;
 	t_error_type	ret;
