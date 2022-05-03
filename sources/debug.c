@@ -7,8 +7,8 @@ void	ft_print_map(char **map)
 	i = 0;
 	while (map[i])
 	{
-        write(1, map[i], ft_strlen(map[i]));
-        write(1, "\n", 1);
+		write(1, map[i], ft_strlen(map[i]));
+		write(1, "\n", 1);
 		i++;
 	}
 }

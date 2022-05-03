@@ -23,20 +23,26 @@ void	load_text_line(t_raycast_data *rayData, t_image *text)
 
 void	init_ray(t_raycast_data *rayData, t_camera *camera, t_point pos)
 {
-	rayData->cameraX = 2 * (rayData->line - W_W / 2) / ((double) (W_W) - 1);
+	rayData->cameraX = 2 * (rayData->line - W_W / 2) / ((double)(W_W) - 1);
 	rayData->rayDirY = camera->dirY + camera->planeY * rayData->cameraX;
 	rayData->rayDirX = camera->dirX + camera->planeX * rayData->cameraX;
 	rayData->mapX = (int) pos.x;
 	rayData->mapY = (int) pos.y;
-	rayData->deltaDistX = (rayData->rayDirX == 0) ? 1e30 : fabs(1 / rayData->rayDirX);
-	rayData->deltaDistY = (rayData->rayDirY == 0) ? 1e30 : fabs(1 / rayData->rayDirY);
+	if (rayData->rayDirX == 0)
+		rayData->deltaDistX = 1e30;
+	else
+		rayData->deltaDistX = fabs(1 / rayData->rayDirX);
+	if (rayData->rayDirY == 0)
+		rayData->deltaDistY = 1e30;
+	else
+		rayData->deltaDistY = fabs(1 / rayData->rayDirY);
 	rayData->hit = 0;
 }
 
-void draw_view(t_raycast_data *rdata, t_game *game)
+void	draw_view(t_raycast_data *rdata, t_game *game)
 {
 	rdata->line = -1;
-	rdata->line_data.line_text_data.pixelArray = malloc(sizeof (uint32_t) * (W_H + 1));
+	rdata->line_data.line_text_data.pixelArray = malloc(sizeof(uint32_t) * (W_H + 1));
 	while (++rdata->line <= W_W)
 	{
 		init_ray(rdata, &game->camera, game->player.pos);
@@ -52,11 +58,11 @@ void draw_view(t_raycast_data *rdata, t_game *game)
 void	draw(void *g)
 {
 	t_game			*game;
-	t_raycast_data	rayData;
+	t_raycast_data	ray_data;
 
 	game = (t_game *) g;
 	do_action(game);
-	draw_view(&rayData, game);
+	draw_view(&ray_data, game);
 	ft_draw_lifebar(game);
 }
 
@@ -85,5 +91,6 @@ void	ft_verline(t_raycast_data *rdata, t_image *buffer, t_mlxp *mlx, t_config *c
 		my_mlx_pixel_put(buffer, 0, i, cfg->floor);
 		i++;
 	}
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr, buffer->img, rdata->line, 0);
+	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr,
+		buffer->img, rdata->line, 0);
 }

@@ -127,15 +127,15 @@ static error_type	is_map_valid(char **map)
 
 error_type	parse_map(int fd, int lines_num, char ***map)
 {
-	char *temp;
-	int	 i;
+	char	*temp;
+	int		i;
 
 	i = 0;
 	*map = malloc(sizeof(char *) * (lines_num + 1));
 	temp = get_next_line(fd, 0);
 	while (temp)
 	{
-		if (temp[0] != '\n')
+		if (temp[0])
 			(*map)[i++] = ft_strcpy(temp);
 		free(temp);
 		temp = get_next_line(fd, 0);
