@@ -40,7 +40,7 @@ void	load_texture(t_config *cfg, char *path, char type)
 		cfg->path_we = ft_strcpy(path);
 }
 
-error_type	texture_check(char *t_path , t_cardi_check *check_cardi)
+error_type	texture_check(char *t_path, t_cardi_check *check_cardi)
 {
 	char	*substr;
 

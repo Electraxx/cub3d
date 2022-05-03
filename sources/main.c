@@ -58,8 +58,5 @@ int	main(int argc, char **argv)
 	load_and_check(&game, argv);
 	load_buffers_window(&game);
 	load_params(&game);
-// TODO Comprendre pourquoi le mouse_hook fait segfault je devienne fou
 	loop_init(&game);
-//	mlx_mouse_hook(mlxp.win_ptr, get_hp, &game);
-//	mlx_key_hook(mlxp.win_ptr, get_hp, &game);
 }
