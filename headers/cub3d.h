@@ -3,7 +3,6 @@
 # include <libft.h>
 # include <get_next_line.h>
 # include <fcntl.h>
-# include "error.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include "../minilibx/mlx.h"

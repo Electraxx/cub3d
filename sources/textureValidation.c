@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   textureValidation.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:05:16 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:05:18 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/cub3d.h"
 
 int	is_valid_cardinal(char *cardinal)
@@ -40,7 +52,7 @@ void	load_texture(t_config *cfg, char *path, char type)
 		cfg->path_we = ft_strcpy(path);
 }
 
-error_type	texture_check(char *t_path, t_cardi_check *check_cardi)
+t_error_type	texture_check(char *t_path, t_cardi_check *check_cardi)
 {
 	char	*substr;
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   textures.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:03:19 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:03:26 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/cub3d.h"
 
 void	fix_png(t_image *img)
@@ -40,10 +52,6 @@ void	load_textures(t_game *game)
 	load_asset(game->textures.S_texture, game->config.path_so, &game->mlxp);
 	load_asset(game->textures.N_texture, game->config.path_no, &game->mlxp);
 	load_asset(game->textures.W_texture, game->config.path_we, &game->mlxp);
-	free(game->config.path_we);
-	free(game->config.path_ea);
-	free(game->config.path_so);
-	free(game->config.path_no);
 }
 
 t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)

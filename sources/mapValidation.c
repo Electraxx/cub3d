@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mapValidation.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:03:08 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:03:10 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/cub3d.h"
 
 static char	**ft_replace_spaces_with_1(char **map)
@@ -68,7 +80,7 @@ static int	wall_check(char **map)
 	return (1);
 }
 
-static error_type	is_map_valid(char **map)
+static t_error_type	is_map_valid(char **map)
 {
 	if (!wall_check(map))
 		return (WALL_ERROR);
@@ -77,7 +89,7 @@ static error_type	is_map_valid(char **map)
 	return (CHECK_OK);
 }
 
-error_type	parse_map(int fd, int lines_num, char ***map)
+t_error_type	parse_map(int fd, int lines_num, char ***map)
 {
 	char	*temp;
 	int		i;

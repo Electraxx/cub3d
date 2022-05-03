@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   colorValidation.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:01:50 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:01:58 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/cub3d.h"
 
-static error_type	ft_check_color(int *colors, char **c_strs)
+static t_error_type	ft_check_color(int *colors, char **c_strs)
 {
 	int	i;
 
@@ -17,7 +29,7 @@ static error_type	ft_check_color(int *colors, char **c_strs)
 	return (CHECK_OK);
 }
 
-error_type	is_color_valid(char *color_line)
+t_error_type	is_color_valid(char *color_line)
 {
 	char	*color;
 	char	**c_strs;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:04:25 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:06:21 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
 
 void	loop_init(t_game *game)
@@ -54,7 +66,6 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 		return (1);
-	game.minimap = malloc(sizeof(t_image));
 	load_and_check(&game, argv);
 	load_buffers_window(&game);
 	load_params(&game);

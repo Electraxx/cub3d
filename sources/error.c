@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vvermot- <marvin@42lausanne.ch>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/03 16:02:48 by vvermot-          #+#    #+#             */
+/*   Updated: 2022/05/03 16:06:40 by vvermot-         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../headers/cub3d.h"
 
-void	print_error_exit(error_type error)
+void	print_error_exit(t_error_type error)
 {
 	if (error == MAP_ERROR)
 		printf("Map error\n");
