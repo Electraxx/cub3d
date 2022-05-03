@@ -22,6 +22,7 @@ void	set_player_dir(t_camera *camera, char goal)
 	double	old_planex;
 	char	curr;
 	int		i;
+	double	rad;
 
 	curr = 'W';
 	i = 0;
@@ -32,7 +33,7 @@ void	set_player_dir(t_camera *camera, char goal)
 	}
 	old_planex = camera->planeX;
 	old_dirx = camera->dirX;
-	double rad = (i * -90) * (PI / 180);
+	rad = (i * -90) * (PI / 180);
 	camera->dirX = old_dirx * cos(rad) - camera->dirY * sin(rad);
 	camera->dirY = old_dirx * sin(rad) + camera->dirY * cos(rad);
 	camera->planeX = camera->planeX * cos(rad) - camera->planeY * sin(rad);

@@ -6,24 +6,25 @@ void	move(t_game *g, int dir)
 	t_point		delta;
 	t_player	*player;
 
+	map = g->map;
 	delta.x = g->camera.dirX * SPEED * dir;
 	delta.y = g->camera.dirY * SPEED * dir;
 	player = &g->player;
 	if (map[(int)(player->pos.y + delta.y)]
-		[(int)(player->pos.x + delta.x)] != '1')
+	[(int)(player->pos.x + delta.x)] != '1')
 	{
 		player->pos.x += delta.x;
 		player->pos.y += delta.y;
 	}
-	else if (g->map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] == '1'
-		&& g->map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] != '1')
+	else if (map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] == '1'
+	&& map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] != '1')
 		player->pos.x += delta.x;
-	else if (g->map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] == '1'
-		&& g->map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] != '1')
+	else if (map[(int)(player->pos.y)][(int)(player->pos.x + delta.x)] == '1'
+	&& map[(int)(player->pos.y + delta.y)][(int)(player->pos.x)] != '1')
 		g->player.pos.y += delta.y;
 	if ((int)(player->pos.y - delta.y) != (int)(player->pos.y)
 		|| (int)(player->pos.y - delta.x) != (int)(player->pos.x))
-		g->map[((int)(player->pos.y - delta.y))]
+		map[((int)(player->pos.y - delta.y))]
 		[((int)(player->pos.x - delta.x))] = '0';
 	map[(int)(player->pos.y)][(int)(player->pos.x)] = 'N';
 }

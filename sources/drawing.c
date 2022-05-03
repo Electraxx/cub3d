@@ -42,7 +42,8 @@ void	init_ray(t_raycast_data *rayData, t_camera *camera, t_point pos)
 void	draw_view(t_raycast_data *rdata, t_game *game)
 {
 	rdata->line = -1;
-	rdata->line_data.line_text_data.pixelArray = malloc(sizeof(uint32_t) * (W_H + 1));
+	rdata->line_data.line_text_data.pixelArray
+		= malloc(sizeof(uint32_t) * (W_H + 1));
 	while (++rdata->line <= W_W)
 	{
 		init_ray(rdata, &game->camera, game->player.pos);
@@ -66,7 +67,7 @@ void	draw(void *g)
 	ft_draw_lifebar(game);
 }
 
-void	ft_verline(t_raycast_data *rdata, t_image *buffer, t_mlxp *mlx, t_config *cfg)
+void	verline(t_raycast_data *rdata, t_image *buf, t_mlxp *mlx, t_config *cfg)
 {
 	int			i;
 	int			j;
@@ -77,20 +78,20 @@ void	ft_verline(t_raycast_data *rdata, t_image *buffer, t_mlxp *mlx, t_config *c
 	pxline = rdata->line_data.line_text_data.pixelArray;
 	while (i < rdata->line_data.drawStart)
 	{
-		my_mlx_pixel_put(buffer, 0, i, cfg->ceiling);
+		my_mlx_pixel_put(buf, 0, i, cfg->ceiling);
 		i++;
 	}
 	while (rdata->line_data.line_text_data.pixelArray[j])
 	{
-		my_mlx_pixel_put(buffer, 0, i, pxline[j]);
+		my_mlx_pixel_put(buf, 0, i, pxline[j]);
 		j++;
 		i++;
 	}
 	while (i < W_H)
 	{
-		my_mlx_pixel_put(buffer, 0, i, cfg->floor);
+		my_mlx_pixel_put(buf, 0, i, cfg->floor);
 		i++;
 	}
-	mlx_put_image_to_window(mlx->mlx_ptr, mlx->win_ptr,
-		buffer->img, rdata->line, 0);
+	mlx_put_image_to_window
+		(mlx->mlx_ptr, mlx->win_ptr, buf->img, rdata->line, 0);
 }

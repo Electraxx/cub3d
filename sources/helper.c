@@ -10,7 +10,8 @@ unsigned int	creatergba(int r, int g, int b, int a)
 {
 	size_t	v;
 
-	v = ((a & 0xff) << 24) + ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	v = ((a & 0xff) << 24) + ((r & 0xff) << 16)
+		+ ((g & 0xff) << 8) + (b & 0xff);
 	return (v);
 }
 

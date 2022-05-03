@@ -65,14 +65,13 @@ char	*get_next_line(int fd, int new_call)
 	char		*buffer;
 	char		*line;
 	static int	is_empty = 0;
-	int	file = 1;
+	int			file;
 
+	file = 1;
 	if (new_call)
 		buf_pos = NULL;
 	buffer = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	if (!buffer)
-		return (NULL);
-	if (!check_validity(fd, &buffer, &is_empty))
+	if (!buffer || !check_validity(fd, &buffer, &is_empty))
 		return (NULL);
 	if (!buf_pos && file)
 		buf_pos = ft_strdup("");
