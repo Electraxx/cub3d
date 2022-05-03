@@ -195,6 +195,7 @@ int				key_hook(int keycode, t_game *game);
 void			move(t_game *game, int dir);
 void			turncamera(t_game *game, int dir);
 int				key_relase(int kc, t_game *game);
+void			do_action(t_game *game);
 
 //drawing.c
 void			draw(void *g);
@@ -221,9 +222,6 @@ void			get_player_orientation(char **map, t_config *cfg);
 int				exit_game(int kc, t_game *game);
 unsigned int	creatergba(int r, int g, int b, int a);
 void			init_buffer(t_image *buf, void *mlxp, int width, int height);
-
-//todo
-void			do_action(t_game *game);
 
 //raycast.c
 void			calc_sidedist(t_raycast_data *rdata, t_point pos);
