@@ -52,6 +52,10 @@ void	load_textures(t_game *game)
 	load_asset(game->textures.s_texture, game->config.path_so, &game->mlxp);
 	load_asset(game->textures.n_texture, game->config.path_no, &game->mlxp);
 	load_asset(game->textures.w_texture, game->config.path_we, &game->mlxp);
+	free(game->config.path_we);
+	free(game->config.path_so);
+	free(game->config.path_no);
+	free(game->config.path_ea);
 }
 
 t_image	*get_ray_texture(t_assets *assets, t_raycast_data *rdata)

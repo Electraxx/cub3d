@@ -15,10 +15,8 @@
 char	**ft_add_args(char **args, char *new)
 {
 	int		i;
-	int		count;
 	char	**ret;
 
-	count = 0;
 	i = -1;
 	while (args[++i])
 		;
