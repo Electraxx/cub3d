@@ -37,7 +37,7 @@ void	load_and_check(t_game *game, char **argv)
 void	load_params(t_game *game)
 {
 	game->player.health = 150;
-	game->camera.dirx = -1;
+	game->camera.dirx = -1	;
 	game->camera.diry = 0;
 	game->player.current_action = malloc(sizeof(int) * 4);
 	game->player.current_action[0] = 0;

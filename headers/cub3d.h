@@ -21,8 +21,8 @@
 # include <pthread.h>
 # include <math.h>
 
-# define W_W 640
-# define W_H 480
+# define W_W 10
+# define W_H 10
 
 # define PI 3.141592653589
 
