@@ -30,6 +30,7 @@ OBJFT		= ${FT:.c=.o}
 NAME		= cub3d
 
 CC		= /Users/vvermot-/sgoinfre/lgyger/.brew/Cellar/llvm/13.0.1_1/bin/clang -fsanitize=leak -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
+#CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f

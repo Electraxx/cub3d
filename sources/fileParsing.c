@@ -26,6 +26,7 @@ static int	get_number_of_lines(int fd)
 		free(temp);
 		temp = get_next_line(fd, 0);
 	}
+	free(temp);
 	if (ret - 6 <= 0)
 		return (0);
 	else
@@ -94,13 +95,15 @@ t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 	return (CHECK_OK);
 }
 
-t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
+t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 {
 	int				fd;
 	t_error_type	ret;
 	char			**map;
 	int				lines_number;
 
+	map = NULL;
+	game->map = map;
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
@@ -114,7 +117,6 @@ t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	if (ret < 0)
 		return (ret);
 	ret = parse_map(fd, lines_number, &map);
-	game->map = map;
 	if (ret < 0)
 		return (ret);
 	return (CHECK_OK);

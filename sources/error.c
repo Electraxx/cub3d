@@ -41,5 +41,4 @@ void clean(t_game *game)
 	free(game->config.path_ea);
 	free(game->config.path_so);
 	free(game->config.path_we);
-	free(game->player.current_action);
 }

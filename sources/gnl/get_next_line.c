@@ -12,6 +12,32 @@
 
 #include "get_next_line.h"
 
+char	*ft_freejoin(char *s1, char *s2)
+{
+	char				*newstr;
+	int					newstrsz;
+	unsigned int		i;
+	unsigned int		j;
+
+	if (!s1 || !s2)
+		return (0);
+	j = 0;
+	newstrsz = ft_strlen(s1) + ft_strlen(s2) + 1;
+	newstr = malloc (sizeof(char) * newstrsz);
+	if (newstr == 0)
+		return (0);
+	i = ft_strlcpy(newstr, s1, newstrsz);
+	while (i < ft_strlen(s1) + ft_strlen(s2))
+	{
+		newstr[i] = s2[j];
+		i++;
+		j++;
+	}
+	newstr[i] = '\0';
+	free(s1);
+	return (newstr);
+}
+
 char	*copy_line(char **line, char **buf_pos, int *is_empty)
 {
 	int			i;
@@ -79,7 +105,7 @@ char	*get_next_line(int fd, int new_call)
 	{
 		file = read(fd, buffer, BUFFER_SIZE);
 		buffer[file] = '\0';
-		buf_pos = ft_strjoin(buf_pos, buffer);
+		buf_pos = ft_freejoin(buf_pos, buffer);
 		is_empty++;
 	}
 	buf_pos = copy_line(&line, &buf_pos, &is_empty);

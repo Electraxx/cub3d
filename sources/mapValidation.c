@@ -95,7 +95,7 @@ t_error_type	parse_map(int fd, int lines_num, char ***map)
 	int		i;
 
 	i = 0;
-	*map = malloc(sizeof(char *) * (lines_num + 1));
+	*map = ft_calloc((lines_num + 1), sizeof(char *));
 	temp = get_next_line(fd, 0);
 	while (temp)
 	{
@@ -104,6 +104,7 @@ t_error_type	parse_map(int fd, int lines_num, char ***map)
 		free(temp);
 		temp = get_next_line(fd, 0);
 	}
+	free(temp);
 	(*map)[i] = NULL;
 	(*map) = ft_replace_spaces_with_1((*map));
 	return (is_map_valid(*map));

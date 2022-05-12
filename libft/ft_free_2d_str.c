@@ -17,9 +17,12 @@ void	ft_free_2d_str(char **strs)
 	int	i;
 
 	i = 0;
+	if (!strs)
+		return ;
 	while (strs[i])
 	{
-		free(strs[i]);
+		if (strs[i])
+			free(strs[i]);
 		i++;
 	}
 	free(strs[i]);
