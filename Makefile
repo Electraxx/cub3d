@@ -29,12 +29,12 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR} -fsanitize=address
+CC		= /Users/vvermot-/sgoinfre/lgyger/.brew/Cellar/llvm/13.0.1_1/bin/clang -fsanitize=leak -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f
 
-CFLAGS		= -g3 -O0 -Wall -Wextra -Werror
+CFLAGS		= -g3 -Wall -Wextra -Werror
 
 .c.o:
 		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}

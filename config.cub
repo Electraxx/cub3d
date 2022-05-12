@@ -1,7 +1,7 @@
 NO ./textures/amandine.xpm
 SO ./textures/mac64.xpm
 WE ./textures/shrek64.xpm
-EA ./textures/jj.xpm
+E ./textures/jj.xpm
 F 0,255,0
 C 112,0,255
 
