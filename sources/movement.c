@@ -21,26 +21,32 @@ t_point	get_perpendicular_vector(t_point dir)
 	return (perp);
 }
 
+void	get_movement_vector(t_point *pt, t_camera *cam, int dir, int straffe)
+{
+	t_point	straffvec;
+
+	if (straffe)
+	{
+		straffvec.x = cam->dirx;
+		straffvec.y = cam->diry;
+		straffvec = get_perpendicular_vector(straffvec);
+		pt->x = straffvec.x * SPEED * dir;
+		pt->y = straffvec.y * SPEED * dir;
+	}
+	else
+	{
+		pt->x = cam->dirx * SPEED * dir;
+		pt->y = cam->diry * SPEED * dir;
+	}
+}
+
 void	move(t_game *g, int dir, int straffe)
 {
 	char		**map;
 	t_point		delta;
 	t_player	*player;
-	t_point		straffvec;
 
-	if (straffe)
-	{
-		straffvec.x = g->camera.dirx;
-		straffvec.y = g->camera.diry;
-		straffvec = get_perpendicular_vector(straffvec);
-		delta.x = straffvec.x * SPEED * dir;
-		delta.y = straffvec.y * SPEED * dir;
-	}
-	else
-	{
-		delta.x = g->camera.dirx * SPEED * dir;
-		delta.y = g->camera.diry * SPEED * dir;
-	}
+	get_movement_vector(&delta, &g->camera, dir, straffe);
 	map = g->map;
 	player = &g->player;
 	if (map[(int)(player->pos.y + delta.y)]
@@ -93,42 +99,4 @@ void	turncamera(t_game *game, int dir)
 		- game->camera.planey * sin(ROT_SPEED * dir);
 	game->camera.planey = opx * sin(ROT_SPEED * dir)
 		+ game->camera.planey * cos(ROT_SPEED * dir);
-}
-
-int	key_relase(int kc, t_game *game)
-{
-	if (kc == D_KEY)
-		game->player.current_action[STRAFE_RIGHT_INDEX] = 0;
-	if (kc == A_KEY)
-		game->player.current_action[STRAFE_LEFT_INDEX] = 0;
-	if (kc == W_KEY)
-		game->player.current_action[FRONT_INDEX] = 0;
-	if (kc == S_KEY)
-		game->player.current_action[BACK_INDEX] = 0;
-	if (kc == R_ARROW_KEY)
-		game->player.current_action[R_RIGHT_INDEX] = 0;
-	if (kc == L_ARROW_KEY)
-		game->player.current_action[R_LEFT_INDEX] = 0;
-	return (0);
-}
-
-int	key_hook(int keycode, t_game *game)
-{
-	if (keycode == ESC_KEY)
-		exit(0);
-	if (keycode == D_KEY)
-		game->player.current_action[STRAFE_RIGHT_INDEX] = 1;
-	if (keycode == A_KEY)
-		game->player.current_action[STRAFE_LEFT_INDEX] = 1;
-	if (keycode == L_ARROW_KEY)
-		game->player.current_action[R_LEFT_INDEX] = 1;
-	if (keycode == R_ARROW_KEY)
-		game->player.current_action[R_RIGHT_INDEX] = 1;
-	if (keycode == W_KEY)
-		game->player.current_action[FRONT_INDEX] = 1;
-	if (keycode == S_KEY)
-		game->player.current_action[BACK_INDEX] = 1;
-	if (keycode == 14)
-		game->player.health += 10;
-	return (0);
 }

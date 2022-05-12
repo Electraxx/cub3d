@@ -24,7 +24,7 @@ void	loop_init(t_game *game)
 void	load_and_check(t_game *game, char **argv)
 {
 	t_cardi_check	cardi;
-	t_error_type 	err;
+	t_error_type	err;
 
 	init_cardi_struct(&cardi);
 	err = ft_parse_file(argv[1], &cardi, game);

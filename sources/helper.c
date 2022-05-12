@@ -16,7 +16,6 @@ int	exit_game(int kc, t_game *game)
 {
 	(void)kc;
 	(void)game;
-	//free(game->player.current_action);
 	exit(0);
 }
 

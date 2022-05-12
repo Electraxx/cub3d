@@ -95,7 +95,7 @@ t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 	return (CHECK_OK);
 }
 
-t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
+t_error_type	ft_parse_file(char *path, t_cardi_check *carcheck, t_game *g)
 {
 	int				fd;
 	t_error_type	ret;
@@ -103,7 +103,7 @@ t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	int				lines_number;
 
 	map = NULL;
-	game->map = map;
+	g->map = map;
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
@@ -112,11 +112,12 @@ t_error_type	ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	fd = open(path, O_RDONLY);
 	if (fd < 0 || !ft_check_extension(path))
 		return (MAP_ERROR);
-	init_config_struct(&game->config);
-	ret = ft_check_lines(cardiCheck, &game->config, fd);
+	init_config_struct(&g->config);
+	ret = ft_check_lines(carcheck, &g->config, fd);
 	if (ret < 0)
 		return (ret);
 	ret = parse_map(fd, lines_number, &map);
+	g->map = map;
 	if (ret < 0)
 		return (ret);
 	return (CHECK_OK);

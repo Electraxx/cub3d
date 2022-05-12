@@ -34,7 +34,7 @@ void	print_error(t_error_type error)
 		printf("The format of the first lines is not correct\n");
 }
 
-void clean(t_game *game)
+void	clean(t_game *game)
 {
 	ft_free_2d_str(game->map);
 	free(game->config.path_no);
