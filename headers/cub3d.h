@@ -30,6 +30,9 @@
 # define S_KEY 1
 # define A_KEY 0
 # define D_KEY 2
+# define ESC_KEY 53
+# define R_ARROW_KEY 124
+# define L_ARROW_KEY 123
 
 # define SPEED 0.1
 # define ROT_SPEED 0.05
@@ -100,6 +103,8 @@ typedef struct s_raycast_data {
 typedef enum e_action_index{
 	FRONT_INDEX,
 	BACK_INDEX,
+	STRAFE_LEFT_INDEX,
+	STRAFE_RIGHT_INDEX,
 	R_LEFT_INDEX,
 	R_RIGHT_INDEX,
 	NONE
@@ -194,7 +199,7 @@ int				max_height(char **map);
 
 //movement.c
 int				key_hook(int keycode, t_game *game);
-void			move(t_game *game, int dir);
+void			move(t_game *g, int dir, int straffe);
 void			turncamera(t_game *game, int dir);
 int				key_relase(int kc, t_game *game);
 void			do_action(t_game *game);

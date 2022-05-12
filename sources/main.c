@@ -39,14 +39,15 @@ void	load_and_check(t_game *game, char **argv)
 
 void	load_params(t_game *game)
 {
+	int	i;
+
+	i = -1;
 	game->player.health = 150;
-	game->camera.dirx = -1	;
+	game->camera.dirx = -1;
 	game->camera.diry = 0;
-	game->player.current_action = malloc(sizeof(int) * 4);
-	game->player.current_action[0] = 0;
-	game->player.current_action[1] = 0;
-	game->player.current_action[2] = 0;
-	game->player.current_action[3] = 0;
+	game->player.current_action = malloc(sizeof(int) * 6);
+	while (++i < 6)
+		game->player.current_action[i] = 0;
 	game->camera.planex = 0;
 	game->camera.planey = 0.66;
 	load_textures(game);
