@@ -122,5 +122,5 @@ t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 		clean(game);
 		exit(0);
 	}
-		return (CHECK_OK);
+	return (CHECK_OK);
 }
