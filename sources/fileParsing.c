@@ -91,6 +91,7 @@ t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 		free(temp);
 		temp = get_next_line(fd, 0);
 	}
+	free(temp);
 	return (CHECK_OK);
 }
 
@@ -112,10 +113,14 @@ t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	init_config_struct(&game->config);
 	ret = ft_check_lines(cardiCheck, &game->config, fd);
 	if (ret < 0)
-		print_error_exit(ret);
+		return (ret);
 	ret = parse_map(fd, lines_number, &map);
 	game->map = map;
 	if (ret < 0)
-		print_error_exit(ret);
-	return (CHECK_OK);
+	{
+		print_error(ret);
+		clean(game);
+		exit(0);
+	}
+		return (CHECK_OK);
 }
