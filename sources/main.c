@@ -28,7 +28,7 @@ void	load_and_check(t_game *game, char **argv)
 
 	init_cardi_struct(&cardi);
 	err = ft_parse_file(argv[1], &cardi, game);
-	if(err != CHECK_OK)
+	if (err != CHECK_OK)
 	{
 		print_error(err);
 		clean(game);
