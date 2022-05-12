@@ -49,6 +49,7 @@ typedef enum e_error_type
 	PLAYER_ERROR = -6,
 	WALL_ERROR = -7,
 	FORMAT_ERROR = -8,
+	FILE_ERROR = -9,
 	CHECK_OK = 1
 }	t_error_type;
 
@@ -183,7 +184,8 @@ void			load_texture(t_config *cfg, char *path, char type);
 t_error_type	ft_parse_file(char *path, t_cardi_check *cardi, t_game *game);
 
 // error.c
-void			print_error_exit(t_error_type error);
+void			print_error(t_error_type error);
+void			clean(t_game *game);
 
 //render2d
 void			my_mlx_pixel_put(t_image *image, int x, int y, int color);

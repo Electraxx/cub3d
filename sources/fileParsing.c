@@ -90,6 +90,7 @@ t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
 		free(temp);
 		temp = get_next_line(fd, 0);
 	}
+	free(temp);
 	return (CHECK_OK);
 }
 

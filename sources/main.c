@@ -24,11 +24,14 @@ void	loop_init(t_game *game)
 void	load_and_check(t_game *game, char **argv)
 {
 	t_cardi_check	cardi;
+	t_error_type 	err;
 
 	init_cardi_struct(&cardi);
-	if(ft_parse_file(argv[1], &cardi, game) != CHECK_OK)
+	err = ft_parse_file(argv[1], &cardi, game);
+	if(err != CHECK_OK)
 	{
-		printf("file error\n");
+		print_error(err);
+		clean(game);
 		exit(0);
 	}
 	fill_map(&game->map);

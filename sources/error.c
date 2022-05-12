@@ -12,7 +12,7 @@
 
 #include "../headers/cub3d.h"
 
-void	print_error_exit(t_error_type error)
+void	print_error(t_error_type error)
 {
 	if (error == MAP_ERROR)
 		printf("Map error\n");
@@ -30,5 +30,16 @@ void	print_error_exit(t_error_type error)
 		printf("The map should be surrounded by walls\n");
 	else if (error == FORMAT_ERROR)
 		printf("The format of the first lines is not correct\n");
-	exit(0);
+	else if (error == FILE_ERROR)
+		printf("The format of the first lines is not correct\n");
+}
+
+void clean(t_game *game)
+{
+	ft_free_2d_str(game->map);
+	free(game->config.path_no);
+	free(game->config.path_ea);
+	free(game->config.path_so);
+	free(game->config.path_we);
+	free(game->player.current_action);
 }
