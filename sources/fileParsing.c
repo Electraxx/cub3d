@@ -54,7 +54,7 @@ t_error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
 		(*cnt)++;
 		return (CHECK_OK);
 	}
-	else if (is_valid_cardinal(ft_substr(temp, 0, 2)))
+	else
 	{
 		if (texture_check(temp, cardiCheck) < 0)
 			return (texture_check(temp, cardiCheck));
@@ -62,7 +62,6 @@ t_error_type	ft_check_line(char *temp, t_cardi_check *cardiCheck,
 		(*cnt)++;
 		return (CHECK_OK);
 	}
-	return (FORMAT_ERROR);
 }
 
 t_error_type	ft_check_lines(t_cardi_check *cardiCheck,
@@ -117,10 +116,6 @@ t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	ret = parse_map(fd, lines_number, &map);
 	game->map = map;
 	if (ret < 0)
-	{
-		print_error(ret);
-		clean(game);
-		exit(0);
-	}
-		return (CHECK_OK);
+		return (ret);
+	return (CHECK_OK);
 }
