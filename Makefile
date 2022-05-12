@@ -2,7 +2,7 @@ SRCS_DIR	= sources/
 SRCS_DIR_GNL = sources/gnl/
 SRCS_FILES_GNL = get_next_line.c
 SRCS_FILES	=	main.c init.c error.c player.c mapValidation.c colorValidation.c textureValidation.c \
-				fileParsing.c movement.c drawing.c textures.c ui.c directions.c helper.c pixels.c \
+				fileParsing.c movement.c drawing.c textures.c ui.c directions.c helper.c pixels.c keys.c\
 				raycast.c
 SRCS		= ${patsubst %, ${SRCS_DIR}%, ${SRCS_FILES}}
 SRCS_GNL = ${patsubst %, ${SRCS_DIR_GNL}%, ${SRCS_FILES_GNL}}
@@ -29,8 +29,8 @@ OBJFT		= ${FT:.c=.o}
 
 NAME		= cub3d
 
-CC		= /Users/vvermot-/sgoinfre/lgyger/.brew/Cellar/llvm/13.0.1_1/bin/clang -fsanitize=leak -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
-#CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
+#CC		= /Users/vvermot-/sgoinfre/lgyger/.brew/Cellar/llvm/13.0.1_1/bin/clang -fsanitize=leak -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
+CC		= gcc -I ./headers/ -I ${SRCS_DIR_GNL} -I ${FT_DIR}
 AR		= ar rcs
 CP		= cp -f
 RM		= rm -f

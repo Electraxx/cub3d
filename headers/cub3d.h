@@ -186,7 +186,7 @@ int				is_valid_cardinal(char *cardinal);
 void			load_texture(t_config *cfg, char *path, char type);
 
 // fileParsing.c
-t_error_type	ft_parse_file(char *path, t_cardi_check *cardi, t_game *game);
+t_error_type	ft_parse_file(char *path, t_cardi_check *carcheck, t_game *g);
 
 // error.c
 void			print_error(t_error_type error);
@@ -198,11 +198,13 @@ int				max_width(char **map);
 int				max_height(char **map);
 
 //movement.c
-int				key_hook(int keycode, t_game *game);
 void			move(t_game *g, int dir, int straffe);
 void			turncamera(t_game *game, int dir);
-int				key_relase(int kc, t_game *game);
 void			do_action(t_game *game);
+
+//keys.c
+int				key_hook(int keycode, t_game *game);
+int				key_relase(int kc, t_game *game);
 
 //drawing.c
 void			draw(void *g);
