@@ -112,10 +112,10 @@ t_error_type ft_parse_file(char *path, t_cardi_check *cardiCheck, t_game *game)
 	init_config_struct(&game->config);
 	ret = ft_check_lines(cardiCheck, &game->config, fd);
 	if (ret < 0)
-		print_error_exit(ret);
+		return (ret);
 	ret = parse_map(fd, lines_number, &map);
 	game->map = map;
 	if (ret < 0)
-		print_error_exit(ret);
+		return (ret);
 	return (CHECK_OK);
 }
